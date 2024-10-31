@@ -1,3 +1,5 @@
+/* style.css */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #1e1e1e;
@@ -48,7 +50,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 40px; /* 전체 사이드바의 상단 여백 */
+    padding-top: 40px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
     transform: translateX(-250px);
@@ -66,17 +68,10 @@ body {
     margin-bottom: 15px;
 }
 
-
-.character-image {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 10px;
-}
-
 .nickname {
     font-size: 1.2em;
     color: #fff;
-    margin-top: 10px; /* 닉네임과 이미지 사이 여백 */
+    margin-top: 10px;
 }
 
 header {
@@ -96,7 +91,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw; /* 전체 너비 */
+    width: 100vw;
     height: 80vh;
     overflow: hidden;
     position: relative;
@@ -105,16 +100,15 @@ header {
 
 .page {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5개의 열 */
-    grid-template-rows: repeat(4, 1fr);    /* 4개의 행 */
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     gap: 20px;
     justify-content: center;
-    width: calc(100% - 40px); /* 전체 너비에서 패딩 제외 */
+    width: calc(100% - 40px);
     max-width: 600px;
     height: 100%;
-    padding: 0 20px; /* 왼쪽과 오른쪽에 패딩 추가 */
+    padding: 0 20px;
 }
-
 
 .card {
     width: 100px;
@@ -122,11 +116,19 @@ header {
     perspective: 1000px;
     cursor: pointer;
     position: relative;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    transform-style: preserve-3d;
     transition: transform 0.6s;
-    background-color: #444;
+}
+
+.card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card.solved .card-inner {
+    transform: rotateY(180deg); /* 해결 후 뒤집힘 */
 }
 
 .card-front, .card-back {
@@ -134,7 +136,6 @@ header {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -142,6 +143,7 @@ header {
     font-weight: bold;
     color: white;
     border: 2px solid #555;
+    border-radius: 10px;
 }
 
 .card-front {
@@ -151,14 +153,6 @@ header {
 .card-back {
     background-color: #333;
     transform: rotateY(180deg);
-}
-
-.card.solved .card-front {
-    display: none;
-}
-
-.card.solved .card-back {
-    transform: rotateY(0deg);
 }
 
 .card-back img {
