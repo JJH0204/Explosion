@@ -84,7 +84,6 @@ function toggleSidebar() {
         challengeGrid.style.width = 'calc(100vw - 250px)';
     } else {
         container.style.marginLeft = '0';
-        challengeGrid.style.width = '100vw';
     }
 }
 
