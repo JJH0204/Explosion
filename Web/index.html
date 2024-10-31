@@ -1,52 +1,34 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>War Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="container">
         <header>
             <button class="logo-button">
                 <img src="Flame_logo2.png" alt="Logo" style="height: 80px;">
             </button>
-
         </header>
-        <aside>
-            <!-- <button class="login-button">
-                <a href="login.html">login</a>
-            </button> -->
-        </aside>
         <main>
-            <div class="challenge-grid">
-                <!-- 챌린지 버튼들을 반복적으로 생성 -->
-                <button class="challenge-button">1</button>
-                <button class="challenge-button">2</button>
-                <button class="challenge-button">3</button>
-                <button class="challenge-button">4</button>
-                <button class="challenge-button">5</button>
-                <button class="challenge-button">6</button>
-                <button class="challenge-button">7</button>
-                <button class="challenge-button">8</button>
-                <button class="challenge-button">9</button>
-                <button class="challenge-button">10</button>
-                <button class="challenge-button">11</button>
-                <button class="challenge-button">12</button>
-                <button class="challenge-button">13</button>
-                <button class="challenge-button">14</button>
-                <button class="challenge-button">15</button>
-                <button class="challenge-button">16</button>
-                <button class="challenge-button">17</button>
-                <button class="challenge-button">18</button>
-                <button class="challenge-button">19</button>
-                <button class="challenge-button">20</button>
+            <div class="challenge-grid" id="challengeGrid">
+                <!-- JavaScript를 통해 카드들이 동적으로 추가될 예정 -->
             </div>
         </main>
     </div>
-</body>
 
+    <!-- 게임 팝업 -->
+    <div id="gamePopup" class="popup">
+        <div class="popup-content">
+            <span onclick="closePopup()" class="close">&times;</span>
+            <p id="gameContent">여기에 게임 내용 표시</p>
+            <button onclick="solveGame()">해결하기</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
