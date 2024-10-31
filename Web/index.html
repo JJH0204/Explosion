@@ -13,20 +13,25 @@
         
         <!-- 사이드바 -->
         <div id="sidebar" class="sidebar">
+            <img src="character_image.jpg" alt="Character" class="character-image">
             <div class="status-bar">
-                <img src="character_image.jpg" alt="Character" class="character-image">
                 <p class="nickname">닉네임: User123</p>
             </div>
         </div>
+        
 
         <header>
             <button class="logo-button">
                 <img src="Flame_logo2.png" alt="Logo" style="height: 80px;">
             </button>
+            <!-- 화살표 버튼 추가 -->
+            <button class="arrow-button left" onclick="prevPage()">←</button>
+            <button class="arrow-button right" onclick="nextPage()">→</button>
         </header>
+
         <main>
             <div class="challenge-grid" id="challengeGrid">
-                <!-- JavaScript를 통해 카드들이 동적으로 추가될 예정 -->
+                <!-- JavaScript를 통해 카드 페이지들이 동적으로 추가될 예정 -->
             </div>
         </main>
     </div>
