@@ -4,7 +4,7 @@ body {
     color: white;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* 화면에서 스크롤바 숨김 */
+    overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,6 +19,61 @@ body {
     align-items: center;
     justify-content: center;
     background-color: #333;
+    transition: margin-left 0.3s ease;
+}
+
+/* 사이드바 토글 버튼 */
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* 사이드바 */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    transform: translateX(-250px); /* 기본 상태에서 숨김 */
+    z-index: 5;
+}
+
+.sidebar.active {
+    transform: translateX(0); /* 활성화 시 사이드바가 보이게 */
+}
+
+.status-bar {
+    text-align: center;
+    padding: 20px;
+}
+
+.character-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.nickname {
+    font-size: 1.2em;
+    color: #fff;
 }
 
 header {
@@ -37,9 +92,11 @@ header {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory; /* 스크롤 스냅 설정 */
-    width: 100vw;
+    width: calc(100vw - 250px); /* 사이드바가 차지하는 공간만큼 줄임 */
     height: 80vh;
     gap: 20px;
+    padding: 20px;
+    transition: width 0.3s ease; /* 사이드바 열고 닫힐 때 부드럽게 조정 */
 }
 
 .page {
@@ -47,16 +104,14 @@ header {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(4, 1fr);
     gap: 20px;
-    width: 100vw; /* 페이지 너비를 100vw로 고정 */
+    width: 100vw; /* 페이지 너비를 화면에 맞춤 */
     height: 100%;
-    scroll-snap-align: start; /* 페이지별로 스냅 */
+    scroll-snap-align: start; /* 페이지가 스크롤 시작점에 정렬되도록 설정 */
 }
 
 .card {
-    width: 100%;
-    height: 100%;
-    max-width: 100px; /* 카드 크기를 제한하여 적절한 레이아웃 유지 */
-    max-height: 150px;
+    width: 100px;
+    height: 150px;
     perspective: 1000px;
     cursor: pointer;
     position: relative;
@@ -115,14 +170,16 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.6); /* 어두운 반투명 배경 */
     justify-content: center;
     align-items: center;
+    z-index: 1000; /* 팝업이 사이드바나 다른 요소 위에 표시되도록 설정 */
 }
 
 .popup-content {
     background-color: #222;
     padding: 20px;
+    width: 300px; /* 팝업 창의 너비를 작게 설정 */
     border-radius: 10px;
     text-align: center;
     color: white;

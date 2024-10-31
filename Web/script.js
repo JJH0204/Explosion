@@ -1,3 +1,8 @@
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('active');
+}
+
 // 페이지 로드 시 40개의 카드를 동적으로 생성
 window.onload = function() {
     const challengeGrid = document.getElementById('challengeGrid');
@@ -66,3 +71,21 @@ function solveGame() {
     // 팝업 닫기
     closePopup();
 }
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const container = document.querySelector('.container');
+    const challengeGrid = document.querySelector('.challenge-grid');
+    
+    sidebar.classList.toggle('active');
+    
+    if (sidebar.classList.contains('active')) {
+        container.style.marginLeft = '250px';
+        challengeGrid.style.width = 'calc(100vw - 250px)';
+    } else {
+        container.style.marginLeft = '0';
+        challengeGrid.style.width = '100vw';
+    }
+}
+
+// 기존 코드 유지
