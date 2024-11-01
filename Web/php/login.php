@@ -3,8 +3,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: application/json'); // 응답을 JSON 형식으로 설정
 
-$serverIP = '192.168.1.150';
-$DB_rootID = "root";
+$serverIP = 'localhost';
+$DB_rootID = "admin";
 $DB_rootPW = "flamerootpassword";
 $dbname = "testDB";
 
