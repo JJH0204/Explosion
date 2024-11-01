@@ -11,6 +11,6 @@ CREATE TABLE `ID_info` (
 
 INSERT INTO `ID_info` VALUES ('public', 'public', 'public');
 
-CREATE USER `admin`@`localhost` identified by 'flamerootpassword'
+CREATE USER `admin`@`localhost` identified by 'flamerootpassword';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;
