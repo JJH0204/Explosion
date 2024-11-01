@@ -263,3 +263,24 @@ header {
     border-radius: 10px;
     transition: width 0.3s ease;
 }
+
+/* 로그아웃 버튼 스타일 */
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(68, 68, 68, 0.9); /* 사이드바와 같은 색상 */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #555; /* 호버 시 조금 더 밝은 색상 */
+}
+

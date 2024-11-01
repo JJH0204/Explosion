@@ -109,3 +109,10 @@ function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('active');
 }
+
+function logout() {
+    // 로그아웃 처리 (예: 세션 종료 코드 추가)
+    alert("로그아웃되었습니다.");
+    // 로그인 페이지로 이동하거나 다른 작업 수행
+    window.location.href = "login.html"; // 로그인 페이지로 리디렉션
+}
