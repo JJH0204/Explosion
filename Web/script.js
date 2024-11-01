@@ -4,6 +4,7 @@ let currentPage = 0;
 const cardsPerPage = 20;
 const totalCards = 40;
 const totalPages = Math.ceil(totalCards / cardsPerPage);
+let collectedCount = 0; // 카드 수집 카운트
 
 // 페이지 로드 시 카드 생성
 window.onload = function() {
@@ -84,13 +85,21 @@ function solveGame() {
     const cardId = popup.dataset.currentCardId;
     const card = document.querySelector(`[data-id="${cardId}"]`);
 
-    if (card) {
+    if (card && !card.classList.contains('solved')) {
         card.classList.add('solved');
         const cardInner = card.querySelector('.card-inner');
         cardInner.style.transform = "rotateY(180deg)";
         
         const cardBack = card.querySelector('.card-back');
         cardBack.innerHTML = `<img src="./img/monster_image${cardId}.jpg" alt="몬스터 이미지" style="width:100%; height:100%;">`;
+
+        // 카드 수집기 업데이트
+        collectedCount++;
+        document.getElementById('collectedText').innerText = `${collectedCount} / ${totalCards}`;
+
+        // 진행 상태 바 업데이트
+        const progressFill = document.getElementById('progressFill');
+        progressFill.style.width = `${(collectedCount / totalCards) * 100}%`;
     }
 
     closePopup();
