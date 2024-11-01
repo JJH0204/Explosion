@@ -28,43 +28,48 @@
                     </div>
                     <p id="error-message" style="display:none; color:red;">아이디 또는 비밀번호가 잘못되었습니다.</p>
                     <button type="submit" class="signin-button">Sign in</button>
-                    <button type="button" class="signup-button">Sign up</button>
+                    <button type="button" class="login-signup-button" id="open-signup-window">Sign up</button>
                 </form>
             </div>
         </main>
     </div>
 
     <script>
+        // 로그인 요청 처리
         document.getElementById('login-form').addEventListener('submit', function (event) {
-                event.preventDefault();
-                const ID = document.getElementById('ID').value;
-                const PW = document.getElementById('PW').value;
-    
-                // 로그인 요청 보내기
-                fetch('./php/login.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `ID=${encodeURIComponent(ID)}&PW=${encodeURIComponent(PW)}`,
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            sessionStorage.setItem('loggedIn', 'true');
-                            sessionStorage.setItem('ID', data.ID);
-                            window.location.href = 'main.html'; // 시작(main) 페이지로 이동
-                        } else {
-                            document.getElementById('error-message').textContent = 'ID 또는 PW가 잘못되었습니다.';
-                            document.getElementById('error-message').style.display = 'block'; // 에러 메시지 표시
-                        }
-                    })
-                    .catch(error => {
-                        console.error('로그인 요청 실패:', error);
-                    });
-            });
-    </script>
+            event.preventDefault();
+            const ID = document.getElementById('ID').value;
+            const PW = document.getElementById('PW').value;
 
+            // 로그인 요청 보내기
+            fetch('./php/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `ID=${encodeURIComponent(ID)}&PW=${encodeURIComponent(PW)}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        sessionStorage.setItem('loggedIn', 'true');
+                        sessionStorage.setItem('ID', data.ID);
+                        window.location.href = 'main.html'; // 시작(main) 페이지로 이동
+                    } else {
+                        document.getElementById('error-message').textContent = 'ID 또는 PW가 잘못되었습니다.';
+                        document.getElementById('error-message').style.display = 'block'; // 에러 메시지 표시
+                    }
+                })
+                .catch(error => {
+                    console.error('로그인 요청 실패:', error);
+                });
+        });
+
+        // 회원가입 창 열기
+        document.getElementById('open-signup-window').onclick = function () {
+            window.open('signup.html', 'signupWindow', 'width=400,height=500');
+        };
+    </script>
 </body>
 
 </html>
