@@ -30,7 +30,7 @@ window.onload = function() {
             const cardBack = document.createElement('div');
             cardBack.className = 'card-back';
             const img = document.createElement('img');
-            img.src = `image${i}.jpg`;
+            img.src = `./img/image${i}.jpg`;
             img.alt = "해결된 이미지";
             cardBack.appendChild(img);
             

@@ -12,7 +12,7 @@
     <div class="login-container">
         <header>
             <button class="logo-button">
-                <img src="Flame_logo2.png" alt="Logo" style="height: 80px;">
+                <img src="./img/Flame_logo2.png" alt="Logo" style="height: 80px;">
             </button>
         </header>
         <main>
@@ -41,7 +41,7 @@
                 const PW = document.getElementById('PW').value;
     
                 // 로그인 요청 보내기
-                fetch('/php/login.php', {
+                fetch('./php/login.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -53,7 +53,7 @@
                         if (data.success) {
                             sessionStorage.setItem('loggedIn', 'true');
                             sessionStorage.setItem('ID', data.ID);
-                            window.location.href = 'index.html'; // 시작(index) 페이지로 이동
+                            window.location.href = 'main.html'; // 시작(main) 페이지로 이동
                         } else {
                             document.getElementById('error-message').textContent = 'ID 또는 PW가 잘못되었습니다.';
                             document.getElementById('error-message').style.display = 'block'; // 에러 메시지 표시
