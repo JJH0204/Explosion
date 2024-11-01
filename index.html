@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>War Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 사이드바 토글 버튼 -->
+        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        
+        <!-- 사이드바 -->
+        <div id="sidebar" class="sidebar">
+            <img src="./img/character_image.jpg" alt="Character" class="character-image">
+            <div class="status-bar">
+                <p class="nickname">닉네임: User123</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="collectedText">0 / 40</p>
+            </div>
+            <div class="scoreboard">
+                <p class="score">점수: <span id="score">0</span></p>
+                <p>레벨: <span id="level">1</span></p>
+            </div>
+            <div id="rankingBoard" class="ranking-board">
+                <h3>실시간 랭킹</h3>
+                <ul id="rankingList"></ul>
+            </div>
+        </div>
+        
+
+        <header>
+            <button class="logo-button">
+                <img src="./img/Flame_logo2.png" alt="Logo" style="height: 80px;">
+            </button>
+            <!-- 화살표 버튼 추가 -->
+            <button class="arrow-button left" onclick="prevPage()">←</button>
+            <button class="arrow-button right" onclick="nextPage()">→</button>
+        </header>
+
+        <main>
+            <div class="challenge-grid" id="challengeGrid">
+                <!-- JavaScript를 통해 카드 페이지들이 동적으로 추가될 예정 -->
+            </div>
+        </main>
+    </div>
+
+    <!-- 게임 팝업 -->
+    <div id="gamePopup" class="popup">
+        <div class="popup-content">
+            <span onclick="closePopup()" class="close">&times;</span>
+            <p id="gameContent">여기에 게임 내용 표시</p>
+            <button onclick="solveGame()">해결하기</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

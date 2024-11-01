@@ -1,0 +1,311 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: white;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #333;
+    transition: margin-left 0.3s ease;
+}
+
+/* 사이드바 토글 버튼 */
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* 사이드바 */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    transform: translateX(-250px);
+    z-index: 5;
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+.character-image {
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.nickname {
+    font-size: 1.2em;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.status-bar {
+    text-align: center;
+}
+
+.card-collector {
+    margin-top: 20px;
+}
+
+.collection-image {
+    width: 100px;
+    height: auto;
+    margin-top: 10px;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.logo-button img {
+    height: 80px;
+    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.7));
+}
+
+.challenge-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 80vh;
+    overflow: hidden;
+    position: relative;
+    transition: width 0.3s ease;
+}
+
+.page {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 20px;
+    justify-content: center;
+    width: calc(100% - 40px);
+    max-width: 600px;
+    height: 100%;
+    padding: 0 20px;
+}
+
+.card {
+    width: 100px;
+    height: 150px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.6s;
+}
+
+.card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card.solved .card-inner {
+    transform: rotateY(180deg); /* 해결 후 뒤집힘 */
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    border: 2px solid #555;
+    border-radius: 10px;
+}
+
+.card-front {
+    background-color: #444;
+}
+
+.card-back {
+    background-color: #333;
+    transform: rotateY(180deg);
+}
+
+.card-back img {
+    width: 90%;
+    height: 90%;
+    border-radius: 8px;
+    border: 2px solid #999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 화살표 버튼 */
+/* 화살표 버튼 */
+.arrow-button {
+    position: fixed;
+    top: 50%;
+    background-color: rgba(68, 68, 68, 0.7); /* 배경을 약간 투명하게 */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.arrow-button:hover {
+    background-color: rgba(68, 68, 68, 0.9); /* 호버 시 약간 더 불투명하게 */
+}
+
+.arrow-button.left {
+    left: 20px;
+}
+
+.arrow-button.right {
+    right: 20px;
+}
+
+
+
+/* 팝업 스타일 */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #222;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    position: relative;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+}
+
+.close {
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #888;
+}
+
+.status-bar {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 80%;
+    height: 20px;
+    background-color: #555;
+    border-radius: 10px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background-color: #4caf50;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+/* 랭킹 보드 스타일 */
+.ranking-board {
+    width: 80%;
+    background-color: #444;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+}
+
+.ranking-board h3 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    color: #ffd700; /* 타이틀 색상 */
+}
+
+.ranking-board ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ranking-board li {
+    padding: 8px 0;
+    border-bottom: 1px solid #555;
+    color: #ccc;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ranking-board li:last-child {
+    border-bottom: none;
+}
+
+.ranking-board li strong {
+    color: #ffd700; /* 순위 색상 */
+    margin-right: 8px;
+}
+
+.ranking-board li span {
+    color: #fff;
+    font-weight: bold;
+}
