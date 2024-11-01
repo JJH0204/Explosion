@@ -109,10 +109,62 @@ function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('active');
 }
-
-function logout() {
-    // 로그아웃 처리 (예: 세션 종료 코드 추가)
-    alert("로그아웃되었습니다.");
-    // 로그인 페이지로 이동하거나 다른 작업 수행
-    window.location.href = "login.html"; // 로그인 페이지로 리디렉션
+// 점수 및 레벨 업데이트 함수
+function updateScore() {
+    fetch("Scoreboard2.php")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("score").textContent = data.score;
+            document.getElementById("level").textContent = data.stage;
+        })
+        .catch(error => console.error("Error updating score:", error));
 }
+
+// 페이지 로드 시 점수 불러오기
+document.addEventListener("DOMContentLoaded", () => {
+    updateScore();
+});
+
+// 스테이지 완료 시 호출하는 함수 예시
+function completeStage() {
+    updateScore(10);  // 스테이지 완료 시 점수 10점 추가
+    alert("스테이지 완료! 점수가 갱신되었습니다.");
+}
+
+// 팝업 닫기 함수
+function closePopup() {
+    document.getElementById("gamePopup").style.display = "none";
+}
+
+// 게임 해결 함수 예시
+function solveGame() {
+    completeStage();  // 스테이지 완료 처리
+    closePopup();
+}
+// 랭킹 정보를 업데이트하는 함수
+function updateRanking() {
+    fetch("ranking.php")
+        .then(response => response.json())
+        .then(data => {
+            const rankingList = document.getElementById("rankingList");
+            rankingList.innerHTML = ""; // 기존 랭킹 초기화
+
+            // 랭킹 데이터를 순회하며 리스트 생성
+            data.forEach((player, index) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `                    
+                    <strong>${index + 1}위</strong>
+                    <span>${player.username}</span>
+                    <span>점수: ${player.score}</span>
+                    <span>레벨: ${player.stage}</span>`;
+                rankingList.appendChild(listItem);
+            });
+        })
+        .catch(error => console.error("Error fetching ranking data:", error));
+}
+
+// 5초마다 랭킹 갱신
+document.addEventListener("DOMContentLoaded", () => {
+    updateRanking(); // 첫 로드 시 랭킹 표시
+    setInterval(updateRanking, 5000); // 5초마다 업데이트
+});

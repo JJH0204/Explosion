@@ -263,24 +263,49 @@ header {
     border-radius: 10px;
     transition: width 0.3s ease;
 }
-
-/* 로그아웃 버튼 스타일 */
-.logout-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(68, 68, 68, 0.9); /* 사이드바와 같은 색상 */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    z-index: 10;
-    transition: background-color 0.3s;
+/* 랭킹 보드 스타일 */
+.ranking-board {
+    width: 80%;
+    background-color: #444;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
 }
 
-.logout-button:hover {
-    background-color: #555; /* 호버 시 조금 더 밝은 색상 */
+.ranking-board h3 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    color: #ffd700; /* 타이틀 색상 */
 }
 
+.ranking-board ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ranking-board li {
+    padding: 8px 0;
+    border-bottom: 1px solid #555;
+    color: #ccc;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ranking-board li:last-child {
+    border-bottom: none;
+}
+
+.ranking-board li strong {
+    color: #ffd700; /* 순위 색상 */
+    margin-right: 8px;
+}
+
+.ranking-board li span {
+    color: #fff;
+    font-weight: bold;
+}
