@@ -4,15 +4,21 @@ session_start();
 // 데이터베이스 설정
 $host = '127.0.0.1';
 $db = 'GameScore';
-$username = 'root';
-$passwd = '1515';
+$username = 'admin';
+$passwd = '1234';
 $charset = 'utf8mb4';
 
-// 세션에서 사용자 정보 가져오기
-$user_id = $_SESSION['user_id'] ?? null; // 사용자 고유 ID
-$user_name = $_SESSION['username'] ?? null; // 사용자 이름
+// 게임 내 점수 업데이트 요청인지 확인하는 토큰 검사
+if (!isset($_SESSION['is_game_request']) || $_SESSION['is_game_request'] !== true) {
+    echo json_encode(["error" => "잘못된 접근입니다."]);
+    exit;
+}
 
-// 사용자 로그인 여부 확인
+
+// 세션에서 사용자 정보 가져오기
+$user_id = $_SESSION['user_id'] ?? null;
+$user_name = $_SESSION['username'] ?? null;
+
 if (!$user_id || !$user_name) {
     die("로그인 상태가 아닙니다.");
 }
@@ -47,8 +53,8 @@ if ($result->num_rows > 0) {
     $stmt_update->execute();
 } else {
     // 새로운 사용자 기록 추가
-    $new_score = 10;  // 초기 점수
-    $new_stage = 1;   // 첫 번째 스테이지
+    $new_score = 10;
+    $new_stage = 1;
 
     $sql_insert = "INSERT INTO Scoreboard (username, game_id, score, stage) VALUES (?, ?, ?, ?)";
     $stmt_insert = $conn->prepare($sql_insert);
@@ -65,4 +71,7 @@ echo json_encode([
 
 // 연결 종료
 $conn->close();
+
+// 점수 업데이트 후 요청 완료, 세션 값 초기화
+$_SESSION['is_game_request'] = false;
 ?>
