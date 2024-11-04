@@ -76,7 +76,7 @@ function solveGame() {
         cardInner.style.transform = "rotateY(180deg)";
         
         const cardBack = card.querySelector('.card-back');
-        cardBack.innerHTML = `<img src="./img/monster_image${cardId}.jpg" alt="몬스터 이미지" style="width:100%; height:100%;">`;
+        cardBack.innerHTML = `<img src="./img/monster_image${cardId}.png" alt="몬스터 이미지" style="width:100%; height:100%;">`;
 
         collectedCount++;
         document.getElementById('collectedText').innerText = `${collectedCount} / ${totalCards}`;
