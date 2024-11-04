@@ -34,8 +34,13 @@ body {
     padding: 10px;
     font-size: 20px;
     cursor: pointer;
+<<<<<<< HEAD
     z-index: 10;
     transition: left 0.3s ease; /* 버튼 위치 애니메이션 */
+=======
+    z-index: 10;t 0.3s e
+    transition: lefase; /* 버튼 위치 애니메이션 */
+>>>>>>> 6748b2d (1)
 }
 
 .sidebar {

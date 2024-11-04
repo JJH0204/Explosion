@@ -5,9 +5,13 @@ header('Content-Type: application/json'); // 응답을 JSON 형식으로 설정
 
 $serverIP = 'localhost';
 $DB_rootID = "admin";
+<<<<<<< HEAD
 $DB_rootPW = "12345";
+=======
+$DB_rootPW = "1234";
+>>>>>>> 6748b2d (1)
 $dbname = "testDB";
-
+$charset = 'utf8mb4';
 try {
     // 데이터베이스 연결 시도
     $conn = new mysqli($serverIP, $DB_rootID, $DB_rootPW, $dbname);
