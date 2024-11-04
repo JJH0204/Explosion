@@ -278,6 +278,7 @@ header {
     padding: 5px 0;
     border-bottom: 1px solid #ccc;
 }
+<<<<<<< HEAD
 .character-image {
     width: 100%; /* 사이드바 너비에 맞게 조정 */
     height: auto; /* 비율을 유지하면서 높이 조정 */
@@ -285,3 +286,23 @@ header {
     object-fit: cover; /* 이미지가 사이드바에 잘 맞게 */
     border-radius: 10px; /* 원하는 경우 이미지에 둥근 모서리 추가 */
 }
+=======
+.game-description {
+    margin-bottom: 20px;
+  }
+  
+  .flag-input {
+    margin-bottom: 20px;
+  }
+  
+  .game-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .challenge-button, .submit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+>>>>>>> 4051ba0 (flag)
