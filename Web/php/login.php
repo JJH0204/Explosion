@@ -33,9 +33,13 @@ try {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+
             session_start();
-            $_SESSION['ID'] = $ID;
-            echo json_encode(['success' => true, 'ID' => $ID]);
+            $_SESSION['user_id'] = $user['ID'];  // user_id 저장
+            $_SESSION['username'] = $user['NICKNAME'];  // username 저장
+
+            echo json_encode(['success' => true, 'ID' => $user['ID'], 'NICKNAME' => $user['NICKNAME']]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Invalid ID or password']);
         }

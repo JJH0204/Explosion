@@ -26,7 +26,7 @@ window.onload = function() {
             const cardBack = document.createElement('div');
             cardBack.className = 'card-back';
             const img = document.createElement('img');
-            img.src = `./img/image${i}.jpg`;
+            img.src = `./img/monster_image${i}.jpg`;
             img.alt = `카드 ${i} 해결된 이미지`;
             cardBack.appendChild(img);
             
@@ -37,7 +37,41 @@ window.onload = function() {
         }
         challengeGrid.appendChild(page);
     }
+
+    // 페이지가 로드될 때 랭킹 정보를 가져옵니다.
+    fetchRanking();
 };
+
+function fetchRanking() {
+    fetch('./php/ranking.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                displayRanking(data.rankings);
+            } else {
+                console.error('Error fetching rankings:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching ranking:', error);
+        });
+}
+
+function displayRanking(rankings) {
+    const rankingList = document.getElementById('rankingList'); // 점수를 표시할 DOM 요소를 찾습니다.
+    rankingList.innerHTML = ''; // 기존 내용을 지웁니다.
+
+    rankings.forEach((ranking, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${index + 1}. ${ranking.username} - 점수: ${ranking.score}, 스테이지: ${ranking.stage}`;
+        rankingList.appendChild(listItem);
+    });
+}
 
 function showPage(pageIndex) {
     const challengeGrid = document.getElementById('challengeGrid');
@@ -83,6 +117,18 @@ function solveGame() {
 
         const progressFill = document.getElementById('progressFill');
         progressFill.style.width = `${(collectedCount / totalCards) * 100}%`;
+
+        fetch('./php/set_game_request.php', {
+            method: 'POST',
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (response.ok) {
+                // 이후 점수 업데이트 요청
+                fetchScoreUpdate();
+            }
+        })
+        .catch(error => console.error('Error setting game request:', error));
     }
 
     closePopup();
@@ -103,8 +149,23 @@ function toggleSidebar() {
     }
 }
 
-
-
+function fetchScoreUpdate() {
+    fetch('./php/Scoreboard2.php', {
+        method: 'POST',
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Error:', data.error);
+            alert(data.error); // 사용자에게 오류 메시지 표시
+        } else if (data.message) {
+            console.log(data.message);
+            updateScoreboard(data.score, data.stage);
+        }
+    })
+    .catch(error => console.error('Error parsing JSON:', error));
+}
 function logout() {
     alert("로그아웃되었습니다.");
     window.location.href = "login.html"; 

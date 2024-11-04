@@ -1,27 +1,26 @@
 <?php
-session_start();
-
-// 데이터베이스 설정
+header('Content-Type: application/json');
 $host = '127.0.0.1';
 $db = 'GameScore';
-$username = 'root';
-$passwd = '1515';
+$username = 'admin';
+$passwd = '1234';
 $charset = 'utf8mb4';
 
 // 데이터베이스 연결
 $conn = new mysqli($host, $username, $passwd, $db);
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['success' => false, 'error' => 'Database connection failed']);
+    exit;
 }
 
-// 랭킹 조회 쿼리: 점수 기준 내림차순으로 상위 10명 조회
-$sql = "SELECT username, score, stage FROM Scoreboard ORDER BY score DESC LIMIT 10";
+// 상위 랭킹 10명의 사용자 정보를 가져오는 SQL 쿼리
+$sql = "SELECT username, score, stage FROM Scoreboard ORDER BY score DESC, stage DESC LIMIT 10";
 $result = $conn->query($sql);
 
-$ranking = [];
+$rankings = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $ranking[] = [
+        $rankings[] = [
             'username' => $row['username'],
             'score' => $row['score'],
             'stage' => $row['stage']
@@ -29,9 +28,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// JSON 형식으로 랭킹 데이터 반환
-echo json_encode($ranking);
-
-// 연결 종료
+echo json_encode(['success' => true, 'rankings' => $rankings]);
 $conn->close();
 ?>
