@@ -4,13 +4,12 @@ const totalCards = 40;
 const totalPages = Math.ceil(totalCards / cardsPerPage);
 let collectedCount = 0; // 현재까지 수집한 경험치
 let userNickname = ""; 
-let questionsData = null;
 
 window.onload = function() {
     // 사용자 정보와 랭킹 정보를 가져옵니다.
     fetchUserInfo();
     fetchRanking();
-    loadQuestionData();
+    
     const challengeGrid = document.getElementById('challengeGrid');
     for (let p = 0; p < totalPages; p++) {
         const page = document.createElement('div');
@@ -114,30 +113,9 @@ function prevPage() {
 function revealGame(cardElement, gameId) {
     const popup = document.getElementById('gamePopup');
     popup.style.display = 'flex';
-    
-    // Create game content
-    const gameContent = document.getElementById('gameContent');
-    gameContent.innerHTML = `
-      <h2>${gameId}</h2>
-      <div class="game-description">
-        <h3>게임 설명:</h3>
-        <div id="gameDescription"></div>
-      </div>
-      <div class="flag-input">
-        <label for="flagInput">플래그:</label>
-        <input type="text" id="flagInput" placeholder="플래그를 입력하세요">
-      </div>
-      <div class="game-buttons">
-        <button onclick="startChallenge('${gameId}')" class="challenge-button">도전하기</button>
-        <button onclick="submitFlag('${gameId}')" class="submit-button">정답 제출</button>
-      </div>
-    `;
-  
-    // Fetch and display game description
-    fetchGameDescription(gameId);
-  
+    document.getElementById('gameContent').innerText = `게임: ${gameId}`;
     popup.dataset.currentCardId = cardElement.dataset.id;
-  }
+}
 
 function closePopup() {
     document.getElementById('gamePopup').style.display = 'none';
@@ -154,7 +132,7 @@ function solveGame() {
         cardInner.style.transform = "rotateY(180deg)";
         
         const cardBack = card.querySelector('.card-back');
-        cardBack.innerHTML = `<img src="./img/monster_image${cardId}.png" alt="몬스터 이미지" style="width:100%; height:100%;">`;
+        cardBack.innerHTML = `<img src="./img/monster_image${cardId}.jpg" alt="몬스터 이미지" style="width:100%; height:100%;">`;
 
         // 경험치 증가
         collectedCount++;
@@ -217,104 +195,3 @@ function logout() {
     alert("로그아웃되었습니다.");
     window.location.href = "login.html"; 
 }
-
-// JSON 데이터를 로드하는 함수
-function loadQuestionData() {
-    fetch('./json/data.json')
-      .then(response => response.json())
-      .then(data => {
-        questionsData = data;
-        console.log('Questions data loaded');
-      })
-      .catch(error => console.error('Error loading questions data:', error));
-  }
-  
-  // ... existing code ...
-  
-  function submitFlag(gameId) {
-    const flagInput = document.getElementById('flagInput');
-    const flag = flagInput.value.trim();
-    if (!flag) {
-      alert("플래그를 입력해주세요.");
-      return;
-    }
-  
-    if (!questionsData) {
-      alert("문제 데이터가 로드되지 않았습니다. 잠시 후 다시 시도해주세요.");
-      return;
-    }
-  
-    console.log(`Submitting flag for ${gameId}: ${flag}`);
-    alert("플래그가 제출되었습니다. 검증 중...");
-  
-    // gameId에서 문제 번호 추출 (예: 'game1' -> 0)
-    const questionIndex = parseInt(gameId.replace('game', '')) - 1;
-    
-    if (questionIndex < 0 || questionIndex >= questionsData.QCount) {
-      alert("유효하지 않은 게임 ID입니다.");
-      return;
-    }
-  
-    const correctAnswer = questionsData.QData[questionIndex].answer;
-  
-    setTimeout(() => {
-      if (flag === correctAnswer) {
-        alert("축하합니다! 정답입니다.");
-        solveGame();
-      } else {
-        alert("틀렸습니다. 다시 시도해주세요.");
-      }
-    }, 1000);
-  }
-  
-  // ... existing code ...
-  
-  function fetchGameDescription(gameId) {
-    if (!questionsData) {
-      console.error('Questions data not loaded');
-      return;
-    }
-  
-    const questionIndex = parseInt(gameId.replace('game', '')) - 1;
-    if (questionIndex < 0 || questionIndex >= questionsData.QCount) {
-      console.error('Invalid game ID');
-      return;
-    }
-  
-    const descPath = questionsData.QData[questionIndex].desc;
-    fetch(descPath)
-      .then(response => response.text())
-      .then(markdown => {
-        const gameDescriptionElement = document.getElementById('gameDescription');
-        if (gameDescriptionElement) {
-          if (typeof marked === 'function') {
-            gameDescriptionElement.innerHTML = marked(markdown);
-          } else {
-            gameDescriptionElement.textContent = markdown;
-          }
-        } else {
-          console.error('gameDescription element not found');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching game description:', error);
-        document.getElementById('gameDescription').textContent = "게임 설명을 불러오는 데 실패했습니다.";
-      });
-  }
-  
-  function startChallenge(gameId) {
-    if (!questionsData) {
-      console.error('Questions data not loaded');
-      return;
-    }
-  
-    const questionIndex = parseInt(gameId.replace('game', '')) - 1;
-    if (questionIndex < 0 || questionIndex >= questionsData.QCount) {
-      console.error('Invalid game ID');
-      return;
-    }
-  
-    const challengeUrl = questionsData.QData[questionIndex].link;
-    window.open(challengeUrl, '_blank');
-  }
-  

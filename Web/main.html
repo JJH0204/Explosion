@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flame</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 사이드바 토글 버튼 -->
+        <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="사이드바 열기/닫기" role="button">☰</button>
+        
+        <!-- 사이드바 -->
+        <div id="sidebar" class="sidebar">
+            <img src="./img/character_image.jpg" alt="Character" class="character-image">
+            <div class="status-bar">
+                <p class="nickname">닉네임: <span id="user-nickname">User123</span></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="collectedText">0 / 40</p>
+            </div>
+            <div class="ranking-section">
+                <h2>랭킹 보드</h2>
+                <ul id="rankingList">
+                    <!-- 랭킹이 여기에 표시됩니다 -->
+                </ul>
+            </div>
+            
+        </div>
+
+        <header>
+            <button class="logo-button" role="button" aria-label="메인 로고">
+                <img src="./img/Flame_logo2.png" alt="Logo" style="height: 80px;">
+            </button>
+            <button class="arrow-button left" onclick="prevPage()" aria-label="이전 페이지" role="button">←</button>
+            <button class="arrow-button right" onclick="nextPage()" aria-label="다음 페이지" role="button">→</button>
+        
+            <!-- 로그아웃 버튼 추가 -->
+            <button class="logout-button" onclick="logout()" aria-label="로그아웃" role="button">로그아웃</button>
+        </header>
+
+        <main>
+            <div class="challenge-frame">
+                <div class="challenge-grid" id="challengeGrid">
+                    <!-- JavaScript를 통해 카드 페이지들이 동적으로 추가될 예정 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 게임 팝업 -->
+    <div id="gamePopup" class="popup" aria-hidden="true" role="dialog">
+        <div class="popup-content">
+            <span onclick="closePopup()" class="close" aria-label="팝업 닫기" role="button">&times;</span>
+            <p id="gameContent">여기에 게임 내용 표시</p>
+            <button onclick="solveGame()" role="button">해결하기</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>
