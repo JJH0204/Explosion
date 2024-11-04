@@ -19,7 +19,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: "./image/background.jpg";
+    background-image: "./img/background.jpg";
     background-color: #333;
     transition: margin-left 0.3s ease;
 }
@@ -135,11 +135,14 @@ header {
     font-weight: bold;
     color: white;
     border: 2px solid #555;
-    border-radius: 10px;
+    border-radius: 10px; /* 카드 모서리를 둥글게 */
+    overflow: hidden; /* 이미지가 카드 경계를 벗어나지 않게 */
 }
+
 
 .card-front {
     background-color: #444;
+    
 }
 
 .card-back {
@@ -274,4 +277,11 @@ header {
 #rankingList li {
     padding: 5px 0;
     border-bottom: 1px solid #ccc;
+}
+.character-image {
+    width: 100%; /* 사이드바 너비에 맞게 조정 */
+    height: auto; /* 비율을 유지하면서 높이 조정 */
+    max-width: 200px; /* 원하는 최대 크기 설정 (필요시 조정) */
+    object-fit: cover; /* 이미지가 사이드바에 잘 맞게 */
+    border-radius: 10px; /* 원하는 경우 이미지에 둥근 모서리 추가 */
 }
