@@ -5,7 +5,7 @@ header('Content-Type: application/json'); // 응답을 JSON 형식으로 설정
 
 $serverIP = 'localhost';
 $DB_rootID = "admin";
-$DB_rootPW = "flamerootpassword";
+$DB_rootPW = "12345";
 $dbname = "testDB";
 
 try {
@@ -19,7 +19,7 @@ try {
     // POST 요청으로 전달된 ID, PW, Nickname 받기
     $ID = isset($_POST['ID']) ? $_POST['ID'] : null;
     $PW = isset($_POST['PW']) ? $_POST['PW'] : null;
-    $Nickname = isset($_POST['Nickname']) ? $_POST['Nickname'] : null;
+    $Nickname = isset($_POST['Nickname']) ? $_POST['Nickname'] : null;   
 
     // 필수 입력값 확인
     if ($ID && $PW && $Nickname) {
