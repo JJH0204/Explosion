@@ -95,13 +95,15 @@ header {
 
 .page {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 20px;
-    width: 100vw;
-    padding: 0 150px;
+    grid-template-columns: repeat(5, 150px); /* 열의 너비를 150px로 고정 */
+    grid-template-rows: repeat(4, 150px);    /* 행의 높이도 150px로 고정 */
+    gap: 20px;                               /* 카드 간의 간격 */
+    width: calc(5 * 150px + 4 * 20px);       /* 전체 너비를 열 너비와 간격을 합쳐 계산 */
+    margin: 0 auto;                          /* 페이지 중앙에 정렬 */
+    padding: 0;                              /* 불필요한 padding 제거 */
     box-sizing: border-box;
 }
+
 
 .card {
     width: 100px;
