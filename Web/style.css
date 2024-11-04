@@ -19,7 +19,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: "/image/background.jpg";
+    background-image: "./image/background.jpg";
     background-color: #333;
     transition: margin-left 0.3s ease;
 }
