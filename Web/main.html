@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <!-- 사이드바 토글 버튼 -->
-        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="사이드바 열기/닫기" role="button">☰</button>
         
         <!-- 사이드바 -->
         <div id="sidebar" class="sidebar">
@@ -24,14 +24,14 @@
         </div>
 
         <header>
-            <button class="logo-button">
+            <button class="logo-button" role="button" aria-label="메인 로고">
                 <img src="./img/Flame_logo2.png" alt="Logo" style="height: 80px;">
             </button>
-            <button class="arrow-button left" onclick="prevPage()">←</button>
-            <button class="arrow-button right" onclick="nextPage()">→</button>
+            <button class="arrow-button left" onclick="prevPage()" aria-label="이전 페이지" role="button">←</button>
+            <button class="arrow-button right" onclick="nextPage()" aria-label="다음 페이지" role="button">→</button>
         
             <!-- 로그아웃 버튼 추가 -->
-            <button class="logout-button" onclick="logout()">로그아웃</button>
+            <button class="logout-button" onclick="logout()" aria-label="로그아웃" role="button">로그아웃</button>
         </header>
 
         <main>
@@ -44,11 +44,11 @@
     </div>
 
     <!-- 게임 팝업 -->
-    <div id="gamePopup" class="popup">
+    <div id="gamePopup" class="popup" aria-hidden="true" role="dialog">
         <div class="popup-content">
-            <span onclick="closePopup()" class="close">&times;</span>
+            <span onclick="closePopup()" class="close" aria-label="팝업 닫기" role="button">&times;</span>
             <p id="gameContent">여기에 게임 내용 표시</p>
-            <button onclick="solveGame()">해결하기</button>
+            <button onclick="solveGame()" role="button">해결하기</button>
         </div>
     </div>
 
