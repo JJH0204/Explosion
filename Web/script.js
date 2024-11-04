@@ -1,11 +1,15 @@
-/* script.js */
 let currentPage = 0;
 const cardsPerPage = 20;
 const totalCards = 40;
 const totalPages = Math.ceil(totalCards / cardsPerPage);
-let collectedCount = 0; 
+let collectedCount = 0; // 현재까지 수집한 경험치
+let userNickname = ""; 
 
 window.onload = function() {
+    // 사용자 정보와 랭킹 정보를 가져옵니다.
+    fetchUserInfo();
+    fetchRanking();
+    
     const challengeGrid = document.getElementById('challengeGrid');
     for (let p = 0; p < totalPages; p++) {
         const page = document.createElement('div');
@@ -37,10 +41,28 @@ window.onload = function() {
         }
         challengeGrid.appendChild(page);
     }
-
-    // 페이지가 로드될 때 랭킹 정보를 가져옵니다.
-    fetchRanking();
 };
+
+// 사용자 정보를 가져오는 함수 추가
+function fetchUserInfo() {
+    fetch('./php/user_info.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched user info:', data); // 사용자 정보 로그
+            if (data.username) {
+                userNickname = data.username; // userNickname 변수에 사용자 이름 저장
+                document.getElementById('user-nickname').innerText = userNickname; // 닉네임 업데이트
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching user info:', error);
+        });
+}
 
 function fetchRanking() {
     fetch('./php/ranking.php')
@@ -63,7 +85,7 @@ function fetchRanking() {
 }
 
 function displayRanking(rankings) {
-    const rankingList = document.getElementById('rankingList'); // 점수를 표시할 DOM 요소를 찾습니다.
+    const rankingList = document.getElementById('rankingList');
     rankingList.innerHTML = ''; // 기존 내용을 지웁니다.
 
     rankings.forEach((ranking, index) => {
@@ -110,14 +132,16 @@ function solveGame() {
         cardInner.style.transform = "rotateY(180deg)";
         
         const cardBack = card.querySelector('.card-back');
-        cardBack.innerHTML = `<img src="./img/monster_image${cardId}.png" alt="몬스터 이미지" style="width:100%; height:100%;">`;
+        cardBack.innerHTML = `<img src="./img/monster_image${cardId}.jpg" alt="몬스터 이미지" style="width:100%; height:100%;">`;
 
+        // 경험치 증가
         collectedCount++;
         document.getElementById('collectedText').innerText = `${collectedCount} / ${totalCards}`;
 
         const progressFill = document.getElementById('progressFill');
-        progressFill.style.width = `${(collectedCount / totalCards) * 100}%`;
+        progressFill.style.width = `${(collectedCount / totalCards) * 100}%`; // 진행률 바 업데이트
 
+        // 서버에 게임 요청 보내기
         fetch('./php/set_game_request.php', {
             method: 'POST',
             credentials: 'same-origin'
@@ -166,6 +190,7 @@ function fetchScoreUpdate() {
     })
     .catch(error => console.error('Error parsing JSON:', error));
 }
+
 function logout() {
     alert("로그아웃되었습니다.");
     window.location.href = "login.html"; 
