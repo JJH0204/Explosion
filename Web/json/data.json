@@ -11,7 +11,7 @@
         {
             "name":"find_flag",
             "desc":"/markdown/mk_01.md",
-            "link":"/Question/01.html",
+            "link":"http://192.168.1.230/Flame_WarGame/Web/Question/01.html",
             "type":"network",
             "answer":"ZmxhbWUxYW5zd2Vy"
         },
