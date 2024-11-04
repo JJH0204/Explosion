@@ -1,29 +1,29 @@
 {
     "QCount": 40,
-    "QData":{
-        "Q1":{
+    "QData":[
+        {
             "name":"find_flag",
             "desc":"/markdown/mk_01.md",
             "link":"/Question/01.html",
             "type":"network"
         },
-        "Q2":{
+        {
             "name":"find_flag",
             "desc":"/markdown/mk_01.md",
             "link":"/Question/01.html",
             "type":"network"
         },
-        "Q3":{
+        {
             "name":"find_flag",
             "desc":"/markdown/mk_01.md",
             "link":"/Question/01.html",
             "type":"network"
         },
-        "Q4":{
+        {
             "name":"find_flag",
             "desc":"/markdown/mk_01.md",
             "link":"/Question/01.html",
             "type":"network"
         }
-    }
+    ]
 }
