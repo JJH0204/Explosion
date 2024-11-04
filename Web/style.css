@@ -1,3 +1,4 @@
+/* style.css */
 body {
     font-family: Arial, sans-serif;
     background-color: #1e1e1e;
@@ -34,6 +35,7 @@ body {
     font-size: 20px;
     cursor: pointer;
     z-index: 10;
+    transition: left 0.3s ease; /* 버튼 위치 애니메이션 */
 }
 
 .sidebar {
@@ -58,6 +60,11 @@ body {
     transform: translateX(0);
 }
 
+.sidebar.active ~ .sidebar-toggle {
+    left: 270px; /* 사이드바 열릴 때 버튼도 이동 */
+}
+
+
 header {
     display: flex;
     justify-content: center;
@@ -71,16 +78,19 @@ header {
     filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.7));
 }
 
+/* 나머지 스타일은 기존과 동일 */
+
+
 .challenge-frame {
     width: 100vw;
-    height: 80vh; /* 프레임 높이를 늘려서 카드가 짤리지 않도록 조정 */
+    height: 80vh;
     overflow: hidden;
 }
 
 .challenge-grid {
     display: flex;
-    transition: transform 1s ease; /* 슬라이드 애니메이션 */
-    width: 200vw; /* 두 페이지 너비 */
+    transition: transform 0.6s ease;
+    width: calc(100vw * 2);
 }
 
 .page {
@@ -134,7 +144,6 @@ header {
     transform: rotateY(180deg);
 }
 
-/* 화살표 버튼 */
 .arrow-button {
     position: fixed;
     top: 50%;
@@ -149,14 +158,28 @@ header {
 }
 
 .arrow-button.left {
+    position: fixed;
+    top: 50%;
     left: 20px;
+    background-color: rgba(68, 68, 68, 0.7);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 10;
+    transition: left 0.3s ease; /* 왼쪽 화살표 버튼 위치 애니메이션 */
+}
+
+.sidebar.active ~ .arrow-button.left {
+    left: 270px; /* 사이드바가 열리면 왼쪽 화살표 버튼도 이동 */
 }
 
 .arrow-button.right {
     right: 20px;
 }
 
-/* 팝업 스타일 */
 .popup {
     display: none;
     position: fixed;
@@ -212,12 +235,11 @@ header {
     transition: width 0.3s ease;
 }
 
-/* 로그아웃 버튼 스타일 */
 .logout-button {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: rgba(68, 68, 68, 0.9); /* 사이드바와 같은 색상 */
+    background-color: rgba(68, 68, 68, 0.9);
     color: white;
     border: none;
     padding: 10px 15px;
@@ -229,5 +251,5 @@ header {
 }
 
 .logout-button:hover {
-    background-color: #555; /* 호버 시 조금 더 밝은 색상 */
+    background-color: #555;
 }

@@ -1,3 +1,4 @@
+/* script.js */
 let currentPage = 0;
 const cardsPerPage = 20;
 const totalCards = 40;
@@ -26,7 +27,7 @@ window.onload = function() {
             cardBack.className = 'card-back';
             const img = document.createElement('img');
             img.src = `./img/image${i}.jpg`;
-            img.alt = "해결된 이미지";
+            img.alt = `카드 ${i} 해결된 이미지`;
             cardBack.appendChild(img);
             
             cardInner.appendChild(cardFront);
@@ -44,17 +45,13 @@ function showPage(pageIndex) {
 }
 
 function nextPage() {
-    if (currentPage < totalPages - 1) {
-        currentPage++;
-        showPage(currentPage);
-    }
+    currentPage = Math.min(currentPage + 1, totalPages - 1);
+    showPage(currentPage);
 }
 
 function prevPage() {
-    if (currentPage > 0) {
-        currentPage--;
-        showPage(currentPage);
-    }
+    currentPage = Math.max(currentPage - 1, 0);
+    showPage(currentPage);
 }
 
 function revealGame(cardElement, gameId) {
@@ -93,8 +90,20 @@ function solveGame() {
 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    const leftArrowButton = document.querySelector('.arrow-button.left');
     sidebar.classList.toggle('active');
+    
+    if (sidebar.classList.contains('active')) {
+        sidebarToggle.style.left = '270px'; // 사이드바 열렸을 때 토글 버튼 위치
+        leftArrowButton.style.left = '270px'; // 사이드바 열렸을 때 왼쪽 화살표 버튼 위치
+    } else {
+        sidebarToggle.style.left = '20px'; // 사이드바 닫혔을 때 토글 버튼 위치
+        leftArrowButton.style.left = '20px'; // 사이드바 닫혔을 때 왼쪽 화살표 버튼 위치
+    }
 }
+
+
 
 function logout() {
     alert("로그아웃되었습니다.");
