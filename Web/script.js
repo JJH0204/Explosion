@@ -270,29 +270,37 @@ function loadQuestionData() {
   // ... existing code ...
   
   function fetchGameDescription(gameId) {
-
-     // Simulating API call to fetch game description
-    
-     // Replace this with actual API call in production
-    
-    const descriptions = {
-    
-  game1: "# 게임 1: 숨겨진 플래그\n\n이 게임에서는 웹 페이지의 소스 코드 내에 숨겨진 플래그를 찾아야 합니다.\n\n힌트: 개발자 도구를 사용해보세요!",
-    
-  game2: "# 게임 2: 암호 해독\n\n암호화된 메시지를 해독하여 플래그를 찾으세요.\n\n힌트: Caesar 암호를 사용했습니다.",
-    
-// Add more game descriptions as needed
-    
-  };
-    
- 
-    
- const description = descriptions[gameId] || "게임 설명이 없습니다.";
-    
-document.getElementById('gameDescription').innerHTML = marked(description);
-    
-   }
-    
+    if (!questionsData) {
+      console.error('Questions data not loaded');
+      return;
+    }
+  
+    const questionIndex = parseInt(gameId.replace('game', '')) - 1;
+    if (questionIndex < 0 || questionIndex >= questionsData.QCount) {
+      console.error('Invalid game ID');
+      return;
+    }
+  
+    const descPath = questionsData.QData[questionIndex].desc;
+    fetch(descPath)
+      .then(response => response.text())
+      .then(markdown => {
+        const gameDescriptionElement = document.getElementById('gameDescription');
+        if (gameDescriptionElement) {
+          if (typeof marked === 'function') {
+            gameDescriptionElement.innerHTML = marked(markdown);
+          } else {
+            gameDescriptionElement.textContent = markdown;
+          }
+        } else {
+          console.error('gameDescription element not found');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching game description:', error);
+        document.getElementById('gameDescription').textContent = "게임 설명을 불러오는 데 실패했습니다.";
+      });
+  }
 
     
 function startChallenge(gameId) {
