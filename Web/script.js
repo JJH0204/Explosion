@@ -313,7 +313,7 @@ function startChallenge(gameId) {
     
      // Construct the challenge URL
     
-    const challengeUrl = `http://192.168.1.230/Flame_WarGame/Web/Question/${gameNumber}.html`;
+    const challengeUrl = `/Question/${gameNumber}.html`;
     
     
 
