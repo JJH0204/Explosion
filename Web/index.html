@@ -5,62 +5,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flame</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="assets/styles/style.css"> -->
+    <link rel="stylesheet" href="assets/styles/main.css">
+    <link rel="stylesheet" href="assets/styles/sidebar.css">
+    <link rel="stylesheet" href="assets/styles/cards.css">
+    <link rel="stylesheet" href="assets/styles/popup.css">
+    <link rel="stylesheet" href="assets/styles/markdown.css">
 </head>
 
 <body>
-    <div class="container" style="background-image: url('./img/background.jpg'); background-size: cover; background-position: center;">
-        <!-- 사이드바 토글 버튼 -->
-        <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="사이드바 열기/닫기" role="button">☰</button>
+    <div class="background-container">
+        <img src="assets/images/background.jpg" alt="Background">
+    </div>
 
-        <!-- 사이드바 -->
-        <div id="sidebar" class="sidebar">
-            <img src="./img/character.png" alt="Character" class="character-image">
-            <div class="status-bar">
-                <p class="nickname">닉네임: <span id="user-nickname">User123</span></p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p id="collectedText">0 / 40</p>
-            </div>
-            <div class="ranking-section">
-                <h2>랭킹 보드</h2>
-                <ul id="rankingList">
-                    <!-- 랭킹이 여기에 표시됩니다 -->
-                </ul>
-            </div>
-
+    <header class="header">
+        <div class="logo-container">
+            <img src="assets/images/icons/Flame_logo2.png" alt="Logo" class="logo">
+            <span class="logo-text">Flame War Game</span>
         </div>
+        <div class="header-menu">
+            <button class="menu-button">로그인</button>
+            <button class="menu-button">랭킹</button>
+        </div>
+    </header>
 
-        <header>
-            <button class="logo-button" role="button" aria-label="메인 로고">
-                <img src="./img/Flame_logo2.png" alt="Logo" style="height: 80px;">
-            </button>
-            <button class="arrow-button left" onclick="prevPage()" aria-label="이전 페이지" role="button">←</button>
-            <button class="arrow-button right" onclick="nextPage()" aria-label="다음 페이지" role="button">→</button>
+    <button class="sidebar-toggle">☰</button>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="character-profile">
+                <div class="character-image-container">
+                    <img src="assets/images/character.png" alt="Character" class="character-image">
+                </div>
+                <div class="character-info">
+                    <div class="character-name">플레이어 닉네임</div>
+                    <div class="character-level">레벨: 1</div>
+                </div>
+            </div>
 
-            <!-- 로그아웃 버튼 추가 -->
-            <button class="logout-button" onclick="logout()" aria-label="로그아웃" role="button">로그아웃</button>
-        </header>
-
-        <main>
-            <div class="challenge-frame">
-                <div class="challenge-grid" id="challengeGrid">
-                    <!-- JavaScript를 통해 카드 페이지들이 동적으로 추가될 예정 -->
+            <div class="progress-info">
+                <h3>진행 상황</h3>
+                <div id="progress">
+                    <span id="completed-challenges">0</span> /
+                    <span id="total-challenges">40</span>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="cards-container">
+                <div id="challengeGrid">
+                    <!-- 카드 페이지들 -->
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- 게임 팝업 -->
-    <div id="gamePopup" class="popup" aria-hidden="true" role="dialog">
+    <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
+    <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
+
+    <!-- marked.js 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- 게임 팝업 수정 -->
+    <div id="gamePopup" class="popup">
         <div class="popup-content">
-            <span onclick="closePopup()" class="close" aria-label="팝업 닫기" role="button">&times;</span>
-            <p id="gameContent">여기에 게임 내용 표시</p>
+            <div id="gameContent"></div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/ui-manager.js"></script>
+    <script src="assets/js/game-manager.js"></script>
+    <script src="assets/js/card-manager.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="login_styles.css">
+    <link rel="stylesheet" href="./assets/styles/login_styles.css">
     <style>
         /* 모달 팝업 스타일 */
         .modal {
@@ -80,7 +80,7 @@
     <div class="login-container">
         <header>
             <button class="logo-button">
-                <img src="./img/Flame_logo2.png" alt="Logo" style="height: 80px;">
+                <img src="./assets/images/icons/Flame_logo2.png" alt="Logo" style="height: 80px;">
             </button>
         </header>
         <main>
@@ -105,7 +105,7 @@
     <div id="signup-modal" class="modal">
         <div class="modal-content">
             <span class="close" id="close-signup-modal">&times;</span>
-            <img src="./img/Flame_logo2.png" alt="Logo" class="signup-logo" style="height: 80px;">
+            <img src="./assets/images/icons/Flame_logo2.png" alt="Logo" class="signup-logo" style="height: 80px;">
             <h2>Sign Up</h2>
             <form id="signup-form">
                 <input type="text" id="signup-ID" class="input-field" placeholder="ID" required>
@@ -127,7 +127,7 @@
             const ID = document.getElementById('ID').value;
             const PW = document.getElementById('PW').value;
 
-            fetch('./php/login.php', {
+            fetch('./assets/php/login.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -173,7 +173,7 @@
             const signupNickname = document.getElementById('signup-Nickname').value;
 
             // 회원가입 요청 보내기 (변수명은 그대로)
-            fetch('./php/signup.php', {
+            fetch('./assets/php/signup.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

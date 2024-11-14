@@ -323,3 +323,52 @@ function startChallenge(gameId) {
     
     }
   
+async function loadChallengeData() {
+    try {
+        const response = await fetch('json/data.json');
+        const data = await response.json();
+        return data.challenges;
+    } catch (error) {
+        console.error('챌린지 데이터를 불러오는데 실패했습니다:', error);
+        return [];
+    }
+}
+
+async function loadMarkdownContent(markdownFile) {
+    try {
+        const response = await fetch(`markdown/${markdownFile}`);
+        const markdownContent = await response.text();
+        return marked.parse(markdownContent); // 마크다운을 HTML로 변환
+    } catch (error) {
+        console.error('마크다운 파일을 불러오는데 실패했습니다:', error);
+        return '문제 내용을 불러올 수 없습니다.';
+    }
+}
+async function showChallenge(challengeId) {
+    try {
+        // 경로를 Web 디렉토리 기준으로 수정
+        const response = await fetch(`./markdown/mk_${challengeId}.md`);
+        if (!response.ok) {
+            throw new Error('파일을 찾을 수 없습니다.');
+        }
+        const markdownContent = await response.text();
+        
+        // marked 옵션 설정 추가
+        marked.setOptions({
+            breaks: true,  // 줄바꿈 허용
+            gfm: true      // GitHub Flavored Markdown 활성화
+        });
+        
+        const gameContent = document.getElementById('gameContent');
+        // HTML 문자열을 이스케이프하지 않도록 설정
+        gameContent.innerHTML = marked.parse(markdownContent);
+        
+        const gamePopup = document.getElementById('gamePopup');
+        gamePopup.setAttribute('aria-hidden', 'false');
+        gamePopup.style.display = 'block';
+    } catch (error) {
+        console.error('문제 설명을 불러오는데 실패했습니다:', error);
+        const gameContent = document.getElementById('gameContent');
+        gameContent.innerHTML = '문제 설명을 불러올 수 없습니다.';
+    }
+}

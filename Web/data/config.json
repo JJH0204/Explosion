@@ -1,0 +1,20 @@
+{
+    "challenges": [
+        {
+            "id": 1,
+            "title": "Challenge 1",
+            "markdownFile": "mk_1.md",
+            "description": "This is the first challenge.",
+            "link": "./Question/question1/question1.html",
+            "answer": "flag{answer1}"
+        },
+        {
+            "id": 2,
+            "title": "Challenge 2",
+            "markdownFile": "mk_2.md",
+            "description": "This is the second challenge.",
+            "link": "./Question/question2/question2.php",
+            "answer": "flag{answer2}"
+        }
+    ]
+} 
