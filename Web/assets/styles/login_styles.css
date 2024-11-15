@@ -34,8 +34,9 @@ header {
     display: inline-block;
 }
 
-.logo-button img {
-    height: 100px;
+.logo-button img,
+.signup-logo {
+    height: 80px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 10px rgba(0, 195, 255, 0.3));
@@ -224,6 +225,7 @@ h2 {
     border-radius: 8px;
     margin-bottom: 15px;
     font-size: 14px;
+    display: none;
 }
 
 /* 반응형 디자인 */
