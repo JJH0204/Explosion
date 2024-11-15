@@ -253,18 +253,56 @@ class GameManager {
     
     
 
-    handleCorrectAnswer(cardId) {
-        alert('축하합니다! 정답입니다!');
-        
-        const card = document.querySelector(`.card[data-id="${cardId}"]`);
-        if (!card) {
-            console.error('Card element not found');
-            return;
-        }
+    async handleCorrectAnswer(cardId) {
+        try {
+            // 기존 알림
+            alert('축하합니다! 정답입니다!');
+            
+            const card = document.querySelector(`.card[data-id="${cardId}"]`);
+            if (!card) {
+                console.error('Card element not found');
+                return;
+            }
 
-        this.activateCard(card);
-        
-        this.closePopup();
+            // 카드 활성화
+            this.activateCard(card);
+            
+            // 점수와 진행상황 업데이트
+            try {
+                // 게임 요청 설정
+                const requestResponse = await fetch('assets/php/set_game_request.php');
+                const requestData = await requestResponse.json();
+                
+                if (requestData.error) {
+                    console.error('Game request error:', requestData.error);
+                    return;
+                }
+
+                // 점수 업데이트
+                const scoreResponse = await fetch('assets/php/Scoreboard2.php');
+                const scoreData = await scoreResponse.json();
+
+                if (scoreData.error) {
+                    console.error('Score update error:', scoreData.error);
+                } else {
+                    console.log('Score updated successfully:', scoreData);
+                    // UI 업데이트
+                    if (typeof updateUserInfo === 'function') {
+                        updateUserInfo();
+                    }
+                    if (typeof updateRanking === 'function') {
+                        updateRanking();
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to update game progress:', error);
+            }
+
+            // 팝업 닫기
+            this.closePopup();
+        } catch (error) {
+            console.error('Error in handleCorrectAnswer:', error);
+        }
     }
 
     activateCard(card) {
