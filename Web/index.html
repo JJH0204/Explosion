@@ -76,6 +76,22 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/ui-manager.js"></script>
     <script src="assets/js/game-manager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('assets/php/fetchClearedCards.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        gameManager.initializeClearedCards(data.clearedCards);
+                    } else {
+                        console.error('Failed to fetch cleared cards:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching cleared cards:', error);
+                });
+        });
+    </script>
     <script src="assets/js/card-manager.js"></script>
     <script src="assets/js/main.js"></script>
 </body>

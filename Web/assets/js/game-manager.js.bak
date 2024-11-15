@@ -1,31 +1,41 @@
 class GameManager {
     constructor() {
         this.questionsData = null;
-        this.solvedCards = new Set(); // 클리어된 카드 저장
+        this.solvedCards = new Set();
         this.initialize();
     }
 
     async initialize() {
         try {
-            await this.loadQuestionData(); // 문제 데이터 로드
-            this.initializeEventListeners(); // 이벤트 리스너 초기화
+            await this.loadQuestionData();
+            this.loadSolvedCards();
+            this.initializeEventListeners();
+            
+            // 저장된 진행 상황 복원
+            const savedProgress = localStorage.getItem('gameProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                this.updateProgress();
+            }
         } catch (error) {
             console.error('Failed to initialize GameManager:', error);
         }
     }
 
-    // loadQuestionData 메서드 추가
     async loadQuestionData() {
         try {
-            const response = await fetch('./data/config.json'); // config.json 파일에서 데이터 로드
+            const response = await fetch('./data/config.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+            
             if (!data || !data.challenges) {
                 throw new Error('Invalid data structure in config.json');
             }
+            
             this.questionsData = data;
+            console.log('Questions data loaded:', this.questionsData);
         } catch (error) {
             console.error('Error loading questions data:', error);
             this.questionsData = { challenges: [] };
@@ -114,73 +124,6 @@ class GameManager {
         }
     }
 
-    // 데이터베이스에 기록하는 메서드 추가
-    async saveToDatabase(cardId, nickname) {
-        console.log('Saving to database with nickname:', nickname, 'and cardId:', cardId); // 디버깅 로그 추가
-        try {
-            const response = await fetch('./assets/php/saveScore.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cardId: cardId,
-                    nickname: nickname,
-                }),
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-    
-            const result = await response.json();
-            if (!result.success) {
-                throw new Error(result.error || 'Unknown error');
-            }
-        } catch (error) {
-            console.error('Error saving to database:', error);
-            throw error;
-        }
-    }
-    
-    
-
-    // 세션에서 닉네임 가져오는 메서드 수정
-    async getNicknameFromSession() {
-        try {
-            const response = await fetch('./assets/php/user_info.php');
-            if (!response.ok) {
-                throw new Error('Failed to fetch user info');
-            }
-            const data = await response.json();
-            console.log('Fetched nickname:', data.username); // 디버깅 로그 추가
-            if (data.username) {
-                return data.username;
-            }
-            throw new Error(data.error || 'Unknown error');
-        } catch (error) {
-            console.error('Error fetching nickname from session:', error);
-            return 'Guest'; // 오류 시 기본값 반환
-        }
-    }
-
-
-    initializeClearedCards(clearedCards) {
-        console.log('initializeClearedCards this:', this); // this 확인
-        this.solvedCards = new Set(clearedCards);
-        this.restoreClearedCards();
-        this.updateProgress();
-    }
-
-    restoreClearedCards() {
-        this.solvedCards.forEach(cardId => {
-            const card = document.querySelector(`.card[data-id="${cardId}"]`);
-            if (card) {
-                this.activateCard(card);
-            }
-        });
-    }
-
     startChallenge(cardId) {
         try {
             console.log('Starting challenge for cardId:', cardId);
@@ -206,52 +149,37 @@ class GameManager {
         }
     }
 
-    async submitFlag(gameId) {
+    submitFlag(gameId) {
         const flagInput = document.getElementById('flagInput');
         if (!flagInput) {
             alert('플래그 입력 필드를 찾을 수 없습니다.');
             return;
         }
-    
+
         const flag = flagInput.value.trim();
         if (!flag) {
             alert('플래그를 입력해주세요.');
             return;
         }
-    
-        if (this.submitting) {
-            console.warn('Already submitting, please wait.');
-            return;
-        }
-        this.submitting = true;
-    
+
         try {
             const cardId = parseInt(gameId.replace('game', ''));
             const challenge = this.questionsData.challenges.find(c => c.id === cardId);
-    
+
             if (!challenge) {
                 throw new Error('Challenge not found');
             }
-    
+
             if (flag === challenge.answer) {
                 this.handleCorrectAnswer(cardId);
-    
-                // 닉네임 가져오기 및 저장
-                const nickname = await this.getNicknameFromSession();
-                console.log('Nickname used for saving:', nickname); // 디버깅 로그 추가
-                await this.saveToDatabase(cardId, nickname);
             } else {
                 alert('틀렸습니다. 다시 시도해주세요.');
             }
         } catch (error) {
             console.error('Error submitting flag:', error);
-        } finally {
-            this.submitting = false;
+            alert('플래그 제출 중 오류가 발생했습니다.');
         }
     }
-    
-    
-    
 
     handleCorrectAnswer(cardId) {
         alert('축하합니다! 정답입니다!');
@@ -270,9 +198,10 @@ class GameManager {
     activateCard(card) {
         const cardId = card.dataset.id;
         this.solvedCards.add(cardId);
+        this.saveSolvedCards();
 
         card.classList.add('solved');
-
+        
         const cardInner = card.querySelector('.card-inner');
         if (cardInner) {
             cardInner.style.transform = 'rotateY(180deg)';
@@ -286,29 +215,37 @@ class GameManager {
                      class="monster-image">
             `;
         }
+
+        this.updateProgress();
     }
 
-    // updateProgress 메서드 추가
     updateProgress() {
-        console.log('updateProgress this:', this); // this 확인
+        const completedChallenges = this.solvedCards.size;
+        const totalChallenges = CONFIG.GAME.TOTAL_CARDS;
+        
         const completedElement = document.getElementById('completed-challenges');
         const totalElement = document.getElementById('total-challenges');
-    
+        
         if (completedElement && totalElement) {
-            completedElement.textContent = this.solvedCards.size;
-            totalElement.textContent = CONFIG.GAME.TOTAL_CARDS;
+            completedElement.textContent = completedChallenges;
+            totalElement.textContent = totalChallenges;
         }
+
+        localStorage.setItem('gameProgress', JSON.stringify({
+            completed: completedChallenges,
+            total: totalChallenges
+        }));
     }
 
     initializeEventListeners() {
         document.addEventListener('click', (e) => {
             const target = e.target;
-
+            
             if (target.classList.contains('challenge-button')) {
                 const cardId = target.dataset.cardId;
                 this.startChallenge(cardId);
             }
-
+            
             if (target.classList.contains('submit-button')) {
                 const gameId = target.dataset.gameId;
                 this.submitFlag(gameId);
@@ -337,5 +274,8 @@ class GameManager {
             this.solvedCards = new Set(JSON.parse(savedCards));
         }
     }
-    
-}
+
+    saveSolvedCards() {
+        localStorage.setItem('solvedCards', JSON.stringify(Array.from(this.solvedCards)));
+    }
+} 

@@ -1,5 +1,6 @@
 <?php
 session_start(); // 세션 시작
+header('Content-Type: application/json');
 
 // 데이터베이스 연결    
 $host = 'localhost'; // 호스트

@@ -2,7 +2,7 @@ class CardManager {
     constructor(gameManager, uiManager) {
         this.gameManager = gameManager;
         this.uiManager = uiManager;
-        this.currentPage = parseInt(localStorage.getItem('currentPage')) || 0;
+        this.currentPage = 0; // 기본값 설정
         this.cardsPerPage = CONFIG.GAME.CARDS_PER_PAGE;
         this.totalPages = CONFIG.GAME.TOTAL_PAGES;
         this.isAnimating = false;
@@ -19,43 +19,6 @@ class CardManager {
         }
     }
 
-    restoreSavedState() {
-        const solvedCards = this.gameManager.solvedCards;
-        if (solvedCards.size > 0) {
-            solvedCards.forEach(cardId => {
-                const card = document.querySelector(`.card[data-id="${cardId}"]`);
-                if (card && !card.classList.contains('solved')) {
-                    this.gameManager.activateCard(card);
-                }
-            });
-        }
-    }
-
-    preventWheelScroll() {
-        const grid = document.getElementById('challengeGrid');
-        if (grid) {
-            grid.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                    if (e.deltaY > 0) {
-                        this.nextPage();
-                    } else {
-                        this.prevPage();
-                    }
-                }
-            }, { passive: false });
-        }
-
-        document.addEventListener('wheel', (e) => {
-            if (e.target.closest('#challengeGrid')) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }, { passive: false, capture: true });
-    }
-
     initializeCards() {
         const grid = document.getElementById('challengeGrid');
         if (!grid) {
@@ -69,7 +32,7 @@ class CardManager {
         wrapper.className = 'pages-wrapper';
         
         for (let i = 0; i < this.totalPages; i++) {
-            const page = this.createPage(i);
+            const page = this.createPage(i); // createPage 호출
             if (page) {
                 wrapper.appendChild(page);
             }
@@ -77,12 +40,8 @@ class CardManager {
         
         grid.appendChild(wrapper);
         this.updateArrowButtons();
-        
-        const savedPage = localStorage.getItem('currentPage');
-        if (savedPage) {
-            this.currentPage = parseInt(savedPage);
-            this.showPage(this.currentPage);
-        }
+
+        this.showPage(this.currentPage);
     }
 
     createPage(pageNumber) {
@@ -100,40 +59,34 @@ class CardManager {
         return page;
     }
 
-    async nextPage() {
-        if (this.currentPage < this.totalPages - 1 && !this.isAnimating) {
-            this.isAnimating = true;
-            this.currentPage++;
-            this.updatePagePosition();
-            
-            setTimeout(() => {
-                this.isAnimating = false;
-            }, 500);
-            
-            this.updateArrowButtons();
-        }
-    }
+    createCard(number) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.id = number;
 
-    async prevPage() {
-        if (this.currentPage > 0 && !this.isAnimating) {
-            this.isAnimating = true;
-            this.currentPage--;
-            this.updatePagePosition();
-            
-            setTimeout(() => {
-                this.isAnimating = false;
-            }, 500);
-            
-            this.updateArrowButtons();
+        const isSolved = this.gameManager.solvedCards.has(number.toString());
+        if (isSolved) {
+            card.classList.add('solved');
         }
-    }
 
-    updatePagePosition() {
-        const wrapper = document.querySelector('.pages-wrapper');
-        if (wrapper) {
-            wrapper.style.transform = `translateX(-${this.currentPage * 100}%)`;
-            this.uiManager?.adjustLayout();
-        }
+        card.innerHTML = `
+            <div class="card-inner" ${isSolved ? 'style="transform: rotateY(180deg)"' : ''}>
+                <div class="card-front"></div>
+                <div class="card-back">
+                    ${isSolved 
+                        ? `<img src="assets/images/monsters/monster_image${number}.png" alt="Monster ${number}" class="monster-image">` 
+                        : `<img src="assets/images/card_back.jpg" alt="Default card" class="default-image">`}
+                </div>
+            </div>
+        `;
+
+        card.addEventListener('click', () => {
+            if (!card.classList.contains('solved')) {
+                this.gameManager.revealGame(card, `game${number}`);
+            }
+        });
+
+        return card;
     }
 
     updateArrowButtons() {
@@ -163,7 +116,6 @@ class CardManager {
             rightArrow.addEventListener('click', () => this.nextPage());
         }
 
-        // 키보드 이벤트
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') {
                 this.prevPage();
@@ -175,32 +127,36 @@ class CardManager {
         this.updateArrowButtons();
     }
 
-    createCard(number) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.dataset.id = number;
-
-        const isSolved = this.gameManager.solvedCards.has(number.toString());
-        if (isSolved) {
-            card.classList.add('solved');
+    showPage(pageNumber) {
+        this.currentPage = pageNumber;
+        const wrapper = document.querySelector('.pages-wrapper');
+        if (wrapper) {
+            wrapper.style.transform = `translateX(-${this.currentPage * 100}%)`;
         }
-
-        card.innerHTML = `
-            <div class="card-inner" ${isSolved ? 'style="transform: rotateY(180deg)"' : ''}>
-                <div class="card-front">
-                </div>
-                <div class="card-back">
-                    ${isSolved ? `<img src="${CONFIG.PATHS.IMAGES}monster_image${number}.png" alt="Monster ${number}" class="monster-image">` : ''}
-                </div>
-            </div>
-        `;
-
-        card.addEventListener('click', () => {
-            if (!card.classList.contains('solved')) {
-                this.gameManager.revealGame(card, `game${number}`);
-            }
-        });
-
-        return card;
+        this.updateArrowButtons();
     }
-} 
+
+    nextPage() {
+        if (this.currentPage < this.totalPages - 1 && !this.isAnimating) {
+            this.isAnimating = true;
+            this.currentPage++;
+            this.showPage(this.currentPage);
+            
+            setTimeout(() => {
+                this.isAnimating = false;
+            }, 500);
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 0 && !this.isAnimating) {
+            this.isAnimating = true;
+            this.currentPage--;
+            this.showPage(this.currentPage);
+            
+            setTimeout(() => {
+                this.isAnimating = false;
+            }, 500);
+        }
+    }
+}

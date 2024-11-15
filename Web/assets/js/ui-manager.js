@@ -57,4 +57,24 @@ class UIManager {
     getMainContent() {
         return this.mainContent;
     }
+
+    async fetchUserInfo() {
+        try {
+            const response = await fetch('./assets/php/user_info.php');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            if (data.success) {
+                // 유저 정보를 UI에 반영
+                document.querySelector('.character-name').textContent = data.username;
+                document.querySelector('.character-level').textContent = `레벨: ${data.level}`;
+            } else {
+                console.error('Failed to fetch user info:', data.error);
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    }
 } 
