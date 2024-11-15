@@ -2,10 +2,11 @@ function updateUserInfo() {
     fetch('assets/php/user_info.php')
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                document.getElementById('player-nickname').textContent = data.data.nickname;
-                document.getElementById('current-level').textContent = data.data.rank;
-                document.getElementById('completed-challenges').textContent = data.data.stage;
+            if (data.username) {
+                const nicknameElement = document.getElementById('player-nickname');
+                const levelElement = document.getElementById('current-level');
+                if (nicknameElement) nicknameElement.textContent = data.username;
+                if (levelElement) levelElement.textContent = data.rank || '-';
             }
         })
         .catch(error => console.error('Error:', error));

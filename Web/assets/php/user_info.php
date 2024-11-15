@@ -1,11 +1,6 @@
 <?php
-<<<<<<< HEAD
 session_start(); // 세션 시작
-header('Content-Type: application/json');
-=======
-session_start();
 header('Content-Type: application/json; charset=utf-8');
->>>>>>> fd8991dc78440aa638760118dc4996f034349ae0
 
 // 디버깅을 위한 로그 추가
 error_log("Session data: " . print_r($_SESSION, true));

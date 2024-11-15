@@ -24,8 +24,7 @@
             <span class="logo-text">Flame War Game</span>
         </div>
         <div class="header-menu">
-            <button class="menu-button">로그인</button>
-            <button class="menu-button">랭킹</button>
+            <button class="menu-button" id="logoutBtn">로그아웃</button>
         </div>
     </header>
 
@@ -87,6 +86,10 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/ui-manager.js"></script>
     <script src="assets/js/game-manager.js"></script>
+    <script src="assets/js/card-manager.js"></script>
+    <script src="assets/js/ranking.js"></script>
+    <script src="assets/js/userinfo.js"></script>
+    <script src="assets/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             fetch('assets/php/fetchClearedCards.php')
@@ -103,10 +106,6 @@
                 });
         });
     </script>
-    <script src="assets/js/card-manager.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/ranking.js"></script>
-    <script src="assets/js/userinfo.js"></script>
 </body>
 
 </html>

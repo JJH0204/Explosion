@@ -153,7 +153,6 @@ class GameManager {
                 throw new Error('Failed to fetch user info');
             }
             const data = await response.json();
-            console.log('Fetched nickname:', data.username); // 디버깅 로그 추가
             if (data.username) {
                 return data.username;
             }
@@ -163,7 +162,7 @@ class GameManager {
             return 'Guest'; // 오류 시 기본값 반환
         }
     }
-
+    
 
     initializeClearedCards(clearedCards) {
         console.log('initializeClearedCards this:', this); // this 확인
@@ -219,12 +218,6 @@ class GameManager {
             return;
         }
     
-        if (this.submitting) {
-            console.warn('Already submitting, please wait.');
-            return;
-        }
-        this.submitting = true;
-    
         try {
             const cardId = parseInt(gameId.replace('game', ''));
             const challenge = this.questionsData.challenges.find(c => c.id === cardId);
@@ -238,20 +231,14 @@ class GameManager {
     
                 // 닉네임 가져오기 및 저장
                 const nickname = await this.getNicknameFromSession();
-                console.log('Nickname used for saving:', nickname); // 디버깅 로그 추가
                 await this.saveToDatabase(cardId, nickname);
             } else {
                 alert('틀렸습니다. 다시 시도해주세요.');
             }
         } catch (error) {
             console.error('Error submitting flag:', error);
-        } finally {
-            this.submitting = false;
         }
     }
-    
-    
-    
 
     async handleCorrectAnswer(cardId) {
         try {
