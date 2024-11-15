@@ -37,123 +37,56 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="terminal">
-            <h2>시스템 접근 제어</h2>
-            <div id="login-section">
-                <input type="text" id="username" placeholder="사용자명">
-                <input type="password" id="password" placeholder="비밀번호">
-                <button onclick="login()">로그인</button>
-                <p id="error-msg"></p>
-            </div>
-            <div id="admin-panel" class="hidden">
-                <h3>관리자 패널</h3>
-                <div id="secret-content"></div>
-            </div>
-        </div>
+    <h1>로그인</h1>
+    <div id="login-form">
+        <form onsubmit="return handleLogin(event)">
+            <input type="text" name="username" placeholder="사용자 이름"><br>
+            <input type="password" name="password" placeholder="비밀번호"><br>
+            <input type="hidden" name="role" value="user">
+            <button type="submit">로그인</button>
+        </form>
     </div>
+    <div id="result"></div>
 
     <script>
-        // AES 암호화 함수 (CryptoJS 라이브러리 필요)
-        document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"><\/script>');
+        console.log("힌트1: 로그인 요청을 프록시 툴로 확인해보세요");
+        console.log("힌트2: role 파라미터의 값을 확인해보세요");
 
-        // 난독화된 API 엔드포인트
-        const _0x2a8f=['aHR0cHM6Ly9hcGkuZXhhbXBsZS5jb20vYXBpL3YxL2F1dGg='];
-        const API_ENDPOINT = atob(_0x2a8f[0]);
-
-        // JWT 토큰 생성 함수
-        function generateToken(payload) {
-            const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-            const encodedPayload = btoa(JSON.stringify(payload));
-            const signature = CryptoJS.HmacSHA256(header + '.' + encodedPayload, 'secret_key').toString();
-            return `${header}.${encodedPayload}.${signature}`;
-        }
-
-        // 로그인 처리
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                // 사용자 검증 (실제로는 서버에서 처리해야 함)
-                if (username === 'guest' && password === 'guest123') {
-                    const token = generateToken({
-                        username: username,
-                        role: 'guest',
-                        exp: Date.now() + 3600000
-                    });
-
-                    localStorage.setItem('auth_token', token);
-                    checkAccess();
-                } else {
-                    document.getElementById('error-msg').textContent = '잘못된 인증정보입니다.';
-                }
-            } catch (error) {
-                console.error('로그인 오류:', error);
-            }
-        }
-
-        // 접근 권한 확인
-        function checkAccess() {
-            const token = localStorage.getItem('auth_token');
-            if (!token) return;
-
-            try {
-                const [header, payload, signature] = token.split('.');
-                const decodedPayload = JSON.parse(atob(payload));
-
-                if (decodedPayload.role === 'admin') {
-                    document.getElementById('login-section').classList.add('hidden');
-                    document.getElementById('admin-panel').classList.remove('hidden');
-                    loadSecretContent();
-                } else {
-                    document.getElementById('error-msg').textContent = '관리자 권한이 필요합니다.';
-                }
-            } catch (error) {
-                console.error('토큰 검증 오류:', error);
-            }
-        }
-
-        // 비밀 컨텐츠 로드
-        function loadSecretContent() {
-            const encryptedFlag = 'U2FsdGVkX19KV1QjhX7/8q9WQj+zX5tX/YwF+A8L1Jw=';
-            const key = CryptoJS.SHA256('admin_key_2024');
+        function handleLogin(event) {
+            event.preventDefault();
             
-            try {
-                const decryptedFlag = CryptoJS.AES.decrypt(encryptedFlag, key).toString(CryptoJS.enc.Utf8);
-                document.getElementById('secret-content').textContent = `축하합니다! 플래그를 찾았습니다: ${decryptedFlag}`;
-            } catch (error) {
-                console.error('복호화 오류:', error);
-            }
+            const formData = new FormData(event.target);
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                role: formData.get('role')
+            };
+
+            simulateRequest(data);
+            
+            return false;
         }
 
-        // 초기 상태 확인
-        window.onload = function() {
-            checkAccess();
-            // 개발자 콘솔에 힌트 출력
-            console.log('힌트1: JWT 토큰의 구조를 분석하세요.');
-            console.log('힌트2: localStorage를 확인해보세요.');
-            setTimeout(() => {
-                console.log('힌트3: admin 권한이 필요합니다. JWT는 조작 가능할까요?');
-            }, 10000);
-        }
-
-        // 추가된 보안 검사
-        setInterval(() => {
-            const token = localStorage.getItem('auth_token');
-            if (token) {
-                try {
-                    const [header, payload, signature] = token.split('.');
-                    const decodedPayload = JSON.parse(atob(payload));
-                    if (decodedPayload.exp < Date.now()) {
-                        localStorage.removeItem('auth_token');
-                        location.reload();
-                    }
-                } catch (error) {
-                    console.error('토큰 검증 오류:', error);
-                }
+        function simulateRequest(data) {
+            const resultDiv = document.getElementById('result');
+            
+            if(data.role === 'admin') {
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <p>관리자로 로그인 성공!</p>
+                        <p>FLAG{proxy_role_manipulation_success}</p>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <p>일반 사용자로 로그인됨</p>
+                    </div>
+                `;
             }
-        }, 5000);
+
+            console.log('전송된 데이터:', data);
+        }
     </script>
 </body>
 </html>
