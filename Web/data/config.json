@@ -22,7 +22,7 @@
             "markdownFile": "mk_3.md",
             "description": "This is the third challenge.",
             "link": "./Question/question3/question3.html",
-            "answer": "flag{answer3}"
+            "answer": "FLAG{base64_decode_success}"
         },
         {
             "id": 4,
@@ -30,7 +30,7 @@
             "markdownFile": "mk_4.md",
             "description": "This is the fourth challenge.",
             "link": "./Question/question4/question4.html",
-            "answer": "flag{answer4}"
+            "answer": "FLAG{proxy_role_manipulation_success}"
         },
         {
             "id": 5,
