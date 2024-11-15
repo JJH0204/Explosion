@@ -1,3 +1,6 @@
+<?php 
+require_once 'assets/php/checkSession.php';
+?>
 <!DOCTYPE html>
 <html lang="ko">
 

@@ -67,11 +67,11 @@ class UIManager {
             }
             const data = await response.json();
     
-            if (data.username) {
+            if (data.nickname) {
                 // 유저 정보를 UI에 반영
                 const nicknameElement = document.getElementById('player-nickname');
                 if (nicknameElement) {
-                    nicknameElement.textContent = data.username;
+                    nicknameElement.textContent = data.nickname;
                 } else {
                     console.error('Nickname element not found');
                 }
@@ -81,7 +81,8 @@ class UIManager {
         } catch (error) {
             console.error('Error fetching user info:', error);
         }
-    }    
+    }
+    
 
     // 추가된 fetchRanking 메서드 (랭킹 정보 가져오기 예제)
     async fetchRanking() {
