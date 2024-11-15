@@ -1,14 +1,22 @@
 class GameManager {
     constructor() {
         this.questionsData = null;
+        this.solvedCards = new Set();
         this.initialize();
     }
 
     async initialize() {
         try {
             await this.loadQuestionData();
+            this.loadSolvedCards();
             this.initializeEventListeners();
-            console.log('GameManager initialized with data:', this.questionsData);
+            
+            // 저장된 진행 상황 복원
+            const savedProgress = localStorage.getItem('gameProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                this.updateProgress();
+            }
         } catch (error) {
             console.error('Failed to initialize GameManager:', error);
         }
@@ -188,6 +196,10 @@ class GameManager {
     }
 
     activateCard(card) {
+        const cardId = card.dataset.id;
+        this.solvedCards.add(cardId);
+        this.saveSolvedCards();
+
         card.classList.add('solved');
         
         const cardInner = card.querySelector('.card-inner');
@@ -195,7 +207,6 @@ class GameManager {
             cardInner.style.transform = 'rotateY(180deg)';
         }
 
-        const cardId = card.dataset.id;
         const cardBack = card.querySelector('.card-back');
         if (cardBack) {
             cardBack.innerHTML = `
@@ -209,7 +220,7 @@ class GameManager {
     }
 
     updateProgress() {
-        const completedChallenges = document.querySelectorAll('.card.solved').length;
+        const completedChallenges = this.solvedCards.size;
         const totalChallenges = CONFIG.GAME.TOTAL_CARDS;
         
         const completedElement = document.getElementById('completed-challenges');
@@ -219,6 +230,11 @@ class GameManager {
             completedElement.textContent = completedChallenges;
             totalElement.textContent = totalChallenges;
         }
+
+        localStorage.setItem('gameProgress', JSON.stringify({
+            completed: completedChallenges,
+            total: totalChallenges
+        }));
     }
 
     initializeEventListeners() {
@@ -250,5 +266,16 @@ class GameManager {
     closePopup() {
         const popup = document.getElementById('gamePopup');
         popup.style.display = 'none';
+    }
+
+    loadSolvedCards() {
+        const savedCards = localStorage.getItem('solvedCards');
+        if (savedCards) {
+            this.solvedCards = new Set(JSON.parse(savedCards));
+        }
+    }
+
+    saveSolvedCards() {
+        localStorage.setItem('solvedCards', JSON.stringify(Array.from(this.solvedCards)));
     }
 } 

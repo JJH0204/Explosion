@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "몬스터1",
+    "description": "이 몬스터의 상세 설명...",
+    "image": "/images/monster1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "몬스터2",
+    "description": "두 번째 몬스터의 상세 설명...",
+    "image": "/images/monster2.jpg"
+  }
+]

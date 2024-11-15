@@ -1,6 +1,6 @@
 const CONFIG = {
     PATHS: {
-        IMAGES: './assets/images/monsters/',
+        IMAGES: 'assets/images/monsters/',
         MARKDOWN: './data/markdown/',
         PHP: './php/',
         QUESTIONS: './Question/',

@@ -6,7 +6,7 @@
             "markdownFile": "mk_1.md",
             "description": "This is the first challenge.",
             "link": "./Question/question1/question1.html",
-            "answer": "flag{flame1answer}"
+            "answer": "flame1answer"
         },
         {
             "id": 2,
