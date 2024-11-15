@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: monospace;
+        }
+        #login-form {
+            display: none;
+        }
+        .error-msg {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 힌트1: 콘솔을 확인하세요 -->
+    <h1>404 - Page Not Found</h1>
+    <div id="login-form">
+        <input type="password" id="auth-key" placeholder="인증 키를 입력하세요">
+        <button onclick="authenticate()">확인</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        // 난독화된 인증 키 검증 함수
+        const _0x4f8d=['value','auth-key','getElementById','result','innerHTML','정답입니다! 플래그는: ','틀렸습니다!','log','디버거를 발견했습니다!'];
+        
+        (function(_0x5c0b45,_0x4f8d9d){
+            const _0x56a8x1=function(_0x56a8x2){
+                while(--_0x56a8x2){
+                    _0x5c0b45['push'](_0x5c0b45['shift']());
+                }
+            };
+            _0x56a8x1(++_0x4f8d9d);
+        }(_0x4f8d,0x1c3));
+
+        // Base64로 인코딩된 비밀 키
+        const secretKey = 'VGhpc0lzTm90VGhlUmVhbEtleQ==';
+        
+        // 디버거 감지
+        setInterval(function(){
+            const startTime = performance.now();
+            debugger;
+            const endTime = performance.now();
+            if(endTime - startTime > 100){
+                console.log(_0x4f8d[8]);
+            }
+        }, 1000);
+
+        // 초기 콘솔 메시지
+        console.log("힌트2: 이 페이지는 테스트 환경입니다. 버전: dev_0.1");
+        console.log("힌트3: 개발자 노트 - authKey는 Base64로 인코딩되어 있음");
+
+        // XSS 방지를 위한 이스케이프 함수
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // 실제 인증 키 검증 함수
+        function authenticate() {
+            const input = document.getElementById(_0x4f8d[1])[_0x4f8d[0]];
+            const resultDiv = document.getElementById(_0x4f8d[3]);
+            
+            try {
+                if(checkKey(input)) {
+                    const flag = decodeFlag(input);
+                    resultDiv[_0x4f8d[4]] = _0x4f8d[5] + escapeHtml(flag);
+                } else {
+                    resultDiv[_0x4f8d[4]] = _0x4f8d[6];
+                }
+            } catch(e) {
+                console[_0x4f8d[7]]('에러 발생:', e);
+            }
+        }
+
+        // 키 검증 함수 (난독화됨)
+        function checkKey(key) {
+            return atob(key) === atob(secretKey) + '_admin';
+        }
+
+        // 플래그 디코딩 함수
+        function decodeFlag(key) {
+            const decoded = atob(key);
+            return 'FLAG{' + btoa(decoded.split('').reverse().join('')) + '}';
+        }
+
+        // 페이지 로드 시 로그인 폼 표시
+        window.onload = function() {
+            document.getElementById('login-form').style.display = 'block';
+            
+            // 숨겨진 힌트
+            setTimeout(() => {
+                console.log("힌트4: admin 권한이 필요합니다.");
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

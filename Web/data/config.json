@@ -6,15 +6,55 @@
             "markdownFile": "mk_1.md",
             "description": "This is the first challenge.",
             "link": "./Question/question1/question1.html",
-            "answer": "flag{answer1}"
+            "answer": "flag{flame1answer}"
         },
         {
             "id": 2,
             "title": "Challenge 2",
             "markdownFile": "mk_2.md",
             "description": "This is the second challenge.",
-            "link": "./Question/question2/question2.php",
+            "link": "./Question/question2/question2.html",
             "answer": "flag{answer2}"
+        },
+        {
+            "id": 3,
+            "title": "Challenge 3",
+            "markdownFile": "mk_3.md",
+            "description": "This is the third challenge.",
+            "link": "./Question/question3/question3.html",
+            "answer": "flag{answer3}"
+        },
+        {
+            "id": 4,
+            "title": "Challenge 4",
+            "markdownFile": "mk_4.md",
+            "description": "This is the fourth challenge.",
+            "link": "./Question/question4/question4.html",
+            "answer": "flag{answer4}"
+        },
+        {
+            "id": 5,
+            "title": "Challenge 5",
+            "markdownFile": "mk_5.md",
+            "description": "This is the fifth challenge.",
+            "link": "./Question/question5/question5.html",
+            "answer": "flag{answer5}"
+        },
+        {
+            "id": 6,
+            "title": "Challenge 6",
+            "markdownFile": "mk_6.md",
+            "description": "This is the sixth challenge.",
+            "link": "./Question/question6/question6.html",
+            "answer": "flag{answer6}"
+        },
+        {
+            "id": 7,
+            "title": "Challenge 7",
+            "markdownFile": "mk_7.md",
+            "description": "This is the seventh challenge.",
+            "link": "./Question/question7/question7.html",
+            "answer": "flag{answer7}"
         }
     ]
 } 

@@ -4,19 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin String Input</title>
+    <title>Basic Wargame Challenge</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #000000;
+            padding: 2rem;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            text-align: center;
+        }
+        input {
+            background-color: #1a1a1a;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 5px 10px;
+            margin: 10px;
+            outline: none;
+        }
+        button {
+            background-color: #00ff00;
+            color: #000000;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff0000;
+        }
+    </style>
 </head>
 
 <body>
-    <form id="adminForm">
-        <label for="inputString">ID: </label>
-        <input type="text" id="inputString" name="inputString" required>
-        <button type="button" onclick="checkAdmin()">go</button>
-    </form>
-    <p id="result"></p>
-    <!-- ID: admin -->
-    <script src="./question1.js"></script>
+    <div class="container">
+        <h2>Basic Wargame Challenge</h2>
+        <form id="adminForm" onsubmit="return false;">
+            <label for="inputString">관리자 ID를 입력하세요: </label><br>
+            <input type="text" id="inputString" name="inputString" required><br>
+            <button type="button" onclick="checkAdmin()">로그인</button>
+        </form>
+        <p id="result"></p>
+    </div>
 
+    <script>
+        function checkAdmin() {
+            const input = document.getElementById("inputString").value;
+            const result = document.getElementById("result");
+
+            if (input === "admin") {
+                // Base64로 인코딩된 플래그
+                result.className = "";
+                result.textContent = "축하합니다! 플래그를 찾았습니다: ZmxhbWUxYW5zd2Vy";
+                console.log("힌트: 플래그는 Base64로 인코딩되어 있습니다.");
+            } else {
+                result.className = "error";
+                result.textContent = "접근 권한이 없습니다.";
+            }
+        }
+
+        // 초기 힌트
+        console.log("힌트: 페이지 소스 코드를 확인해보세요!");
+    </script>
 </body>
 
 </html>

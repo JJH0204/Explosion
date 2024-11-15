@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Scanner v1.0</title>
+    <style>
+        body {
+            background-color: #001100;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+        .memory-view, .control-panel {
+            background-color: #002200;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            overflow: auto;
+        }
+        .memory-cell {
+            display: inline-block;
+            width: 30px;
+            height: 20px;
+            margin: 2px;
+            font-size: 12px;
+            text-align: center;
+            border: 1px solid #004400;
+        }
+        .memory-cell.modified {
+            background-color: #004400;
+        }
+        .memory-cell.selected {
+            border-color: #00ff00;
+        }
+        button {
+            background-color: #004400;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #006600;
+        }
+        .status {
+            color: #00aa00;
+            margin-top: 10px;
+        }
+        #protocol-view {
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Memory Scanner v1.0</h1>
+    <div class="container">
+        <div class="memory-view" id="memory-display"></div>
+        <div class="control-panel">
+            <button onclick="scanner.scan()">메모리 스캔</button>
+            <button onclick="scanner.analyze()">프로토콜 분석</button>
+            <button onclick="scanner.modify()">메모리 수정</button>
+            <button onclick="scanner.execute()">실행</button>
+            <div class="status" id="status"></div>
+            <div id="protocol-view"></div>
+        </div>
+    </div>
+
+    <script>
+        class MemoryScanner {
+            constructor() {
+                this.memory = new Array(256).fill(0);
+                this.protocolData = [];
+                this.selectedCells = new Set();
+                this.modifiedCells = new Set();
+                this.initializeMemory();
+                this.render();
+            }
+
+            initializeMemory() {
+                // 암호화된 초기 메모리 상태
+                const encoded = 'H4sIAAAAAAAAA2NgYPjPAAVMQMwMxCxAzArEbEDMDsQcQMwJxFxAzA3EPEDMy4AJAABqiGhXAAAA';
+                const decoded = atob(encoded);
+                for(let i = 0; i < decoded.length && i < this.memory.length; i++) {
+                    this.memory[i] = decoded.charCodeAt(i);
+                }
+
+                // 숨겨진 프로토콜 데이터
+                this.protocolData = [
+                    { id: 0x01, type: 'INIT', data: [0x00, 0xFF, 0x00] },
+                    { id: 0x02, type: 'SCAN', data: [0x01, 0x02, 0x03] },
+                    { id: 0x03, type: 'EXEC', data: [0xFF, 0xFF, 0xFF] }
+                ];
+            }
+
+            render() {
+                const display = document.getElementById('memory-display');
+                display.innerHTML = '';
+                
+                for(let i = 0; i < this.memory.length; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'memory-cell';
+                    cell.textContent = this.memory[i].toString(16).padStart(2, '0');
+                    
+                    if(this.selectedCells.has(i)) cell.classList.add('selected');
+                    if(this.modifiedCells.has(i)) cell.classList.add('modified');
+                    
+                    cell.onclick = () => this.selectCell(i);
+                    display.appendChild(cell);
+                }
+            }
+
+            selectCell(index) {
+                if(this.selectedCells.has(index)) {
+                    this.selectedCells.delete(index);
+                } else {
+                    this.selectedCells.add(index);
+                }
+                this.render();
+            }
+
+            updateStatus(message) {
+                document.getElementById('status').textContent = message;
+            }
+
+            scan() {
+                this.updateStatus('메모리 스캔 중...');
+                
+                // 메모리 패턴 분석
+                let patterns = [];
+                for(let i = 0; i < this.memory.length - 2; i++) {
+                    if(this.memory[i] === 0xFF && this.memory[i+1] === 0x00) {
+                        patterns.push(i);
+                    }
+                }
+
+                setTimeout(() => {
+                    this.updateStatus(`발견된 패턴: ${patterns.length}개`);
+                    console.log('힌트: 패턴 0xFF00을 찾아보세요.');
+                }, 1000);
+            }
+
+            analyze() {
+                this.updateStatus('프로토콜 분석 중...');
+                
+                const protocolView = document.getElementById('protocol-view');
+                protocolView.innerHTML = '';
+                
+                setTimeout(() => {
+                    this.protocolData.forEach(p => {
+                        const line = document.createElement('div');
+                        line.textContent = `ID: 0x${p.id.toString(16)} - Type: ${p.type}`;
+                        protocolView.appendChild(line);
+                    });
+                    
+                    console.log('힌트: EXEC 프로토콜의 데이터를 수정해보세요.');
+                }, 1500);
+            }
+
+            modify() {
+                if(this.selectedCells.size === 0) {
+                    this.updateStatus('수정할 셀을 선택하세요.');
+                    return;
+                }
+
+                // 선택된 셀의 값을 수정
+                this.selectedCells.forEach(index => {
+                    this.memory[index] = 0xFF;
+                    this.modifiedCells.add(index);
+                });
+
+                this.render();
+                this.updateStatus('메모리 수정 완료');
+            }
+
+            execute() {
+                this.updateStatus('실행 중...');
+                
+                // 메모리 상태 검증
+                let execProtocol = this.protocolData.find(p => p.type === 'EXEC');
+                let validExec = true;
+                
+                for(let i = 0; i < execProtocol.data.length; i++) {
+                    if(this.memory[0x20 + i] !== execProtocol.data[i]) {
+                        validExec = false;
+                        break;
+                    }
+                }
+
+                setTimeout(() => {
+                    if(validExec) {
+                        const flag = this.decodeFlag();
+                        this.updateStatus(`성공! Flag: ${flag}`);
+                    } else {
+                        this.updateStatus('실행 실패. 메모리 상태가 올바르지 않습니다.');
+                    }
+                }, 1000);
+            }
+
+            decodeFlag() {
+                // XOR 복호화
+                const key = 0xFF;
+                const encoded = [0x7F, 0x6E, 0x61, 0x67, 0x7B, 0x6D, 0x65, 0x6D, 0x5F, 0x68, 0x61, 0x63, 0x6B, 0x7D];
+                return 'FLAG_' + encoded.map(b => String.fromCharCode(b ^ key)).join('');
+            }
+        }
+
+        // 스캐너 초기화
+        const scanner = new MemoryScanner();
+
+        // 안티 디버깅
+        setInterval(() => {
+            const start = performance.now();
+            debugger;
+            const end = performance.now();
+            if(end - start > 100) {
+                location.reload();
+            }
+        }, 1000);
+
+        // 메모리 무결성 검사
+        setInterval(() => {
+            const checksum = scanner.memory.reduce((a, b) => a + b, 0);
+            if(checksum > 10000) {
+                scanner.initializeMemory();
+                scanner.render();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
