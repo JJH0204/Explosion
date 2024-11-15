@@ -1,195 +1,248 @@
-/* 전체 레이아웃 설정 */
+/* 기본 스타일 */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
-.container {
+/* 컨테이너 스타일 */
+.login-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 400px;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* 헤더와 로고 스타일 */
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    padding: 20px;
 }
 
 .logo-button {
-    background-color: #666;
-    color: white;
+    background: none;
     border: none;
-    padding: 10px 20px;
-    font-size: 1.2em;
     cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    position: relative;
+    display: inline-block;
 }
 
-.logo-button:hover {
-    background-color: #555;
+.logo-button img {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 195, 255, 0.3));
+    transition: all 0.3s ease;
 }
 
+.logo-button:hover img {
+    filter: drop-shadow(0 0 15px rgba(0, 195, 255, 0.5));
+    transform: scale(1.05);
+}
+
+.logo-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(0, 195, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* 로그인 박스 스타일 */
 .login-box {
-    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* 입력 필드 스타일 */
+.input-field {
+    width: 100%;
+    padding: 15px;
     margin-bottom: 20px;
-}
-
-.input-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="password"] {
-    width: 80%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
     box-sizing: border-box;
 }
 
+.input-field:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.input-field::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* 체크박스 스타일 */
 .remember-me {
     display: flex;
     align-items: center;
-    justify-content: center;
     margin-bottom: 20px;
+    color: #fff;
 }
 
-.remember-me label {
-    margin-left: 5px;
-}
-
-/* 로그인 페이지 버튼 스타일 (회색, 둥근 모양) */
-.signin-button,
-.login-signup-button {
-    background-color: #ddd;
-    border: 1px solid #bbb;
-    padding: 10px 20px;
-    font-size: 1em;
+.remember-me input[type="checkbox"] {
+    margin-right: 10px;
     cursor: pointer;
-    margin: 5px;
-    width: calc(80% + 20px);
-    border-radius: 5px; /* 둥근 모양 */
+}
+
+/* 버튼 스타일 */
+.signin-button, 
+.login-signup-button,
+.signup-button, 
+.cancel-button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.signin-button {
+    background: #ff6b6b;
+    color: white;
+}
+
+.login-signup-button {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #ff6b6b;
+}
+
+.signup-button {
+    background: #4CAF50;
+    color: white;
+    width: auto;
+    min-width: 100px;
+}
+
+.cancel-button {
+    background: #f44336;
+    color: white;
+    width: auto;
+    min-width: 100px;
 }
 
 .signin-button:hover,
+.signup-button:hover,
+.cancel-button:hover {
+    transform: translateY(-2px);
+    filter: brightness(110%);
+}
+
 .login-signup-button:hover {
-    background-color: #ccc;
+    background: rgba(255, 107, 107, 0.1);
+    transform: translateY(-2px);
 }
 
 /* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* 배경 투명도 */
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
     max-width: 400px;
-    border-radius: 8px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .close {
-    color: #aaa;
+    color: rgba(255, 255, 255, 0.8);
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* 회원가입 페이지 스타일 */
-.signup-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    color: white;
+.close:hover {
+    color: #fff;
+    transform: scale(1.1);
 }
 
-.signup-logo {
-    margin-bottom: 20px;
-}
-
-.signup-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.input-field {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-/* 회원가입 페이지 버튼 스타일 */
 .button-container {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    gap: 15px;
     margin-top: 20px;
+    justify-content: center;
 }
 
-.signup-button, .cancel-button {
-    padding: 10px 20px;
-    font-size: 1em; /* 로그인 페이지와 비율을 동일하게 유지 */
-    width: calc(80% + 20px);
-    border-radius: 5px;
-    cursor: pointer;
+/* 에러 메시지 스타일 */
+#error-message, 
+#signup-error-message {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff6b6b;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
 }
 
-.signup-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-}
-
-.signup-button:hover {
-    background-color: #45a049;
-}
-
-.cancel-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-}
-
-.cancel-button:hover {
-    background-color: #e53935;
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 10px;
+    }
+    
+    .login-box,
+    .modal-content {
+        padding: 20px;
+    }
+    
+    .button-container {
+        flex-direction: column;
+    }
+    
+    .signup-button,
+    .cancel-button {
+        width: 100%;
+    }
 }
