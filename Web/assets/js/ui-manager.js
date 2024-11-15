@@ -57,4 +57,22 @@ class UIManager {
     getMainContent() {
         return this.mainContent;
     }
-} 
+
+    // 추가된 fetchUserInfo 메서드
+
+
+    // 추가된 fetchRanking 메서드 (랭킹 정보 가져오기 예제)
+    async fetchRanking() {
+        try {
+            const response = await fetch('/assets/php/ranking.php');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const rankingInfo = await response.json();
+            console.log('Ranking Info:', rankingInfo);
+            // 랭킹 정보를 UI에 반영하는 코드 추가
+        } catch (error) {
+            console.error('Error fetching ranking info:', error);
+        }
+    }
+}

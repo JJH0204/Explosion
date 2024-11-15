@@ -37,8 +37,12 @@
                     <img src="assets/images/character.png" alt="Character" class="character-image">
                 </div>
                 <div class="character-info">
-                    <div class="character-name">플레이어 닉네임</div>
-                    <div class="character-level">레벨: 1</div>
+                    <div class="level-info">
+                        <p>랭킹: <span id="current-level">-</span></p>
+                    </div>
+                    <div class="character-name">
+                        <p id="player-nickname">로딩중...</p>
+                    </div>
                 </div>
             </div>
 
@@ -50,8 +54,6 @@
                 </div>
             </div>
             <div class="scoreboard">
-                <p class="score">점수: <span id="score">0</span></p>
-                <p>레벨: <span id="level">1</span></p>
             </div>
             <div id="rankingBoard" class="ranking-board">
                 <h3>실시간 랭킹</h3>
@@ -88,6 +90,7 @@
     <script src="assets/js/card-manager.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/ranking.js"></script>
-    </body>
+    <script src="assets/js/userinfo.js"></script>
+</body>
 
 </html>
