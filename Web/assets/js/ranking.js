@@ -45,8 +45,7 @@ function updateRanking() {
                     listItem.innerHTML = `                    
                         <strong>${index + 1}위</strong>
                         <span>${player.username}</span>
-                        <span>점수: ${player.score}</span>
-                        <span>레벨: ${player.stage}</span>`;
+                        <span>점수: ${player.score}</span>`;
                     rankingList.appendChild(listItem);
                 });
             } else {
