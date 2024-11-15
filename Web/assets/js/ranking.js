@@ -1,6 +1,6 @@
 // 점수 및 레벨 업데이트 함수
 function updateScore() {
-    fetch("/assets/php/Scoreboard2.php")
+    fetch("../Scoreboard2.php")
         .then(response => response.json())
         .then(data => {
             document.getElementById("score").textContent = data.score;
@@ -32,7 +32,7 @@ function solveGame() {
 }
 
 function updateRanking() {
-    fetch("/assets/php/ranking.php")
+    fetch("../ranking.php")
         .then(response => response.json())
         .then(data => {
             const rankingList = document.getElementById("rankingList");
