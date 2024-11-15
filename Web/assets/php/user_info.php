@@ -5,7 +5,7 @@ session_start(); // 세션 시작
 $host = 'localhost'; // 호스트
 $db = 'testDB'; // 데이터베이스 이름
 $user = 'admin'; // 데이터베이스 사용자
-$pass = '1234'; // 데이터베이스 비밀번호
+$pass = 'flamerootpassword'; // 데이터베이스 비밀번호
 
 $conn = new mysqli($host, $user, $pass, $db);
 

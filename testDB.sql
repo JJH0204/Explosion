@@ -20,9 +20,6 @@ CREATE TABLE IF NOT EXISTS `Score` (
     UNIQUE KEY unique_user_game (ID, NICKNAME)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- INSERT INTO `ID_info` (`ID`, `PW`, `NICKNAME`) VALUES ('public', 'public', 'public');
--- INSERT INTO `Score` (`ID`, `INCKNAME`) VALUES (`public`, `public`);
-
 CREATE USER `admin`@`localhost` identified by 'flamerootpassword';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;

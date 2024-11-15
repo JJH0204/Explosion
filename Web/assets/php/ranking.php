@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 $host = '127.0.0.1';
 $db = 'GameScore';
 $username = 'admin';
-$passwd = '1234';
+$passwd = 'flamerootpassword';
 $charset = 'utf8mb4';
 
 // 데이터베이스 연결

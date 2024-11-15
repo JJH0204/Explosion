@@ -5,7 +5,7 @@ session_start();
 $host = '127.0.0.1';
 $db = 'GameScore';
 $username = 'admin';
-$passwd = '1234';
+$passwd = 'flamerootpassword';
 $charset = 'utf8mb4';
 
 // 게임 내 점수 업데이트 요청인지 확인하는 토큰 검사
