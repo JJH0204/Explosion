@@ -1,0 +1,46 @@
+/* 관리자 페이지 기본 스타일만 유지 */
+.character-image-container {
+    position: relative;
+}
+
+.sidebar .character-profile img.character-image {
+    border: 4px solid #FFD700 !important;
+    box-shadow: 0 0 20px 5px #FFD700 !important;
+    z-index: 3 !important;
+}
+
+/* 관리자 페이지 카드 호버 효과 */
+.admin-card .card-inner {
+    transform: none !important; /* 카드를 뒤집지 않음 */
+}
+
+.admin-card:hover .card-inner {
+    transform: translateY(-10px) scale(1.05) !important;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 215, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.admin-card .card-front {
+    transform: none !important;
+    background: none !important;
+    border: 3px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.admin-card .card-front img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* 카드 기본 스타일 */
+.admin-card {
+    transition: all 0.3s ease;
+}
+
+/* 호버 시 발광 효과 */
+.admin-card:hover {
+    filter: brightness(1.1);
+}

@@ -150,3 +150,9 @@
         gap: 10px;
     }
 }
+
+.card.solved:hover .card-inner {
+    transform: rotateY(180deg) translateY(-10px) scale(1.05) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+}

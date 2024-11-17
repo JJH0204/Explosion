@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/styles/cards.css">
     <link rel="stylesheet" href="assets/styles/popup.css">
     <link rel="stylesheet" href="assets/styles/markdown.css">
+    <link rel="stylesheet" href="assets/styles/admin.css">
     <style>
         .character-image-container {
             position: relative;
@@ -47,10 +48,10 @@
                 </div>
                 <div class="character-info">
                     <div class="character-name">
-                        <p id="player-nickname">로딩중...</p>
+                        Admin
                     </div>
                     <div class="rank-info">
-                        랭킹: 1 위
+                        직위: 관리자
                     </div>
                     <div class="score-info">
                         점수: 9999 pt
@@ -66,24 +67,22 @@
             </div>
             <div class="scoreboard">
             </div>
-            <div class="ranking-board" style="margin-top: 20px;">
+            <div id="rankingBoard" class="ranking-board" style="margin-top: 20px;">
                 <h3>실시간 랭킹</h3>
-                <ul id="rankingList">
-                    <li>1위 <span id="ranking-nickname"></span> - 9999 pt</li>
-                </ul>
+                <ul id="rankingList"></ul>
             </div>
         </aside>
 
         <main class="main-content">
             <div class="cards-container">
-                <div class="cards-grid">
-                    <!-- 카드들이 여기에 정적으로 추가됩니다 -->
+                <div id="challengeGrid" class="cards-grid">
+                    <!-- 카드들이 여기에 동적으로 추가됩니다 -->
                 </div>
             </div>
         </main>
 
-        <button class="arrow-button left">◀</button>
-        <button class="arrow-button right">▶</button>
+        <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
+        <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
     </div>
 
     <div id="gamePopup" class="popup">
@@ -105,61 +104,17 @@
             </div>
             <div class="footer-section">
                 <h4>문의하기</h4>
-                <p>버그 신고: <a href="mailto:bug-report@flamewargame.com">bug-report@flamewargame.com</a></p>
+                <p>버 신고: <a href="mailto:bug-report@flamewargame.com">bug-report@flamewargame.com</a></p>
                 <p>취약점 신고: <a href="mailto:security@flamewargame.com">security@flamewargame.com</a></p>
             </div>
         </div>
     </footer>
 
-    <script src="assets/js/userinfo.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // userinfo.js의 updateUserInfo 함수가 실행될 때 닉네임만 업데이트
-            window.updateUserInfo = async function() {
-                try {
-                    const response = await fetch('assets/php/get_user_info.php');
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        // 닉네임 업데이트 (프로필과 랭킹 모두)
-                        const nickname = data.nickname;
-                        document.getElementById('player-nickname').textContent = nickname;
-                        
-                        // 실시간 랭킹의 닉네임도 동일하게 업데이트
-                        const rankingNickname = document.getElementById('ranking-nickname');
-                        if (rankingNickname) {
-                            rankingNickname.textContent = nickname;
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            };
-
-            // 초기 정보 업데이트
-            updateUserInfo();
-
-            // 로그아웃 버튼 기능
-            document.getElementById('logoutBtn').addEventListener('click', async function() {
-                try {
-                    const response = await fetch('assets/php/logout.php');
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        window.location.href = 'login.html';
-                    }
-                } catch (error) {
-                    console.error('Logout error:', error);
-                }
-            });
-
-            // 푸터 토글 기능
-            document.querySelector('.footer-toggle').addEventListener('click', function () {
-                document.querySelector('.footer').classList.toggle('active');
-            });
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/admin-card.js"></script>
+    <script src="assets/js/ranking.js"></script>
+    <script src="assets/js/admin-main.js"></script>
 </body>
 
 </html>
