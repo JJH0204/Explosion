@@ -1,0 +1,11 @@
+# JavaScript 파일 직접 접근 차단
+<Files "script24.min.js">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# JavaScript 파일 캐시 방지
+<FilesMatch "\.js$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+</FilesMatch> 

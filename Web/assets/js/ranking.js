@@ -43,14 +43,22 @@ function updateRanking() {
             if (data.success && Array.isArray(data.rankings)) {
                 data.rankings.forEach((player, index) => {
                     const listItem = document.createElement("li");
+                    // 랭킹에 따른 스타일 적용
+                    let rankStyle = '';
+                    if (index === 0) {
+                        rankStyle = 'color: #FFD700;'; // 금색
+                    } else if (index === 1) {
+                        rankStyle = 'color: #C0C0C0;'; // 은색
+                    } else if (index === 2) {
+                        rankStyle = 'color: #CD7F32;'; // 동색
+                    }
+                    
                     listItem.innerHTML = `                    
-                        <strong>${index + 1}위</strong>
+                        <strong style="${rankStyle}">${index + 1}위</strong>
                         <span>${player.nickname}</span>
                         <span>점수: ${player.score} pt</span>`;
                     rankingList.appendChild(listItem);
                 });
-            } else {
-                console.error("Unexpected data format or no rankings available:", data);
             }
         })
         .catch(error => console.error("Error fetching ranking data:", error));

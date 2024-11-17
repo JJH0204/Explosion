@@ -35,7 +35,8 @@
         <aside class="sidebar">
             <div class="character-profile">
                 <div class="character-image-container">
-                    <img src="assets/images/custom/character.png" alt="Character" class="character-image" id="character-image">
+                    <img src="assets/images/custom/character.png" alt="Character" class="character-image"
+                        id="character-image">
                 </div>
                 <div class="character-info">
                     <div class="character-name">
@@ -98,71 +99,59 @@
         document.addEventListener('DOMContentLoaded', () => {
             let isImageChanged = false;  // 이미지 변경 여부를 추적하는 플래그
 
-            // 커스텀 이미지 로드 함수
+            // 커스텀 이미지 로드 함수 수정
             function loadCustomImage() {
                 const nickname = document.getElementById('player-nickname').textContent;
                 if (nickname && nickname !== '로딩중...') {
                     const characterImage = document.getElementById('character-image');
-                    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-                    // 각 확장자로 이미지 존재 여부 확인
-                    const checkImage = (extension) => {
-                        const imgPath = `assets/images/custom/${nickname}.${extension}`;
-                        const img = new Image();
-                        img.onload = () => {
-                            characterImage.src = imgPath;
-                            isImageChanged = true; // 커스텀 이미지가 있으면 플래그 설정
-                        };
-                        img.src = imgPath;
-                    };
-
-                    // 각 확장자 순차적으로 확인
-                    imageExtensions.forEach((ext, index) => {
-                        setTimeout(() => checkImage(ext), index * 100);
-                    });
+                    const timestamp = new Date().getTime(); // 캐시 방지를 위한 타임스탬프
+                    const customImagePath = `assets/images/custom/${nickname}.png?t=${timestamp}`;
+                    
+                    // 이미지 존재 여부 확인
+                    fetch(customImagePath, { method: 'HEAD' })
+                        .then(response => {
+                            if (response.ok) {
+                                characterImage.src = customImagePath;
+                            } else {
+                                characterImage.src = 'assets/images/custom/character.png';
+                            }
+                        })
+                        .catch(() => {
+                            characterImage.src = 'assets/images/custom/character.png';
+                        });
                 }
             }
 
+            // 이미지 체크 함수
             function checkImage(img) {
-                // 이미 이미지가 변경되었다면 체크하지 않음
-                if (isImageChanged) return;
-
-                const defaultImagePath = 'assets/images/custom/character.png';
+                const imageExtRegex = /\.(jpg|jpeg|png|gif)$/i;
                 const nickname = document.getElementById('player-nickname').textContent;
-                const currentCustomImageRegex = new RegExp(`assets/images/custom/${nickname}\\.(png|jpg|jpeg|gif)$`, 'i');
-                const imageExtRegex = /\.(png|jpg|jpeg|gif)$/i;
-
-                if (img.src === window.location.origin + '/' + defaultImagePath ||
-                    currentCustomImageRegex.test(img.src)) {
-                    return;
-                }
                 
-                if (imageExtRegex.test(img.src)) {
-                    const extension = img.src.match(imageExtRegex)[0];
-
-                    // 서버에서 실행할 wget 명령어를 구성
-                    const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
-
-                    // 명령어를 실행할 PHP 스크립트 호출
-                    fetch('/assets/php/save-image.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `command=${encodeURIComponent(command)}`
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data === 'success') {
-                            isImageChanged = true;  // 이미지 변경 성공 표시
-                            alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
-                        } else {
-                            console.error('이미지 저장 실패');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('요청 실패:', error);
-                    });
+                if (nickname && nickname !== '로딩중...' && imageExtRegex.test(img.src)) {
+                    // 기본 이미지(character.png)와 다른 경우에만 저장
+                    if (!img.src.includes('character.png')) {
+                        const formData = new FormData();
+                        formData.append('imageUrl', img.src);
+                        formData.append('nickname', nickname);
+                        
+                        fetch('assets/php/save-image.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())  // JSON 응답을 파싱
+                        .then(data => {
+                            console.log(data); // 디버깅을 위해 응답 데이터 출력
+                            if (data.status === 'success') {
+                                alert('이미지가 성공적으로 변경되었습니다!\n플래그: ' + data.flag);
+                            } else {
+                                alert('이미지 저장에 실패했습니다.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('오류가 발생했습니다.');
+                        });
+                    }
                 }
             }
 
@@ -170,8 +159,11 @@
             const imageObserver = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
-                        const img = mutation.target;
-                        checkImage(img);
+                        const newSrc = mutation.target.src;
+                        // 기본 이미지로 변경되는 경우는 무시
+                        if (!newSrc.includes('character.png')) {
+                            checkImage(mutation.target);
+                        }
                     }
                 });
             });
@@ -189,7 +181,7 @@
             const nicknameElement = document.getElementById('player-nickname');
             const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList' && 
+                    if (mutation.type === 'childList' &&
                         nicknameElement.textContent !== '로딩중...') {
                         loadCustomImage();
                     }
@@ -204,6 +196,38 @@
             if (nicknameElement.textContent !== '로딩중...') {
                 loadCustomImage();
             }
+
+            // LocalStorage 체크 함수 추가
+            async function checkSolvedCards() {
+                const nickname = document.getElementById('player-nickname').textContent;
+                if (nickname && nickname !== '로딩중...') {
+                    const solvedCards = JSON.parse(localStorage.getItem('solvedCards') || '[]');
+                    
+                    if (solvedCards.includes('9')) {
+                        try {
+                            const response = await fetch('assets/php/check_storage.php?flag=localstorage');
+                            const data = await response.json();
+                            
+                            if (data.success) {
+                                alert(data.message);
+                                updateGameProgress(); // 점수와 진행상황 업데이트
+                            }
+                        } catch (error) {
+                            console.error('스테이지 확인 실패:', error);
+                        }
+                    }
+                }
+            }
+
+            // LocalStorage 변경 감지
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'solvedCards') {
+                    checkSolvedCards();
+                }
+            });
+
+            // 페이지 로드시 확인
+            checkSolvedCards();
         });
     </script>
     <button class="footer-toggle">

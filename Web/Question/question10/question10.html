@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server IP Challenge</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #000000;
+            padding: 2rem;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            text-align: center;
+            max-width: 600px;
+        }
+        input {
+            background-color: #1a1a1a;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 8px 15px;
+            margin: 10px;
+            width: 200px;
+            outline: none;
+        }
+        button {
+            background-color: #00ff00;
+            color: #000000;
+            border: none;
+            padding: 8px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff0000;
+        }
+        .hint {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>서버 IP 찾기 챌린지</h2>
+        <p>이 웹 서버의 실제 IP 주소를 찾아보세요!</p>
+        
+        <form id="ipForm" onsubmit="return false;">
+            <input type="text" id="ipInput" placeholder="서버 IP를 입력하세요" 
+                   pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                   title="유효한 IPv4 주소를 입력하세요">
+            <br>
+            <button type="button" onclick="checkIP()">확인</button>
+        </form>
+        
+        <p id="result"></p>
+        
+        <div class="hint">
+            <p>힌트:</p>
+            <ul style="text-align: left;">
+                <li>cmd나 powershell을 사용해보세요</li>
+                <li>ping, tracert, nslookup 등의 네트워크 도구를 활용해보세요</li>
+                <li>DNS 조회 결과를 확인해보세요</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function checkIP() {
+            const input = document.getElementById("ipInput").value;
+            const result = document.getElementById("result");
+            
+            // IP 형식 검증을 위한 정규식
+            const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            
+            if (!ipRegex.test(input)) {
+                result.className = "error";
+                result.textContent = "올바른 IP 주소 형식이 아닙니다.";
+                return;
+            }
+
+            if (input === "221.166.254.49") {
+                result.className = "";
+                result.innerHTML = "축하합니다! 정확한 서버 IP를 찾았습니다!<br>Flag: " + btoa("flag{answer10}");
+            } else {
+                result.className = "error";
+                result.textContent = "틀린 IP 주소입니다. 다시 시도해보세요.";
+            }
+        }
+    </script>
+</body>
+</html>

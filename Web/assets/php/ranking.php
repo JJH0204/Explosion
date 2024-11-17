@@ -13,8 +13,12 @@ if ($conn->connect_error) {
     exit;
 }
 
-// USER_info 테이블에서 상위 10명을 점수와 스테이지 기준으로 정렬
-$sql = "SELECT NICKNAME, SCORE, STAGE FROM USER_info ORDER BY SCORE DESC, STAGE DESC LIMIT 10";
+// USER_info 테이블에서 상위 10명을 점수 기준으로 정렬하고, 같은 점수일 경우 날짜순으로 정렬
+$sql = "SELECT NICKNAME, SCORE, STAGE, RECOREDE_DATE 
+        FROM USER_info 
+        ORDER BY SCORE DESC, RECOREDE_DATE ASC 
+        LIMIT 10";
+        
 $result = $conn->query($sql);
 
 $rankings = [];

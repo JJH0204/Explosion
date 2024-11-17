@@ -57,15 +57,18 @@ class CardManager {
     createPage(pageNumber) {
         const page = document.createElement('div');
         page.className = 'page';
+        if (pageNumber === 0) {
+            page.classList.add('active');
+        }
         
-        const startCard = pageNumber * CONFIG.GAME.CARDS_PER_PAGE;
-        const endCard = Math.min(startCard + CONFIG.GAME.CARDS_PER_PAGE, CONFIG.GAME.TOTAL_CARDS);
-
+        const startCard = pageNumber * this.cardsPerPage;
+        const endCard = Math.min(startCard + this.cardsPerPage, CONFIG.GAME.TOTAL_CARDS);
+        
         for (let i = startCard; i < endCard; i++) {
             const card = this.createCard(i + 1);
             page.appendChild(card);
         }
-
+        
         return page;
     }
 
@@ -139,11 +142,18 @@ class CardManager {
     showPage(pageNumber) {
         if (this.isAnimating) return;
         
-        const wrapper = document.querySelector('.pages-wrapper');
-        if (!wrapper) return;
+        const pages = document.querySelectorAll('.page');
+        if (!pages.length) return;
         
         this.isAnimating = true;
-        wrapper.style.transform = `translateX(-${pageNumber * 25}%)`;
+        
+        pages.forEach((page, index) => {
+            if (index === pageNumber) {
+                page.classList.add('active');
+            } else {
+                page.classList.remove('active');
+            }
+        });
         
         setTimeout(() => {
             this.isAnimating = false;

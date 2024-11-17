@@ -1,4 +1,4 @@
-# 문제 15 - Steganography Challenge
+# 문제 16 - Steganography Challenge
 
 ## 문제 설명
 이 문제는 사용자가 스테가노그래피(Steganography) 기술을 이해하고, 이미지에 숨겨진 플래그를 추출하여 문제를 해결하는 도전 과제입니다. LSB(Least Significant Bit) 기법으로 이미지에 숨겨진 메시지를 복원하여 플래그를 획득하는 것이 목표입니다.

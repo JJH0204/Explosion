@@ -61,8 +61,24 @@
             "title": "Challenge 8",
             "markdownFile": "mk_8.md",
             "description": "This is the eighth challenge.",
-            "link": "./Question/question7/question8.html",
+            "link": "./Question/question8/question8.html",
             "answer": "FLag{image_change}"
+        },
+        {
+            "id": 9,
+            "title": "Challenge 9",
+            "markdownFile": "mk_9.md",
+            "description": "This is the ninth challenge.",
+            "link": "./Question/question9/question9.html",
+            "answer": "FLag{LocalStorage_Modification}"
+        },
+        {
+            "id": 10,
+            "title": "Challenge 10",
+            "markdownFile": "mk_10.md",
+            "description": "This is the tenth challenge.",
+            "link": "./Question/question10/question10.html",
+            "answer": "flag{answer10}"
         },
         {
             "id": 11,
@@ -119,7 +135,40 @@
             "description": "This is the twenty-first challenge.",
             "link": "./Question/question21/question21.html",
             "answer": "Challenges21flage"
+        },
+        {
+            "id": 22,
+            "title": "Challenge 22",
+            "markdownFile": "mk_21.md",
+            "description": "This is the twenty-first challenge.",
+            "link": "./Question/question21/question21.html",
+            "answer": "shadows"
+        },
+        {
+            "id": 23,
+            "title": "Challenge 23",
+            "markdownFile": "mk_21.md",
+            "description": "This is the twenty-first challenge.",
+            "link": "./Question/question21/question21.html",
+            "answer": "F1rstP4sSw0rD"
+        },
+        {
+            "id": 24,
+            "title": "Challenge 24",
+            "markdownFile": "mk_21.md",
+            "description": "This is the twenty-first challenge.",
+            "link": "./Question/question21/question21.html",
+            "answer": "Challenges21flage"
+        },   
+        {
+            "id": 25,
+            "title": "Challenge 25",
+            "markdownFile": "mk_21.md",
+            "description": "This is the twenty-first challenge.",
+            "link": "./Question/question21/question21.html",
+            "answer": "Challenges21flage"
         }
 
     ]
+    
 } 

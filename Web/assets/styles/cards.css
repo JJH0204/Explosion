@@ -1,12 +1,27 @@
 :root {
     --card-ratio: 1.6;
+    --border-radius: 15px;
+    --purple-glow: rgba(147, 112, 219, 0.3);
+    --purple-dark: rgba(75, 0, 130, 0.2);
+    --blueviolet-glow: rgba(138, 43, 226, 0.1);
+    --white-transparent: rgba(255, 255, 255, 0.2);
+    --white-glow: rgba(255, 255, 255, 0.3);
+    --black-shadow: rgba(0, 0, 0, 0.3);
+    --black-deep-shadow: rgba(0, 0, 0, 0.4);
+    --common-shadow: 0 0 15px var(--white-glow);
+    --hover-shadow: 
+        0 10px 20px var(--black-deep-shadow),
+        0 0 30px var(--purple-glow);
+    --solved-shadow: 
+        0 8px 16px var(--black-shadow),
+        0 0 30px var(--blueviolet-glow);
 }
 
 .cards-container {
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    margin: 0;
+    padding: 0 20px;
     overflow: hidden;
     position: relative;
 }
@@ -15,30 +30,47 @@
     width: 100%;
     overflow: hidden;
     position: relative;
+    margin: 0;
 }
 
 .pages-wrapper {
     display: flex;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 400%;
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: visible;
 }
 
 .page {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
     grid-template-rows: repeat(2, 1fr);
     gap: 25px;
-    padding: 20px;
-    width: 25%;
-    min-width: 25%;
+    padding: 25px;
+    width: 100%;
+    height: auto;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.page.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
 }
 
 .card {
     position: relative;
     width: 100%;
     padding-bottom: calc(140% + 20px);
+    margin-bottom: 20px; 
+    /* # 삭제 할 필요가 있을 수도 */
     cursor: pointer;
     perspective: 1000px;
+    cursor: pointer;
 }
 
 .card-inner {
@@ -49,7 +81,8 @@
     height: 100%;
     transition: transform 0.6s;
     transform-style: preserve-3d;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius);
+    box-shadow: var(--common-shadow);
 }
 
 .card-front,
@@ -58,23 +91,20 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     overflow: hidden;
 }
 
 .card-front {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    /* background-image: url('../images/card_back.jpg'); */
-    background-size: cover;
+    background-image: url('../images/card_back.jpg');
+    background-size: 100% 100%;
     background-position: center;
-    border-radius: 15px;
-    border: 3px solid rgba(147, 112, 219, 0.3);
+    background-repeat: no-repeat;
+    transform: rotateY(0deg);
+    border: 3px solid var(--white-transparent);
     box-shadow: 
-        0 0 20px rgba(138, 43, 226, 0.1),
-        inset 0 0 15px rgba(75, 0, 130, 0.2);
+        0 0 20px var(--blueviolet-glow),
+        inset 0 0 15px var(--purple-dark);
 }
 
 .card-front img {
@@ -83,20 +113,10 @@
     object-fit: cover;
 }
 
-.card-number {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 24px;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    z-index: 1;
-}
-
 .card-back {
     transform: rotateY(180deg);
     background: #1a1a1a;
-    border: 3px solid rgba(255, 255, 255, 0.2);
+    border: 3px solid var(--white-transparent);
 }
 
 .monster-image {
@@ -108,17 +128,13 @@
 }
 
 .card:hover .card-inner {
-    transform: translateY(-10px);
-    box-shadow: 
-        0 10px 20px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(147, 112, 219, 0.3);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--hover-shadow);
 }
 
 .card.solved .card-inner {
     transform: rotateY(180deg);
-    box-shadow: 
-        0 8px 16px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(138, 43, 226, 0.3);
+    box-shadow: var(--solved-shadow);
 }
 
 @media (max-width: 1200px) {
@@ -131,4 +147,4 @@
     .page {
         gap: 10px;
     }
-} 
+}

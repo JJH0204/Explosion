@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSRF Challenge</h1>
+    <div class="container">
+        <p>아래 버튼을 클릭하여 관리자 비밀번호를 변경하세요!</p>
+        <form action="./update_password.php" method="POST">
+            <input type="hidden" name="new_password" value="hacked_password">
+            <button type="submit">비밀번호 변경</button>
+        </form>
+    </div>
+</body>
+</html>

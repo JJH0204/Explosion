@@ -12,8 +12,11 @@ body {
     color: #ffffff;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    overflow: hidden;
     min-height: 100vh;
+    position: fixed;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .container {
@@ -100,26 +103,6 @@ header {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .header {
-        padding: 10px 15px;
-    }
-
-    .logo {
-        height: 30px;
-    }
-
-    .logo-text {
-        font-size: 18px;
-    }
-
-    .menu-button {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
-}
-
 /* 사이드바 스타일 */
 .sidebar {
     position: fixed;
@@ -136,38 +119,57 @@ header {
     box-sizing: border-box;
 }
 
-/* 메인 컨테이너 */
+/* 메인 레이아웃 */
 .main-container {
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: 20px;
     padding-top: 80px;
     min-height: 100vh;
+    max-width: 1600px;
+    margin: 0 auto;
+    overflow-x: hidden;
 }
 
 .main-content {
     position: relative;
     width: 100%;
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 80px);
+    grid-column: 2;
     padding: 20px;
-    margin-left: 300px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 0 auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
+/* Chrome/Safari 스크롤바 숨김 */
+.main-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* 카드 컨테이너 */
 .cards-container {
     width: 100%;
     max-width: 1200px;
+    height: auto;
     margin: 0 auto;
     padding: 20px;
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #challengeGrid {
     width: 100%;
+    max-width: 1200px;
     position: relative;
     overflow: hidden;
+    margin: 0 auto;
 }
 
 .arrow-button {
@@ -204,16 +206,6 @@ header {
     transform: translateY(-50%) scale(1.1);
 }
 
-/* 사이드바가 열려있을 때 왼쪽 화살표 위치 */
-.main-container:not(.sidebar-collapsed) .arrow-button.left {
-    left: calc(300px + 20px);
-}
-
-/* 사이드바가 접혔을 때 메인 컨테이너 조정 */
-.main-container.sidebar-collapsed {
-    grid-template-columns: 0 1fr;
-}
-
 /* 호버 효과 */
 .arrow-button:disabled,
 .arrow-button[disabled] {
@@ -221,22 +213,6 @@ header {
     opacity: 0.3;
     cursor: default;
     pointer-events: none;
-}
-
-/* 반응형 조정 */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-        left: -200px;
-    }
-
-    .main-content.sidebar-active {
-        transform: translateX(100px);
-    }
-
-    .sidebar.active ~ .main-container .arrow-button.left {
-        left: 220px;
-    }
 }
 
 /* 배경 이미지 컨테이너 */
@@ -255,221 +231,58 @@ header {
     object-fit: cover;
 }
 
-/* 카드 그리드 컨테이너 */
-.cards-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-}
-
-#challengeGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    touch-action: none;
-    user-select: none;
-}
-
-/* 페이지 래퍼 */
-.pages-wrapper {
-    display: flex;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 400%;
-}
-
-/* 페이지 스타일 */
-.page {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 25px;
-    padding: 20px;
-    width: 25%;
-    min-width: 25%;
-}
-
-/* 각 카드의 위치에 따른 시차 효과 */
-.card:nth-child(odd) {
-    animation: floatAnimation 6s ease-in-out infinite;
-}
-
-.card:nth-child(even) {
-    animation: floatAnimation 6s ease-in-out infinite reverse;
-}
-
-/* 부드러운 떠있는 효과 애니메이션 */
-@keyframes floatAnimation {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-5px);
-    }
-}
-
-/* 반응형 조정 */
+/* 반응형 스타일 */
 @media (max-width: 1400px) {
     .page {
-        grid-template-columns: repeat(5, minmax(100px, 140px));
+        grid-template-columns: repeat(5, minmax(130px, 1fr));
+        grid-template-rows: repeat(2, minmax(180px, 1fr));
         gap: 20px;
     }
 }
 
 @media (max-width: 1200px) {
     .page {
-        grid-template-columns: repeat(5, minmax(90px, 120px));
+        grid-template-columns: repeat(5, minmax(110px, 1fr));
+        grid-template-rows: repeat(2, minmax(160px, 1fr));
         gap: 15px;
     }
 }
 
-@media (max-width: 992px) {
-    .page {
-        grid-template-columns: repeat(5, minmax(80px, 100px));
-        gap: 12px;
-    }
-}
-
 @media (max-width: 768px) {
+    .header {
+        padding: 10px 15px;
+    }
+
+    .logo {
+        height: 30px;
+    }
+
+    .logo-text {
+        font-size: 18px;
+    }
+
+    .menu-button {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .sidebar {
+        width: 200px;
+        left: -200px;
+    }
+
     .page {
-        grid-template-columns: repeat(5, minmax(60px, 80px));
+        grid-template-columns: repeat(5, minmax(90px, 1fr));
         gap: 10px;
     }
     
     .main-content.sidebar-active {
         transform: translateX(100px);
     }
-}
-
-/* 카드 스타일 */
-.card {
-    position: relative;
-    width: 100%;
-    padding-bottom: 140%;
-    perspective: 1000px;
-    cursor: pointer;
-}
-
-.card-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-}
-
-/* 카드 앞면과 뒷면 공통 스타일 */
-.card-front,
-.card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-/* 카드 앞면 스타일 */
-.card-front {
-    background-image: url('../images/card_back.jpg');
-    background-size: 100% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    transform: rotateY(0deg);
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 4px 8px rgba(0, 0, 0, 0.1),
-        0 0 15px rgba(255, 255, 255, 0.1);
-}
-
-/* 카드 뒷면 스타일 */
-.card-back {
-    transform: rotateY(180deg);
-    background-color: #fff;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-}
-
-/* 카 번호 스타일 - 앞면에만 표시 */
-.card-number {
-    position: absolute;
-    font-size: min(24px, 4vw);
-    color: white;
-    text-shadow: 
-        2px 2px 4px rgba(0, 0, 0, 0.5),
-        0 0 10px rgba(255, 255, 255, 0.3);
-    z-index: 1;
-    font-weight: bold;
-    opacity: 0.9;
-}
-
-/* 호버 효과 */
-.card:hover .card-inner {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 
-        0 8px 16px rgba(0, 0, 0, 0.2),
-        0 0 20px rgba(255, 255, 255, 0.1);
-}
-
-/* 해결된 카드 스타일 */
-.card.solved .card-inner {
-    transform: rotateY(180deg);
-    box-shadow: 
-        0 8px 16px rgba(0, 0, 0, 0.2),
-        0 0 30px rgba(0, 255, 0, 0.2);
-}
-
-/* 몬스터 이미지 스타일 */
-.monster-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-/* 전체 레이아웃 컨테이너 */
-.main-container {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 20px;
-    padding: 20px;
-    padding-top: 80px;
-    min-height: 100vh;
-    position: relative;
-}
-
-.main-content {
-    position: relative;
-    width: 100%;
-    min-height: calc(100vh - 80px);
-    grid-column: 2;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.cards-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-#challengeGrid {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    
+    .sidebar.active ~ .main-container .arrow-button.left {
+        left: 220px;
+    }
 }
 
 .footer {
