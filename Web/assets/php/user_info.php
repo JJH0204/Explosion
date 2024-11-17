@@ -1,81 +1,59 @@
 <?php
-session_start(); // 세션 시작
-header('Content-Type: application/json; charset=utf-8');
-
-// 디버깅을 위한 로그 추가
-error_log("Session data: " . print_r($_SESSION, true));
+session_start();
+header('Content-Type: application/json');
 
 $host = 'localhost';
 $db = 'testDB';
-$user = 'admin';
-$pass = 'flamerootpassword';
+$username = 'admin';
+$password = 'flamerootpassword';
 
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    die(json_encode([
-        'success' => false,
-        'error' => 'Database connection failed: ' . $conn->connect_error
-    ]));
-}
-
-// user_id와 nickname 모두 확인
-if (isset($_SESSION['user_id']) && isset($_SESSION['nickname'])) {
-    $user_id = $_SESSION['user_id'];
-    $nickname = $_SESSION['nickname'];
+try {
+    $conn = new mysqli($host, $username, $password, $db);
     
-    // SCORE 테이블에서 사용자 정보 조회
-    $stmt = $conn->prepare("SELECT NICKNAME, SCORE, STAGE FROM SCORE WHERE NICKNAME = ?");
-    if (!$stmt) {
-        error_log("Prepare failed: " . $conn->error);
-        die(json_encode(['success' => false, 'error' => 'Query prepare failed']));
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
     }
 
-    $stmt->bind_param("s", $nickname);
+    $user_id = $_SESSION['user_id'] ?? null;
+    
+    if (!$user_id) {
+        throw new Exception("User not logged in");
+    }
+
+    // USER_info 테이블에서 모든 필드 조회
+    $stmt = $conn->prepare("SELECT ID, NICKNAME, SCORE, STAGE FROM USER_info WHERE ID = ?");
+    $stmt->bind_param("s", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     
     if ($result->num_rows > 0) {
         $user_data = $result->fetch_assoc();
-    } else {
-        // SCORE 테이블에 사용자 정보가 없으면 새로 추가
-        $insert_stmt = $conn->prepare("INSERT INTO SCORE (NICKNAME, SCORE, STAGE) VALUES (?, 0, 1)");
-        $insert_stmt->bind_param("s", $nickname);
-        $insert_stmt->execute();
         
-        $user_data = [
-            'NICKNAME' => $nickname,
-            'SCORE' => 0,
-            'STAGE' => 1
-        ];
+        // 랭킹 계산 (점수와 스테이지 기준 내림차순)
+        $rank_query = "SELECT COUNT(*) + 1 as rank FROM USER_info WHERE SCORE > ? OR (SCORE = ? AND STAGE > ?)";
+        $rank_stmt = $conn->prepare($rank_query);
+        $rank_stmt->bind_param("iii", $user_data['SCORE'], $user_data['SCORE'], $user_data['STAGE']);
+        $rank_stmt->execute();
+        $rank_result = $rank_stmt->get_result();
+        $rank = $rank_result->fetch_assoc()['rank'];
+
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'nickname' => $user_data['NICKNAME'],
+                'score' => $user_data['SCORE'],
+                'stage' => $user_data['STAGE'],
+                'rank' => $rank
+            ]
+        ]);
+    } else {
+        throw new Exception("User not found");
     }
-    
-    // 전체 랭킹에서 사용자의 순위 계산
-    $rank_query = "SELECT COUNT(*) + 1 as rank FROM SCORE WHERE SCORE > ?";
-    $rank_stmt = $conn->prepare($rank_query);
-    $rank_stmt->bind_param("i", $user_data['SCORE']);
-    $rank_stmt->execute();
-    $rank_result = $rank_stmt->get_result();
-    $rank_data = $rank_result->fetch_assoc();
-    
-    echo json_encode([
-        'success' => true,
-        'data' => [
-            'nickname' => $user_data['NICKNAME'],
-            'score' => $user_data['SCORE'],
-            'stage' => $user_data['STAGE'],
-            'rank' => $rank_data['rank']
-        ]
-    ]);
-    
-    error_log("Sent user data: " . print_r($user_data, true));
-} else {
+
+} catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'error' => 'User not logged in',
-        'session_data' => $_SESSION
+        'error' => $e->getMessage()
     ]);
 }
-
-$conn->close();
 ?>

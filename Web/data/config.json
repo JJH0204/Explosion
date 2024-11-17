@@ -84,9 +84,25 @@
             "id": 13,
             "title": "Challenge 13",
             "markdownFile": "mk_13.md",
-            "description": "This is the thirteen challenge.",
+            "description": "This is the thirteenth challenge.",
             "link": "./Question/question13/question13.html",
             "answer": "FLAG{advanced_buffer_overflow}"
+        },
+        {
+            "id": 14,
+            "title": "Challenge 14",
+            "markdownFile": "mk_14.md",
+            "description": "This is the fourteenth challenge.",
+            "link": "./Question/question14/question14.html",
+            "answer": "FLAG{number_baseball_success}"
+        },
+        {
+            "id": 15,
+            "title": "Challenge 15",
+            "markdownFile": "mk_15.md",
+            "description": "This is the fifteenth challenge.",
+            "link": "./Question/question15/question15.html",
+            "answer": "FLAG{number_baseball_success}"
         },
         {
             "id": 21,

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숫자 야구 게임</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>숫자 야구 게임</h1>
+    <div class="container">
+        <p>3자리 숫자를 입력하고 정답을 맞춰보세요!</p>
+        <input type="text" id="guessInput" placeholder="숫자를 입력하세요 (예: 123)">
+        <button onclick="makeGuess()">제출</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function makeGuess() {
+            const guessInput = document.getElementById('guessInput').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch('validate.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guess: guessInput })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    resultDiv.style.color = '#00ff00';
+                    resultDiv.textContent = `축하합니다! 플래그: ${data.flag}`;
+                } else {
+                    resultDiv.style.color = '#ff0000';
+                    resultDiv.textContent = data.message;
+                }
+            } catch (error) {
+                resultDiv.style.color = '#ff0000';
+                resultDiv.textContent = '오류 발생: 서버에 연결할 수 없습니다.';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,56 +1,102 @@
-window.addEventListener('DOMContentLoaded', async () => {
+// 로그인 상태 체크 함수
+async function checkLoginStatus() {
     try {
-        // UIManager 초기화
-        const uiManager = new UIManager(); // UIManager 인스턴스 생성
+        const response = await fetch('assets/php/checkSession.php');
+        const data = await response.json();
+        if (!data.success) {
+            window.location.href = 'login.html';
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Login check failed:', error);
+        window.location.href = 'login.html';
+        return false;
+    }
+}
 
-        // GameManager 초기화
-        const gameManager = new GameManager();
-        await gameManager.initialize();
+// 로그아웃 함수 수정
+async function logout() {
+    try {
+        const response = await fetch('assets/php/logout.php');
+        const data = await response.json();
+        if (data.success) {
+            // 캐시 제거 및 히스토리 관리
+            window.location.replace('login.html'); // replace를 사용하여 히스토리에서 현재 페이지 제거
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
 
-        // CardManager 초기화 전에 클리어된 카드 정보를 먼저 가져옴
+document.addEventListener('DOMContentLoaded', async () => {
+    // 뒤로가기 방지
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = async function () {
+        window.history.pushState(null, null, window.location.href);
+        // 세션 체크
+        const response = await fetch('assets/php/checkSession.php');
+        const data = await response.json();
+        if (!data.success) {
+            window.location.replace('login.html');
+        }
+    };
+
+    // 로그인 상태 체크
+    const isLoggedIn = await checkLoginStatus();
+    if (!isLoggedIn) return;
+
+    const uiManager = new UIManager();
+    const gameManager = new GameManager();
+    const cardManager = new CardManager(gameManager, uiManager);
+
+    // 사용자 정보 업데이트 함수
+    async function updateUserInfo() {
         try {
-            const response = await fetch('./assets/php/fetchClearedCards.php');
+            const response = await fetch('assets/php/user_info.php');
             const data = await response.json();
-            
             if (data.success) {
-                gameManager.initializeClearedCards(data.clearedCards);
+                document.getElementById('player-nickname').textContent = data.data.nickname;
+                document.getElementById('current-level').textContent = data.data.rank;
+                document.getElementById('player-score').textContent = data.data.score;
             } else {
-                console.error('Failed to fetch cleared cards:', data.error);
+                throw new Error(data.error || 'Failed to fetch user info');
             }
         } catch (error) {
-            console.error('Error fetching cleared cards:', error);
-        }
-
-        // CardManager 초기화 (클리어된 카드 정보가 로드된 후)
-        const cardManager = new CardManager(gameManager, uiManager);
-
-        // 전역 객체로 할당
-        window.uiManager = uiManager;
-        window.gameManager = gameManager;
-        window.cardManager = cardManager;
-
-        // 유저 정보 로드 및 UI 반영
-        await uiManager.fetchUserInfo();
-
-        // 로그아웃 버튼 이벤트 핸들러
-        document.getElementById('logoutBtn').addEventListener('click', async function() {
-            try {
-                const response = await fetch('assets/php/logout.php');
-                const data = await response.json();
-                
-                if (data.success) {
-                    sessionStorage.clear();
-                    localStorage.clear();
-                    window.location.replace('login.html');
-                } else {
-                    console.error('Logout failed');
-                }
-            } catch (error) {
-                console.error('Logout error:', error);
+            console.error('Failed to fetch user info:', error);
+            if (error.message === 'User not logged in') {
+                window.location.href = 'login.html';
             }
-        });
-
-    } catch (error) {
-        console.error('초기화 중 오류 발생:', error);
+        }
     }
+
+    // 랭킹 업데이트 함수
+    async function updateRanking() {
+        try {
+            const response = await fetch('assets/php/ranking.php');
+            const data = await response.json();
+            if (data.success) {
+                const rankingList = document.getElementById('rankingList');
+                rankingList.innerHTML = '';
+                data.rankings.forEach((player, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <strong>${index + 1}위</strong>
+                        <span>${player.nickname}</span>
+                        <span>점수: ${player.score} pt</span>`;
+                    rankingList.appendChild(listItem);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to fetch ranking:', error);
+        }
+    }
+
+    // 로그아웃 버튼 이벤트 리스너 수정
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    // 이벤트 버튼 이벤트 리스너
+    document.getElementById('EventBtn').addEventListener('click', () => {
+        alert('이벤트 준비중입니다!');
+    });
 });

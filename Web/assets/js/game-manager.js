@@ -125,7 +125,7 @@ class GameManager {
 
     // 데이터베이스에 기록하는 메서드 추가
     async saveToDatabase(cardId, nickname) {
-        console.log('Saving to database with nickname:', nickname, 'and cardId:', cardId); // 디버깅 로그 추가
+        console.log('Saving to database with nickname:', nickname, 'and cardId:', cardId);
         try {
             const response = await fetch('./assets/php/saveScore.php', {
                 method: 'POST',
@@ -137,11 +137,11 @@ class GameManager {
                     nickname: nickname,
                 }),
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             const result = await response.json();
             if (!result.success) {
                 throw new Error(result.error || 'Unknown error');

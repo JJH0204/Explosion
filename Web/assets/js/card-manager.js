@@ -31,7 +31,6 @@ class CardManager {
         const wrapper = document.createElement('div');
         wrapper.className = 'pages-wrapper';
         
-        // 클리어된 카드 정보 확인
         try {
             const response = await fetch('./assets/php/fetchClearedCards.php');
             const data = await response.json();
@@ -45,9 +44,7 @@ class CardManager {
         
         for (let i = 0; i < this.totalPages; i++) {
             const page = this.createPage(i);
-            if (page) {
-                wrapper.appendChild(page);
-            }
+            wrapper.appendChild(page);
         }
         
         grid.appendChild(wrapper);
@@ -139,11 +136,11 @@ class CardManager {
     }
 
     showPage(pageNumber) {
-        this.currentPage = pageNumber;
         const wrapper = document.querySelector('.pages-wrapper');
         if (wrapper) {
-            wrapper.style.transform = `translateX(-${this.currentPage * 100}%)`;
+            wrapper.style.transform = `translateX(-${pageNumber * 25}%)`;
         }
+        this.currentPage = pageNumber;
         this.updateArrowButtons();
     }
 

@@ -1,13 +1,13 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-header('Content-Type: application/json'); // 응답을 JSON 형식으로 설정
+header('Content-Type: application/json');
 
 $serverIP = 'localhost';
 $DB_rootID = "admin";
 $DB_rootPW = "flamerootpassword";
 $dbname = "testDB";
-$charset = 'utf8mb4';
 
 try {
     $conn = new mysqli($serverIP, $DB_rootID, $DB_rootPW, $dbname);
@@ -18,45 +18,52 @@ try {
 
     $ID = isset($_POST['ID']) ? $_POST['ID'] : null;
     $PW = isset($_POST['PW']) ? $_POST['PW'] : null;
+    
+    error_log("Received ID: " . print_r($ID, true));
+    error_log("Received PW: " . print_r($PW, true));
 
     if ($ID && $PW) {
-        $sql = "SELECT * FROM ID_info WHERE ID = ?";
+        $sql = "SELECT i.ID, i.PW, u.NICKNAME FROM ID_info i 
+                JOIN USER_info u ON i.ID = u.ID 
+                WHERE i.ID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
-            echo json_encode(['success' => false, 'error' => 'Statement preparation failed: ' . $conn->error]);
+            error_log("Statement preparation failed: " . $conn->error);
+            echo json_encode(['success' => false, 'error' => 'Statement preparation failed']);
             exit;
         }
 
         $stmt->bind_param("s", $ID);
         $stmt->execute();
         $result = $stmt->get_result();
+        
+        error_log("Query result rows: " . $result->num_rows);
 
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
             if (password_verify($PW, $user['PW'])) {
-                session_start();
-                session_regenerate_id(true); // 세션 ID 재생성
                 $_SESSION['user_id'] = $user['ID'];
                 $_SESSION['nickname'] = $user['NICKNAME'];
-
-                echo json_encode(['success' => true, 'ID' => $user['ID'], 'NICKNAME' => $user['NICKNAME']]);
+                $_SESSION['logged_in'] = true;
+                
+                echo json_encode(['success' => true]);
             } else {
+                error_log("Password verification failed for user: " . $ID);
                 echo json_encode(['success' => false, 'error' => 'Invalid password']);
             }
         } else {
-            echo json_encode(['success' => false, 'error' => 'Invalid ID']);
+            error_log("No user found with ID: " . $ID);
+            echo json_encode(['success' => false, 'error' => 'User not found']);
         }
 
         $stmt->close();
     } else {
+        error_log("Missing ID or PW in POST data");
         echo json_encode(['success' => false, 'error' => 'ID or PW not set']);
     }
+    
+    $conn->close();
 } catch (Exception $e) {
+    error_log("Login exception: " . $e->getMessage());
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-    exit;
-} finally {
-    if ($conn) {
-        $conn->close();
-    }
 }
-exit;

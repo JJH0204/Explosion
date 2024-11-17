@@ -1,4 +1,4 @@
-# 문제 12 - Buffer Overflow Challenge
+# 문제 13 - Buffer Overflow Challenge
 
 ## 문제 설명
 이 문제는 사용자가 버퍼 오버플로우를 이해하고, 특정 조건을 만족하여 플래그를 얻는 웹 해킹 문제입니다. 입력 값의 길이와 패턴을 기반으로 조건을 만족하면 서버에서 플래그를 반환합니다.
@@ -22,7 +22,7 @@ JavaScript 코드에서 힌트를 확인하면, magicNumber 값이 "424F4642"로
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABOFB
 "A"로 32자를 채운 뒤 "BOFB"를 추가합니다.(A대신 아무 문자나 써도 됩니다.)
 
-### 5. 플래그 확인
+### 4. 플래그 확인
 위의 입력 값을 입력하면 성공 시, 플래그가 화면에 출력됩니다:
 축하합니다! 플래그: FLAG{advanced_buffer_overflow}
 

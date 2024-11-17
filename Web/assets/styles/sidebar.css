@@ -1,4 +1,4 @@
-/* 사이드바 기본 스타일 */
+/* 사이드바 기본 스타일 수정 */
 .sidebar {
     position: fixed;
     left: 0;
@@ -8,21 +8,39 @@
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 20px;
-    transition: transform 0.3s ease;
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
-/* 사이드바가 닫혔을 때의 위치 조정 */
-.sidebar.closed {
-    transform: translateX(-100%);
+/* 삭제할 클래스들 */
+.sidebar.collapsed,
+.sidebar.active,
+.sidebar-toggle {
+    display: none;
 }
 
-/* 캐릭터 프로필 섹션 */
+.main-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+.main-content {
+    padding: 20px;
+    margin-left: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* 캐릭터 프로필 섹션 수정 */
 .character-profile {
     text-align: center;
-    padding: 20px 0;
+    padding: 10px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 

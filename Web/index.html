@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="assets/styles/cards.css">
     <link rel="stylesheet" href="assets/styles/popup.css">
     <link rel="stylesheet" href="assets/styles/markdown.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 
 <body>
@@ -28,7 +31,6 @@
         </div>
     </header>
 
-    <button class="sidebar-toggle">☰</button>
     <div class="main-container">
         <aside class="sidebar">
             <div class="character-profile">
@@ -66,8 +68,8 @@
 
         <main class="main-content">
             <div class="cards-container">
-                <div id="challengeGrid">
-                    <!-- 카드 페이지들 -->
+                <div id="challengeGrid" class="cards-grid">
+                    <!-- 카드들이 여기에 동적으로 추가됩니다 -->
                 </div>
             </div>
         </main>
@@ -138,31 +140,26 @@
                 }
 
                 if (imageExtRegex.test(img.src)) {
-                    const extension = img.src.match(imageExtRegex)[0];
-
-                    // 서버에서 실행할 wget 명령어를 구성
-                    const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
-
-                    // 명령어를 실행할 PHP 스크립트 호출
+                    // 서버에 이미지 URL과 닉네임 전송
                     fetch('/assets/php/save-image.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: `command=${encodeURIComponent(command)}`
+                        body: `imageUrl=${encodeURIComponent(img.src)}&nickname=${encodeURIComponent(nickname)}`
                     })
-                        .then(response => response.text())
-                        .then(data => {
-                            if (data === 'success') {
-                                isImageChanged = true;  // 이미지 변경 성공 표시
-                                alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
-                            } else {
-                                console.error('이미지 저장 실패');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('요청 실패:', error);
-                        });
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data === 'success') {
+                            isImageChanged = true;
+                            alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
+                        } else {
+                            console.error('이미지 저장 실패:', data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('요청 실패:', error);
+                    });
                 }
             }
 
@@ -214,7 +211,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>Flame War Game</h4>
-                <p>&copy; 2024 Flame War Game. All rights reserved.</p>
+                <p>&copy; 2024 Team FireWall. All rights reserved.</p>
                 <p>개발: Flame War Game 개발팀</p>
             </div>
             <div class="footer-section">
