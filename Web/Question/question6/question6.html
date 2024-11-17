@@ -4,121 +4,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>SQL Injection 연습</title>
     <style>
         body {
             background-color: #0a0a0a;
             color: #00ff00;
             font-family: 'Courier New', monospace;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
         }
 
-        .panel {
+        .login-container {
             background-color: #1a1a1a;
             border: 1px solid #00ff00;
-            padding: 15px;
-            margin: 10px 0;
+            padding: 20px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
         }
 
-        input,
-        textarea {
+        input {
             background-color: #2a2a2a;
             color: #00ff00;
             border: 1px solid #00ff00;
-            padding: 5px;
+            padding: 8px;
             margin: 5px 0;
             width: 100%;
+            box-sizing: border-box;
         }
 
         button {
             background-color: #00ff00;
             color: #000;
             border: none;
-            padding: 8px 15px;
+            padding: 10px 20px;
             cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        .message-board {
+        .result {
             margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            width: 100%;
+            max-width: 400px;
         }
 
-        .hidden {
-            display: none;
+        .success {
+            color: #00ff00;
+        }
+
+        .error {
+            color: #ff0000;
         }
     </style>
 </head>
 
 <body>
-    <h1>User Login</h1>
-    <div class="login-form">
+    <h1>SQL Injection 연습</h1>
+    <div class="login-container">
         <form id="loginForm">
             <div>
-                <label for="username">Username:</label><br>
+                <label for="username">아이디:</label>
                 <input type="text" id="username" name="username" required>
             </div>
-            <div style="margin-top: 10px;">
-                <label for="password">Password:</label><br>
+            <div>
+                <label for="password">비밀번호:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <div style="margin-top: 10px;">
-                <button type="submit">Login</button>
-            </div>
+            <button type="submit">로그인</button>
         </form>
     </div>
     <div id="result" class="result"></div>
 
     <script>
-        // 가상의 데이터베이스 테이블
         const users = [
             { id: 1, username: 'admin', password: 'admin123', isAdmin: true },
             { id: 2, username: 'user1', password: 'password123', isAdmin: false },
             { id: 3, username: 'user2', password: 'password456', isAdmin: false }
         ];
 
-        // SQL 쿼리 시뮬레이션 함수
+        const tables = [
+            { name: 'users', columns: ['id', 'username', 'password', 'isAdmin'] },
+            { name: 'products', columns: ['id', 'name', 'price'] },
+            { name: 'orders', columns: ['id', 'user_id', 'product_id', 'date'] }
+        ];
+
+        const FLAG = "flag{sql_injection_success}";
+
         function simulateSQL(username, password) {
             const query = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
-            console.log('실행된 쿼리:', query);
+            // console.log('실행된 쿼리:', query);
 
-            try {
-                // SQL 인젝션 취약점이 있는 검증 로직
-                let result = eval(`users.find(u => u.username === '${username}' && u.password === '${password}')`);
-                return { success: true, query: query, result: result };
-            } catch (error) {
-                return { success: false, query: query, error: error.message };
+            // 단순 SQL 문법 에러 체크
+            if (username.includes("'") && !username.toLowerCase().includes("or") && !username.toLowerCase().includes("select")) {
+                return {
+                    success: false,
+                    query: query,
+                    error: "SQL 구문 오류"
+                };
             }
+
+            // 특정 테이블 데이터 조회 시도
+            if ((username.toLowerCase().includes("select") && username.toLowerCase().includes("from users")) ||
+                (username.toLowerCase().includes("select") && username.toLowerCase().includes("from `users`")) ||
+                (username.toLowerCase().includes("select") && username.toLowerCase().includes("from [users]")) ||
+                (username.toLowerCase().includes("select") && username.toLowerCase().includes("from \"users\"")) ||
+                username.toLowerCase().includes("union select") ||
+                username.toLowerCase().includes("union all select") ||
+                (username.toLowerCase().includes("select") && username.toLowerCase().includes("join users")) ||
+                (username.toLowerCase().includes("select") && username.toLowerCase().includes("from (select")) ||
+                username.toLowerCase().includes("users;") ||
+                username.toLowerCase().includes("users--") ||
+                username.toLowerCase().includes("users/*") ||
+                (username.toLowerCase().includes("select") && username.toLowerCase().includes("subselect")) ||
+                username.toLowerCase().includes("users where") ||
+                username.toLowerCase().includes("users group") ||
+                username.toLowerCase().includes("users order") ||
+                username.toLowerCase().includes("users limit")) {
+                return {
+                    success: true,
+                    query: query,
+                    message: "쿼리 실행 결과:",
+                    result: users
+                };
+            }
+
+            // 테이블 정보 조회 시도
+            if (username.toLowerCase().includes("information_schema") ||
+                username.toLowerCase().includes("show tables") ||
+                username.toLowerCase().includes("select table_name") ||
+                username.toLowerCase().includes("select * from sqlite_master") ||
+                username.toLowerCase().includes("select name from sqlite_master") ||
+                username.toLowerCase().includes("select * from sys.tables") ||
+                username.toLowerCase().includes("select * from sysobjects") ||
+                username.toLowerCase().includes("select * from pg_tables") ||
+                username.toLowerCase().includes("desc ") ||
+                username.toLowerCase().includes("describe ") ||
+                username.toLowerCase().includes("show columns") ||
+                username.toLowerCase().includes("show schema") ||
+                username.toLowerCase().includes("select catalog_name") ||
+                username.toLowerCase().includes("select table_schema")) {
+                return {
+                    success: true,
+                    query: query,
+                    message: "쿼리 실행 결과:",
+                    result: tables
+                };
+            }
+
+            // SQL Injection 공격 패턴 체크
+            if (username.toLowerCase().includes("' or") || 
+                username.toLowerCase().includes("' and") ||
+                username.toLowerCase().includes("' union") ||
+                username.toLowerCase().includes("' having") ||
+                username.toLowerCase().includes("' group by") ||
+                username.toLowerCase().includes("' order by") ||
+                username.toLowerCase().includes("' limit") ||
+                username.toLowerCase().includes("' like") ||
+                username.toLowerCase().includes("' in") ||
+                username.toLowerCase().includes("' exists") ||
+                username.toLowerCase().includes("' not") ||
+                username.toLowerCase().includes("' between") ||
+                username.toLowerCase().includes("/*") ||
+                username.toLowerCase().includes("--") ||
+                username.toLowerCase().includes("#") ||
+                username.toLowerCase().includes(";") ||
+                username.toLowerCase().includes("\\") ||
+                username.toLowerCase().includes("1=1") ||
+                username.toLowerCase().includes("1 = 1") ||
+                username.toLowerCase().includes("true") ||
+                username.toLowerCase().includes("false") ||
+                username.toLowerCase().includes("sleep") ||
+                username.toLowerCase().includes("waitfor") ||
+                username.toLowerCase().includes("delay") ||
+                username.toLowerCase().includes("benchmark") ||
+                username.toLowerCase().includes("pg_sleep") ||
+                username.toLowerCase().includes("xp_cmdshell") ||
+                username.toLowerCase().includes("exec") ||
+                username.toLowerCase().includes("' +") ||
+                username.toLowerCase().includes("' -") ||
+                username.toLowerCase().includes("@@version") ||
+                username.toLowerCase().includes("database()") ||
+                username.toLowerCase().includes("schema()") ||
+                username.toLowerCase().includes("load_file")) {
+                return {
+                    success: true,
+                    query: query,
+                    message: "쿼리 실행 결과: TRUE",
+                    result: { affected_rows: users.length }
+                };
+            }
+
+            // 일반 로그인 시도
+            const user = users.find(u => u.username === username && u.password === password);
+            return {
+                success: !!user,
+                query: query,
+                result: user,
+                isAdmin: user?.isAdmin || false
+            };
         }
 
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const resultDiv = document.getElementById('result');
 
             const queryResult = simulateSQL(username, password);
 
-            if (queryResult.success && queryResult.result) {
-                resultDiv.innerHTML = `
-                    <div class="success">
-                        로그인 성공!<br>
-                        사용자: ${queryResult.result.username}<br>
-                        관리자 권한: ${queryResult.result.isAdmin ? 'Yes' : 'No'}
-                    </div>
-                    <div>실행된 쿼리: ${queryResult.query}</div>
-                `;
+            if (queryResult.success) {
+                if (queryResult.result === users || Array.isArray(queryResult.result)) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ${queryResult.message}
+                            <pre>${JSON.stringify(queryResult.result, null, 2)}</pre>
+                        </div>
+                    `;
+                } else if (queryResult.result.affected_rows) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ${queryResult.message}
+                        </div>
+                    `;
+                } else if (queryResult.result.isAdmin) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            로그인 성공
+                            ${FLAG}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            로그인 성공
+                        </div>
+                    `;
+                }
             } else {
                 resultDiv.innerHTML = `
                     <div class="error">
-                        로그인 실패!<br>
-                        ${queryResult.error ? '오류: ' + queryResult.error : '잘못된 사용자명 또는 비밀번호'}
+                        ${queryResult.error || '로그인 실패'}
                     </div>
-                    <div>실행된 쿼리: ${queryResult.query}</div>
                 `;
             }
         });

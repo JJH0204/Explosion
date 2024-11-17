@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSRF Challenge</title>
+    <title>SQL Grant Challenge</title>
     <style>
         body {
             background-color: #121212;
@@ -21,16 +21,70 @@
             border: 1px solid #00ff00;
             border-radius: 5px;
         }
+
+        textarea {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
-    <h1>CSRF Challenge</h1>
+    <h1>SQL Grant Challenge</h1>
     <div class="container">
-        <p>아래 버튼을 클릭하여 관리자 비밀번호를 변경하세요!</p>
-        <form action="./update_password.php" method="POST">
-            <input type="hidden" name="new_password" value="hacked_password">
-            <button type="submit">비밀번호 변경</button>
-        </form>
+        <p>'test'@'localhost' 유저에게 USER_db.test 테이블에 SELECT, DELETE 권한을 부여하는 SQL 명령어를 입력하세요.</p>
+        <textarea id="sqlQuery" placeholder="SQL 명령어 입력"></textarea>
+        <button onclick="submitQuery()">명령어 실행</button>
+        <p id="result"></p>
     </div>
+
+    <script>
+        async function submitQuery() {
+            const query = document.getElementById('sqlQuery').value;
+            const result = document.getElementById('result');
+
+            try {
+                const response = await fetch('./validate_sql.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    result.style.color = '#00ff00';
+                    result.textContent = `축하합니다! 플래그: ${data.flag}`;
+                } else {
+                    result.style.color = '#ff0000';
+                    result.textContent = data.message;
+                }
+            } catch (error) {
+                result.style.color = '#ff0000';
+                result.textContent = '오류 발생: 요청을 처리할 수 없습니다.';
+            }
+        }
+    </script>
 </body>
 </html>

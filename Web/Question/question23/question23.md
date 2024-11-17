@@ -1,4 +1,4 @@
-# 문제 22 - Decoder Challenge Solution
+# 문제 24 - Decoder Challenge Solution
 
 ## 문제 설명
 File - Insecure storage 1

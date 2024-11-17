@@ -126,7 +126,7 @@
             "markdownFile": "mk_16.md",
             "description": "This is the sixteenth challenge.",
             "link": "./Question/question16/question16.html",
-            "answer": "FLAG{hidden_with_lsb}"
+            "answer": "FLAG{sql_grant_correct}"
         },
         {
             "id": 21,
@@ -139,25 +139,25 @@
         {
             "id": 22,
             "title": "Challenge 22",
-            "markdownFile": "mk_21.md",
+            "markdownFile": "mk_22.md",
             "description": "This is the twenty-first challenge.",
-            "link": "./Question/question21/question21.html",
+            "link": "./Question/question22/question22.html",
             "answer": "shadows"
         },
         {
             "id": 23,
             "title": "Challenge 23",
-            "markdownFile": "mk_21.md",
+            "markdownFile": "mk_23.md",
             "description": "This is the twenty-first challenge.",
-            "link": "./Question/question21/question21.html",
+            "link": "./Question/question23/question23.html",
             "answer": "F1rstP4sSw0rD"
         },
         {
             "id": 24,
             "title": "Challenge 24",
-            "markdownFile": "mk_21.md",
+            "markdownFile": "mk_24.md",
             "description": "This is the twenty-first challenge.",
-            "link": "./Question/question21/question21.html",
+            "link": "./Question/question24/question24.html",
             "answer": "Challenges21flage"
         },   
         {
