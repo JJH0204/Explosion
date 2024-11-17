@@ -50,8 +50,8 @@ class CardManager {
         }
         
         grid.appendChild(wrapper);
-        this.updateArrowButtons();
         this.showPage(this.currentPage);
+        this.updateArrowButtons();
     }
 
     createPage(pageNumber) {
