@@ -367,7 +367,6 @@ class GameManager {
 
     // updateProgress 메서드 추가
     updateProgress() {
-        console.log('updateProgress this:', this); // this 확인
         const completedElement = document.getElementById('completed-challenges');
         const totalElement = document.getElementById('total-challenges');
     

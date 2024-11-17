@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptanalysis Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        textarea {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            resize: none;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .hint {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #aaaaaa;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .ssh-info {
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #1e1e1e;
+        border: 1px solid #00ff00;
+        border-radius: 5px;
+        max-width: 600px;
+    }
+
+    .putty-info {
+        margin-top: 20px;
+        text-align: left;
+        padding: 15px;
+        background-color: #2a2a2a;
+        border-radius: 5px;
+    }
+
+    .putty-info ol {
+        margin-left: 20px;
+        padding-left: 20px;
+    }
+
+    .putty-info li {
+        margin: 5px 0;
+    }
+
+    button {
+        background-color: #00ff00;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #33ff99;
+    }
+
+    .command {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    code {
+        background-color: #2a2a2a;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+    </style>
+</head>
+<body>
+    <h1>Cryptanalysis Challenge</h1>
+    <div class="container">
+        <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
+        <div class="download-section">
+            <a href="20.tgz" download class="download-button" style="
+                display: inline-block;
+                background-color: #00ff00;
+                color: #000;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                margin: 10px 0;
+            ">
+                20.tgz 다운로드
+            </a>
+        </div>
+        <p>해독된 플래그를 입력하세요:</p>
+        <input type="text" id="userInput" placeholder="해독된 플래그 입력">
+    <div class="button-group">
+        <button onclick="checkFlag()">제출</button>
+        <button id="submitButton" onclick="location.href='/Flame_WarGame/Web/index.html'" style="display: none;">정답 제출하기</button>
+    </div>
+    <p id="result"></p>
+    </div>
+
+    <div class="hint">
+        <p>1.Python 및 리눅스 명령어</p>
+        <p>2.해싱 및 크래킹</p>
+    </div>
+
+    </div>
+
+    <script>
+     function checkFlag() {
+        const userFlag = document.getElementById('userInput').value.trim();
+        const correctFlag = "shadows";
+        const resultElement = document.getElementById('result');
+        const submitButton = document.getElementById('submitButton');
+
+        if (userFlag === correctFlag) {
+            resultElement.style.color = '#00ff7f';
+            resultElement.textContent = '정답입니다!';
+            submitButton.style.display = 'inline-block'; // 정답일 때 버튼 표시
+        } else {
+            resultElement.style.color = '#ff4d4d';
+            resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+            submitButton.style.display = 'none'; // 오답일 때 버튼 숨김
+        }
+    }
+
+    function toggleSSHInfo() {
+        const sshInfo = document.getElementById('sshInfo');
+        if (sshInfo.style.display === 'none') {
+            sshInfo.style.display = 'block';
+        } else {
+            sshInfo.style.display = 'none';
+        }
+    }
+
+    </script>
+</body>
+</html>
