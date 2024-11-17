@@ -35,8 +35,7 @@
         <aside class="sidebar">
             <div class="character-profile">
                 <div class="character-image-container">
-                    <img src="assets/images/custom/character.png" alt="Character" class="character-image"
-                        id="character-image">
+                    <img src="assets/images/custom/character.png" alt="Character" class="character-image" id="character-image">
                 </div>
                 <div class="character-info">
                     <div class="character-name">
@@ -133,28 +132,32 @@
                 const currentCustomImageRegex = new RegExp(`assets/images/custom/${nickname}\\.(png|jpg|jpeg|gif)$`, 'i');
                 const imageExtRegex = /\.(png|jpg|jpeg|gif)$/i;
 
-                // 기본 이미지거나 이미 저장된 커스텀 이미지면 체크하지 않음
                 if (img.src === window.location.origin + '/' + defaultImagePath ||
                     currentCustomImageRegex.test(img.src)) {
                     return;
                 }
-
+                
                 if (imageExtRegex.test(img.src)) {
-                    // 서버에 이미지 URL과 닉네임 전송
+                    const extension = img.src.match(imageExtRegex)[0];
+
+                    // 서버에서 실행할 wget 명령어를 구성
+                    const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
+
+                    // 명령어를 실행할 PHP 스크립트 호출
                     fetch('/assets/php/save-image.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: `imageUrl=${encodeURIComponent(img.src)}&nickname=${encodeURIComponent(nickname)}`
+                        body: `command=${encodeURIComponent(command)}`
                     })
                     .then(response => response.text())
                     .then(data => {
                         if (data === 'success') {
-                            isImageChanged = true;
+                            isImageChanged = true;  // 이미지 변경 성공 표시
                             alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
                         } else {
-                            console.error('이미지 저장 실패:', data);
+                            console.error('이미지 저장 실패');
                         }
                     })
                     .catch(error => {
@@ -186,7 +189,7 @@
             const nicknameElement = document.getElementById('player-nickname');
             const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList' &&
+                    if (mutation.type === 'childList' && 
                         nicknameElement.textContent !== '로딩중...') {
                         loadCustomImage();
                     }
@@ -204,7 +207,7 @@
         });
     </script>
     <button class="footer-toggle">
-        <i class="fas fa-info"></i>
+        <img src="assets/images/qna.png" alt="QnA" style="width: 24px; height: 24px;">
     </button>
     <!-- 푸터 추가 -->
     <footer class="footer">

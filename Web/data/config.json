@@ -102,7 +102,15 @@
             "markdownFile": "mk_15.md",
             "description": "This is the fifteenth challenge.",
             "link": "./Question/question15/question15.html",
-            "answer": "FLAG{number_baseball_success}"
+            "answer": "FLAG{hidden_with_lsb}"
+        },
+        {
+            "id": 16,
+            "title": "Challenge 16",
+            "markdownFile": "mk_16.md",
+            "description": "This is the sixteenth challenge.",
+            "link": "./Question/question16/question16.html",
+            "answer": "FLAG{hidden_with_lsb}"
         },
         {
             "id": 21,

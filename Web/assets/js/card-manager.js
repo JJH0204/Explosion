@@ -58,8 +58,8 @@ class CardManager {
         const page = document.createElement('div');
         page.className = 'page';
         
-        const startCard = pageNumber * this.cardsPerPage;
-        const endCard = Math.min(startCard + this.cardsPerPage, CONFIG.GAME.TOTAL_CARDS);
+        const startCard = pageNumber * CONFIG.GAME.CARDS_PER_PAGE;
+        const endCard = Math.min(startCard + CONFIG.GAME.CARDS_PER_PAGE, CONFIG.GAME.TOTAL_CARDS);
 
         for (let i = startCard; i < endCard; i++) {
             const card = this.createCard(i + 1);
@@ -100,18 +100,17 @@ class CardManager {
     }
 
     updateArrowButtons() {
-        const leftArrow = document.querySelector('.arrow-button.left');
-        const rightArrow = document.querySelector('.arrow-button.right');
-
-        if (leftArrow) {
-            leftArrow.style.opacity = this.currentPage === 0 ? '0.3' : '1';
-            leftArrow.style.pointerEvents = this.currentPage === 0 ? 'none' : 'auto';
+        const leftButton = document.querySelector('.arrow-button.left');
+        const rightButton = document.querySelector('.arrow-button.right');
+        
+        if (leftButton) {
+            leftButton.disabled = this.currentPage === 0;
+            leftButton.style.opacity = this.currentPage === 0 ? '0.5' : '1';
         }
-        if (rightArrow) {
-            rightArrow.style.opacity = 
-                this.currentPage === this.totalPages - 1 ? '0.3' : '1';
-            rightArrow.style.pointerEvents = 
-                this.currentPage === this.totalPages - 1 ? 'none' : 'auto';
+        
+        if (rightButton) {
+            rightButton.disabled = this.currentPage === this.totalPages - 1;
+            rightButton.style.opacity = this.currentPage === this.totalPages - 1 ? '0.5' : '1';
         }
     }
 
@@ -138,35 +137,33 @@ class CardManager {
     }
 
     showPage(pageNumber) {
+        if (this.isAnimating) return;
+        
         const wrapper = document.querySelector('.pages-wrapper');
-        if (wrapper) {
-            wrapper.style.transform = `translateX(-${pageNumber * 25}%)`;
-        }
+        if (!wrapper) return;
+        
+        this.isAnimating = true;
+        wrapper.style.transform = `translateX(-${pageNumber * 25}%)`;
+        
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 500);
+        
         this.currentPage = pageNumber;
         this.updateArrowButtons();
     }
 
     nextPage() {
         if (this.currentPage < this.totalPages - 1 && !this.isAnimating) {
-            this.isAnimating = true;
             this.currentPage++;
             this.showPage(this.currentPage);
-            
-            setTimeout(() => {
-                this.isAnimating = false;
-            }, 500);
         }
     }
 
     prevPage() {
         if (this.currentPage > 0 && !this.isAnimating) {
-            this.isAnimating = true;
             this.currentPage--;
             this.showPage(this.currentPage);
-            
-            setTimeout(() => {
-                this.isAnimating = false;
-            }, 500);
         }
     }
 }
