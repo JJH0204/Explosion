@@ -44,7 +44,9 @@ class CardManager {
         
         for (let i = 0; i < this.totalPages; i++) {
             const page = this.createPage(i);
-            wrapper.appendChild(page);
+            if (page) {
+                wrapper.appendChild(page);
+            }
         }
         
         grid.appendChild(wrapper);
