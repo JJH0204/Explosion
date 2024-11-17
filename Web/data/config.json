@@ -46,7 +46,7 @@
             "markdownFile": "mk_6.md",
             "description": "This is the sixth challenge.",
             "link": "./Question/question6/question6.html",
-            "answer": "flag{answer6}"
+            "answer": "flag{sql_injection_success}"
         },
         {
             "id": 7,
@@ -126,6 +126,14 @@
             "markdownFile": "mk_16.md",
             "description": "This is the sixteenth challenge.",
             "link": "./Question/question16/question16.html",
+            "answer": "FLAG{sql_grant_correct}"
+        },
+        {
+            "id": 17,
+            "title": "Challenge 17",
+            "markdownFile": "mk_17.md",
+            "description": "This is the seventeenth challenge.",
+            "link": "./Question/question17/question17.html",
             "answer": "FLAG{sql_grant_correct}"
         },
         {

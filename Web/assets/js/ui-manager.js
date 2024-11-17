@@ -33,6 +33,3 @@ class UIManager {
         return this.mainContent;
     }
 } 
-
-    
-

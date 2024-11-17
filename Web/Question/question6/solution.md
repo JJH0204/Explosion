@@ -1,50 +1,47 @@
-# 문제 6 - 시간 기반 암호화 문제
 
-## 문제 설명
-시간 기반 암호화가 적용된 고급 난이도의 문제입니다. 현재 시간을 이용한 XOR 암호화 방식을 분석하고 플래그를 찾아내야 합니다.
+# 1. 문제 분석
+## 1.1 문제 설명
+로그인 폼이 있는 웹 페이지  
+SQL Injection 취약점이 존재  
+admin 계정으로 로그인하면 플래그 획득 가능  
 
-## 풀이 과정
+# 2. 공격 방법
+## 2.1 SQL 구문 오류 확인
+아이디 입력창에 작은따옴표(') 입력  
+SQL 구문 오류 메시지 확인  
+SQL Injection 취약점 존재 확인됨  
 
-### 1. 소스 코드 분석
-복호화 시도 코드와 시간 기반 키 생성 로직:
+## 2.2 테이블 정보 조회
+information_schema 또는 show tables 구문 사용  
+데이터베이스 테이블 구조 확인  
+users 테이블 존재 확인  
+
+##  2.3 사용자 정보 조회
+SELECT * FROM users 구문으로 사용자 정보 조회  
+admin 계정 정보 확인: 
+``` 
+username: admin  
+password: admin123
+isAdmin: true
 ```
-html:Web/Question/question6/question6.html
-startLine: 105
-endLine: 122
-```
 
-### 2. 복호화 키 생성 방식
-- 현재 시간(초)를 키로 사용
-- 키 생성 로직: `currentTime % 60`
-- 3번의 시도 후 힌트 출력
+## 2.4 SQL Injection 공격
+' OR '1'='1 구문으로 로그인 우회 시도  
+쿼리 실행 결과가 TRUE로 반환됨  
+전체 사용자 데이터 접근 가능  
 
-### 3. XOR 복호화 검증
-복호화 검증 코드:
-```
-html:Web/Question/question6/question6.html
-startLine: 124
-endLine: 126
-```
+## 3. 플래그 획득
+admin/admin123 계정으로 로그인  
+관리자 권한 확인  
+플래그 획득: flag{sql_injection_success}  
 
-### 4. 플래그 획득 방법
-1. 현재 시간의 초(0-59) 확인
-2. XOR 연산으로 테스트 벡터 검증
-3. 올바른 키로 플래그 복호화
-4. 성공 시 플래그 출력
+## 4. 취약점 설명
+사용자 입력값이 SQL 쿼리에 직접 삽입됨  
+입력값 검증이 불충분  
+SQL Injection 공격에 취약  
 
-## 힌트
-1. 현재 시간의 '초' 부분을 확인하세요
-2. XOR 연산의 특성을 이해하세요
-3. 테스트 벡터로 키 검증이 가능합니다
-4. 3번의 시도 후 추가 힌트가 제공됩니다
-
-## 사용된 기술
-- 시간 기반 암호화
-- XOR 연산
-- 테스트 벡터 검증
-- JavaScript Date 객체 활용
-
-## 최종 플래그
-```
-flag{time_based_xor_crypto_2024}
-```
+## 5. 보안 대책
+입력값 검증 및 이스케이프 처리  
+준비된 구문(Prepared Statement) 사용  
+서버 측에서의 보안 검증 강화  
+최소 권한 원칙 적용  
