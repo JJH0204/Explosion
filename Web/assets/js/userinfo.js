@@ -2,24 +2,30 @@ function updateUserInfo() {
     fetch('assets/php/user_info.php')
         .then(response => response.json())
         .then(data => {
-            console.log('User info response:', data); // 디버깅용 로그
             if (data.success) {
                 document.getElementById('player-nickname').textContent = data.data.nickname;
                 document.getElementById('current-level').textContent = data.data.rank;
-                document.getElementById('completed-challenges').textContent = data.data.stage;
                 document.getElementById('player-score').textContent = data.data.score;
+                
+                return fetch('assets/php/Scoreboard2.php');
+            }
+            throw new Error('Failed to get user info');
+        })
+        .then(response => response.json())
+        .then(scoreData => {
+            if (scoreData.success) {
+                const completedChallenges = scoreData.completed_challenges || 0;
+                document.getElementById('completed-challenges').textContent = completedChallenges;
             } else {
-                console.error('Failed to get user info:', data.error);
-                document.getElementById('player-nickname').textContent = 'Guest';
-                document.getElementById('current-level').textContent = '-';
-                document.getElementById('player-score').textContent = '-';
+                document.getElementById('completed-challenges').textContent = '0';
             }
         })
         .catch(error => {
-            console.error('Error fetching user info:', error);
+            console.error('Error:', error);
             document.getElementById('player-nickname').textContent = 'Guest';
             document.getElementById('current-level').textContent = '-';
             document.getElementById('player-score').textContent = '-';
+            document.getElementById('completed-challenges').textContent = '0';
         });
 }
 

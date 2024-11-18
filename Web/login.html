@@ -53,6 +53,19 @@
     </div>
 
     <script>
+        // 로그인 페이지 진입 시 캐시 방지 및 이전 세션 정리
+        window.onload = function() {
+            // 세션스토리지 클리어
+            sessionStorage.clear();
+            localStorage.clear();
+            
+            // 뒤로가기 방지
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function() {
+                window.history.pushState(null, null, window.location.href);
+            };
+        }
+
         // 로그인 요청 처리
         document.getElementById('login-form').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -70,7 +83,7 @@
                 .then(data => {
                     if (data.success) {
                         sessionStorage.setItem('loggedIn', 'true');
-                        sessionStorage.setItem('ID', data.ID);
+                        sessionStorage.removeItem('refreshed');
                         window.location.href = 'index.html';
                     } else {
                         document.getElementById('error-message').textContent = 'ID 또는 PW가 잘못되었습니다.';

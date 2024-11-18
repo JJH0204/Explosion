@@ -3,6 +3,7 @@ class GameManager {
         this.questionsData = null;
         this.solvedCards = new Set(); // 클리어된 카드 저장
         this.initialize();
+        this.loadSolvedCards(); // 페이지 로드 시 클리어된 카드 정보 불러오기
     }
 
     async initialize() {
@@ -173,10 +174,13 @@ class GameManager {
     
 
     initializeClearedCards(clearedCards) {
-        console.log('initializeClearedCards this:', this); // this 확인
-        this.solvedCards = new Set(clearedCards);
-        this.restoreClearedCards();
-        this.updateProgress();
+        if (Array.isArray(clearedCards)) {
+            clearedCards.forEach(cardId => {
+                this.solvedCards.add(cardId.toString());
+            });
+            this.updateProgress(); // 진행 상황 업데이트
+            localStorage.setItem('solvedCards', JSON.stringify([...this.solvedCards])); // 클리어된 카드 정보를 localStorage에 저장
+        }
     }
 
     restoreClearedCards() {
@@ -248,6 +252,7 @@ class GameManager {
                 const nickname = await this.getNicknameFromSession();
                 await this.saveToDatabase(cardId, nickname);
                 await this.handleCorrectAnswer(cardId);
+                window.location.reload();
             } else {
                 // 오답 처리는 여기서 한 번만
                 alert('틀렸습니다. 다시 시도해주세요.');
@@ -275,41 +280,62 @@ class GameManager {
             
             try {
                 // 게임 요청 설정
-                const requestResponse = await fetch('assets/php/set_game_request.php');
-                const requestData = await requestResponse.json();
+                const requestResponse = await fetch('assets/php/set_game_request.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
                 
+                const requestData = await requestResponse.json();
                 if (requestData.error) {
-                    console.error('Game request error:', requestData.error);
-                    return;
+                    throw new Error(requestData.error);
                 }
 
                 // 점수 업데이트
-                const scoreResponse = await fetch('assets/php/Scoreboard2.php');
+                const scoreResponse = await fetch('assets/php/Scoreboard2.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include'
+                });
+                
                 const scoreData = await scoreResponse.json();
-
                 if (scoreData.error) {
-                    console.error('Score update error:', scoreData.error);
-                } else {
-                    console.log('Score updated successfully:', scoreData);
-                    if (typeof updateUserInfo === 'function') {
-                        updateUserInfo();
-                    }
-                    if (typeof updateRanking === 'function') {
-                        updateRanking();
-                    }
+                    throw new Error(scoreData.error);
                 }
+
+                // 진행 상황 즉시 업데이트
+                const completedElement = document.getElementById('completed-challenges');
+                if (completedElement) {
+                    // solvedCards Set의 크기를 사용하여 업데이트
+                    completedElement.textContent = this.solvedCards.size;
+                }
+
+                // 다른 정보들도 업데이트
+                if (typeof updateUserInfo === 'function') {
+                    await updateUserInfo();
+                }
+                if (typeof updateRanking === 'function') {
+                    await updateRanking();
+                }
+
+                // 팝업 닫기
+                const popup = document.getElementById('gamePopup');
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+
             } catch (error) {
                 console.error('Failed to update game progress:', error);
-            }
-
-            // 팝업 닫기
-            const popup = document.getElementById('gamePopup');
-            if (popup) {
-                popup.style.display = 'none';
+                throw error;
             }
 
         } catch (error) {
             console.error('Error in handleCorrectAnswer:', error);
+            alert('점수 업데이트 중 오류가 발생했습니다. 새로고침 후 다시 시도해주세요.');
         }
     }
 
@@ -332,6 +358,11 @@ class GameManager {
                      class="monster-image">
             `;
         }
+
+        // 진행 상황 즉시 업데이트
+        this.updateProgress();
+
+        localStorage.setItem('solvedCards', JSON.stringify([...this.solvedCards]));
     }
 
     // updateProgress 메서드 추가

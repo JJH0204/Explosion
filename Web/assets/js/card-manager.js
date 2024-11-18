@@ -19,7 +19,7 @@ class CardManager {
         }
     }
 
-    initializeCards() {
+    async initializeCards() {
         const grid = document.getElementById('challengeGrid');
         if (!grid) {
             console.error('Challenge grid element not found');
@@ -31,8 +31,20 @@ class CardManager {
         const wrapper = document.createElement('div');
         wrapper.className = 'pages-wrapper';
         
+        // 클리어된 카드 정보 확인
+        try {
+            const response = await fetch('./assets/php/fetchClearedCards.php');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.gameManager.initializeClearedCards(data.clearedCards);
+            }
+        } catch (error) {
+            console.error('Error fetching cleared cards:', error);
+        }
+        
         for (let i = 0; i < this.totalPages; i++) {
-            const page = this.createPage(i); // createPage 호출
+            const page = this.createPage(i);
             if (page) {
                 wrapper.appendChild(page);
             }
@@ -40,7 +52,6 @@ class CardManager {
         
         grid.appendChild(wrapper);
         this.updateArrowButtons();
-
         this.showPage(this.currentPage);
     }
 

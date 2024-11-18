@@ -57,12 +57,28 @@
             "answer": "flag{answer7}"
         },
         {
+            "id": 8,
+            "title": "Challenge 8",
+            "markdownFile": "mk_8.md",
+            "description": "This is the eighth challenge.",
+            "link": "./Question/question7/question8.html",
+            "answer": "FLag{image_change}"
+        },
+        {
             "id": 11,
             "title": "Challenge 11",
             "markdownFile": "mk_11.md",
             "description": "This is the eleventh challenge.",
             "link": "./Question/question11/question11.html",
-            "answer": "flag{answer11}"
+            "answer": "FLAG{js_code_analysis}"
+        },
+        {
+            "id": 12,
+            "title": "Challenge 12",
+            "markdownFile": "mk_12.md",
+            "description": "This is the twelfth challenge.",
+            "link": "./Question/question12/question12.html",
+            "answer": "FLAG{js_code_analysis}"
         }
     ]
 } 

@@ -40,6 +40,7 @@ if (!$stmt) {
 
 $stmt->bind_param("si", $nickname, $cardId);
 if ($stmt->execute()) {
+    error_log("Saved to database with nickname: $nickname and cardId: $cardId"); // 디버깅 로그 추가
     echo json_encode(['success' => true]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Failed to save to database']);

@@ -3,65 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Directory Traversal Challenge</title>
+    <title>JavaScript Analysis Challenge</title>
     <style>
         body {
-            background-color: #1a1a1a;
+            background-color: #0a0a0a;
             color: #00ff00;
             font-family: 'Courier New', monospace;
             text-align: center;
-            padding: 50px;
+            padding: 20px;
         }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
         input {
-            width: 80%;
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #00ff00;
-            background-color: #000;
+            background-color: #2a2a2a;
             color: #00ff00;
-        }
-        button {
-            padding: 10px 20px;
             border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+
+        button {
             background-color: #00ff00;
             color: #000;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
         }
-        pre {
+
+        button:hover {
+            background-color: #33ff33;
+        }
+
+        #result {
             margin-top: 20px;
-            text-align: left;
-            width: 80%;
-            margin: 0 auto;
-            background-color: #000;
-            border: 1px solid #00ff00;
-            padding: 10px;
-            white-space: pre-wrap;
+            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
-    <h1>Directory Traversal Challenge</h1>
-    <p>명령어를 입력하세요 (예: ls, cd root, cat flag.txt)</p>
-    <form id="command-form">
-        <input type="text" id="command-input" name="command" placeholder="명령어 입력">
-        <button type="submit">실행</button>
-    </form>
-    <pre id="output"></pre>
+    <h1>JavaScript Analysis Challenge</h1>
+    <div class="container">
+        <p>올바른 암호를 입력하여 플래그를 획득하세요.</p>
+        <input type="text" id="passwordInput" placeholder="암호 입력">
+        <button onclick="checkPassword()">확인</button>
+        <p id="result"></p>
+    </div>
 
     <script>
-        document.getElementById("command-form").addEventListener("submit", async function (event) {
-            event.preventDefault();
+        const secretKey = "secret2024";
 
-            const command = document.getElementById("command-input").value.trim();
-            const response = await fetch("./process-command.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `command=${encodeURIComponent(command)}`
-            });
+        function decryptFlag() {
+            const encodedFlag = [0x46, 0x4C, 0x41, 0x47, 0x7B, 0x6A, 0x73, 0x5F, 0x63, 0x6F, 0x64, 0x65, 0x5F, 0x61, 0x6E, 0x61, 0x6C, 0x79, 0x73, 0x69, 0x73, 0x7D];
+            return encodedFlag.map(byte => String.fromCharCode(byte)).join('');
+        }
 
-            const result = await response.text();
-            document.getElementById("output").textContent = result;
-        });
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const result = document.getElementById('result');
+
+            if (input === secretKey) {
+                const flag = decryptFlag();
+                result.style.color = '#00ff00';
+                result.textContent = `플래그: ${flag}`;
+            } else {
+                result.style.color = '#ff0000';
+                result.textContent = '암호가 틀렸습니다. 다시 시도하세요.';
+            }
+        }
+
+        console.log("힌트: secretKey 값을 확인하세요.");
     </script>
 </body>
 </html>

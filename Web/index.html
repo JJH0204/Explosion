@@ -56,13 +56,13 @@
             </div>
             <div class="scoreboard">
             </div>
-            <div id="rankingBoard" class="ranking-board">
+            <div id="rankingBoard" class="ranking-board" style="margin-top: 20px;">
                 <h3>실시간 랭킹</h3>
                 <ul id="rankingList"></ul>
             </div>
         </aside>
-       
-    
+
+
         <main class="main-content">
             <div class="cards-container">
                 <div id="challengeGrid">
@@ -70,11 +70,11 @@
                 </div>
             </div>
         </main>
-        
+
         <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
         <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
     </div>
-    
+
 
     <!-- marked.js 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -107,6 +107,54 @@
                 .catch(error => {
                     console.error('Error fetching cleared cards:', error);
                 });
+        });
+    </script>
+    <script>
+        // 페이지 로드 시 로그인 상태 확인
+        if (!sessionStorage.getItem('loggedIn')) {
+            alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
+            window.location.replace('login.html');
+        }
+
+        // 뒤로가기 방지
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function (event) {
+            window.history.pushState(null, null, window.location.href);
+            if (!sessionStorage.getItem('loggedIn')) {
+                alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
+                window.location.replace('login.html');
+            }
+        };
+        
+        function checkImage(img) {
+            // 기본 이미지 경로
+            const defaultImagePath = 'assets/images/character.png';
+
+            // 이미지 확장자 체크를 위한 정규식
+            const imageExtRegex = /\.(png|jpg|jpeg|gif)$/i;
+
+            // 현재 이미지의 경로가 기본 이미지와 다르고, 올바른 이미지 확장자를 가진 경우
+            if (img.src !== window.location.origin + '/' + defaultImagePath &&
+                imageExtRegex.test(img.src)) {
+                alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
+            }
+        }
+
+        // 이미지 변경 감지를 위한 MutationObserver 설정
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                    const img = mutation.target;
+                    checkImage(img);
+                }
+            });
+        });
+
+        // 이미지 요소 관찰 시작
+        const characterImage = document.querySelector('.character-image');
+        observer.observe(characterImage, {
+            attributes: true,
+            attributeFilter: ['src']
         });
     </script>
 </body>

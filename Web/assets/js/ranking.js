@@ -21,12 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateScore();
 });
 
-// 스테이지 완료 시 호출하는 함수 예시
-function completeStage() {
-    updateScore(10);  // 스테이지 완료 시 점수 10점 추가
-    alert("스테이지 완료! 점수가 갱신되었습니다.");
-}
-
 // 팝업 닫기 함수
 function closePopup() {
     document.getElementById("gamePopup").style.display = "none";
@@ -52,7 +46,7 @@ function updateRanking() {
                     listItem.innerHTML = `                    
                         <strong>${index + 1}위</strong>
                         <span>${player.nickname}</span>
-                        <span>점수: ${player.score}</span>`;
+                        <span>점수: ${player.score} pt</span>`;
                     rankingList.appendChild(listItem);
                 });
             } else {
