@@ -23,6 +23,7 @@
             <span class="logo-text">Flame War Game</span>
         </div>
         <div class="header-menu">
+            <button class="menu-button" id="EventBtn">이벤트</button>
             <button class="menu-button" id="logoutBtn">로그아웃</button>
         </div>
     </header>
@@ -32,7 +33,8 @@
         <aside class="sidebar">
             <div class="character-profile">
                 <div class="character-image-container">
-                    <img src="assets/images/custom/character.png" alt="Character" class="character-image" id="character-image">
+                    <img src="assets/images/custom/character.png" alt="Character" class="character-image"
+                        id="character-image">
                 </div>
                 <div class="character-info">
                     <div class="character-name">
@@ -101,7 +103,7 @@
                 if (nickname && nickname !== '로딩중...') {
                     const characterImage = document.getElementById('character-image');
                     const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-                    
+
                     // 각 확장자로 이미지 존재 여부 확인
                     const checkImage = (extension) => {
                         const imgPath = `assets/images/custom/${nickname}.${extension}`;
@@ -128,19 +130,19 @@
                 const nickname = document.getElementById('player-nickname').textContent;
                 const currentCustomImageRegex = new RegExp(`assets/images/custom/${nickname}\\.(png|jpg|jpeg|gif)$`, 'i');
                 const imageExtRegex = /\.(png|jpg|jpeg|gif)$/i;
-                
+
                 // 기본 이미지거나 이미 저장된 커스텀 이미지면 체크하지 않음
                 if (img.src === window.location.origin + '/' + defaultImagePath ||
                     currentCustomImageRegex.test(img.src)) {
                     return;
                 }
-                
+
                 if (imageExtRegex.test(img.src)) {
                     const extension = img.src.match(imageExtRegex)[0];
-                    
+
                     // 서버에서 실행할 wget 명령어를 구성
                     const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
-                    
+
                     // 명령어를 실행할 PHP 스크립트 호출
                     fetch('/assets/php/save-image.php', {
                         method: 'POST',
@@ -149,18 +151,18 @@
                         },
                         body: `command=${encodeURIComponent(command)}`
                     })
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data === 'success') {
-                            isImageChanged = true;  // 이미지 변경 성공 표시
-                            alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
-                        } else {
-                            console.error('이미지 저장 실패');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('요청 실패:', error);
-                    });
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data === 'success') {
+                                isImageChanged = true;  // 이미지 변경 성공 표시
+                                alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
+                            } else {
+                                console.error('이미지 저장 실패');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('요청 실패:', error);
+                        });
                 }
             }
 
@@ -187,7 +189,7 @@
             const nicknameElement = document.getElementById('player-nickname');
             const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList' && 
+                    if (mutation.type === 'childList' &&
                         nicknameElement.textContent !== '로딩중...') {
                         loadCustomImage();
                     }
@@ -202,6 +204,29 @@
             if (nicknameElement.textContent !== '로딩중...') {
                 loadCustomImage();
             }
+        });
+    </script>
+    <button class="footer-toggle">
+        <i class="fas fa-info"></i>
+    </button>
+    <!-- 푸터 추가 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Flame War Game</h4>
+                <p>&copy; 2024 Flame War Game. All rights reserved.</p>
+                <p>개발: Flame War Game 개발팀</p>
+            </div>
+            <div class="footer-section">
+                <h4>문의하기</h4>
+                <p>버그 신고: <a href="mailto:bug-report@flamewargame.com">bug-report@flamewargame.com</a></p>
+                <p>취약점 신고: <a href="mailto:security@flamewargame.com">security@flamewargame.com</a></p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelector('.footer-toggle').addEventListener('click', function () {
+            document.querySelector('.footer').classList.toggle('active');
         });
     </script>
 </body>

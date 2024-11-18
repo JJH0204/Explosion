@@ -57,28 +57,58 @@
             padding: 10px;
             border-radius: 5px;
         }
-
         .ssh-info {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #00ff7f;
-            border-radius: 5px;
-        }
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #1e1e1e;
+        border: 1px solid #00ff7f;
+        border-radius: 5px;
+        max-width: 600px;
+    }
 
-        .putty-button {
-            display: inline-block;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .putty-info {
+        margin-top: 20px;
+        text-align: left;
+        padding: 15px;
+        background-color: #2a2a2a;
+        border-radius: 5px;
+    }
 
-        .putty-button:hover {
-            background-color: #45a049;
-        }
+    .putty-info ol {
+        margin-left: 20px;
+        padding-left: 20px;
+    }
+
+    .putty-info li {
+        margin: 5px 0;
+    }
+
+    button {
+        background-color: #00ff7f;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #33ff99;
+    }
+
+    .command {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    code {
+        background-color: #2a2a2a;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
     </style>
 </head>
 <body>
@@ -93,8 +123,11 @@
         </textarea>
         <p>해독된 플래그를 입력하세요:</p>
         <input type="text" id="userInput" placeholder="해독된 플래그 입력">
+    <div class="button-group">
         <button onclick="checkFlag()">제출</button>
-        <p id="result"></p>
+        <button onclick="toggleSSHInfo()" id="sshButton">SSH 접속 정보</button>
+    </div>
+    <p id="result"></p>
     </div>
 
     <div class="hint">
@@ -102,52 +135,51 @@
         <p>2.Python, 리눅스 명령어(uudecode), 또는 온라인 도구를 사용하여 UUdecode를 실행할 수 있습니다.</p>
         <p>3.디코딩 결과에서 PASS 값이 문제의 플래그로 사용됩니다.</p>
     </div>
-
     <div id="sshInfo" class="ssh-info" style="display: none;">
         <h3>SSH 접속 정보</h3>
         <p>아래 명령어를 사용하여 SSH 접속하세요:</p>
         <div class="command">
-            <code>ssh root@192.168.56.102 -p 22</code>
-            <button onclick="copyToClipboard(this.previousElementSibling.textContent)">복사</button>
+           
         </div>
-        <p>비밀번호: <span id="sshPassword">1515</span></p>
-        <a id="puttyButton" href="#" class="putty-button">PuTTY로 바로 접속</a>
+        <p>비밀번호: <span id="sshPassword">Challenge21passwd</span></p>
+        <div class="putty-info">
+            <p>PuTTY로 접속하기:</p>
+            <ol>
+                <li>PuTTY 실행</li>
+                <li>Host Name: Challenge21@192.168.1.170</li>
+                <li>Port: 22</li>
+                <li>Connection type: SSH</li>
+            </ol>
+            
+        </div>
     </div>
 
     <script>
-        function checkFlag() {
-            const userFlag = document.getElementById('userInput').value.trim();
-            const correctFlag = "ULTRASIMPLE"; // 실제 정답 플래그
+     function checkFlag() {
+        const userFlag = document.getElementById('userInput').value.trim();
+        const correctFlag = "ULTRASIMPLE";
+        const resultElement = document.getElementById('result');
 
-            const resultElement = document.getElementById('result');
-            const sshInfoElement = document.getElementById('sshInfo');
-
-            if (userFlag === correctFlag) {
-                resultElement.style.color = '#00ff7f';
-                resultElement.textContent = '정답입니다!';
-                
-                // SSH 정보 표시
-                sshInfoElement.style.display = 'block';
-                
-                // PuTTY 실행을 위한 URL 생성
-                const sshUrl = `putty://root@192.168.56.102:22/`;
-                
-                // PuTTY 실행 버튼 업데이트
-                document.getElementById('puttyButton').href = sshUrl;
-            } else {
-                resultElement.style.color = '#ff4d4d';
-                resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-                sshInfoElement.style.display = 'none';
-            }
+        if (userFlag === correctFlag) {
+            resultElement.style.color = '#00ff7f';
+            resultElement.textContent = '정답입니다!';
+            document.getElementById('sshInfo').style.display = 'block'; // 정답일 때 SSH 정보 표시
+            document.getElementById('sshButton').style.display = 'inline-block'; // SSH 버튼 표시
+        } else {
+            resultElement.style.color = '#ff4d4d';
+            resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
         }
+    }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('SSH 명령어가 클립보드에 복사되었습니다.');
-            }).catch(err => {
-                console.error('클립보드 복사 실패:', err);
-            });
+    function toggleSSHInfo() {
+        const sshInfo = document.getElementById('sshInfo');
+        if (sshInfo.style.display === 'none') {
+            sshInfo.style.display = 'block';
+        } else {
+            sshInfo.style.display = 'none';
         }
+    }
+
     </script>
 </body>
 </html>

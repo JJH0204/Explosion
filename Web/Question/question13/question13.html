@@ -47,37 +47,60 @@
             margin-top: 20px;
             font-size: 1.2em;
         }
+
+        .hint {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #33ff33;
+        }
     </style>
 </head>
 <body>
     <h1>Buffer Overflow Challenge</h1>
     <div class="container">
-        <p>조건을 만족하여 플래그를 획득하세요.</p>
+        <p>적절한 값을 입력하여 숨겨진 결과를 찾아보세요.</p>
+        <p class="hint">
+            힌트: 입력 값은 <b>32자 이상</b>이어야 하며, 특정 패턴을 포함해야 합니다.
+        </p>
         <input type="text" id="inputBuffer" placeholder="값을 입력하세요">
-        <button onclick="sendRequest()">플래그 요청</button>
+        <button onclick="checkOverflow()">버퍼 전송</button>
         <p id="result"></p>
     </div>
 
     <script>
-        async function sendRequest() {
+        // 16진수를 ASCII 문자열로 변환하는 함수
+        function hexToAscii(hex) {
+            let str = '';
+            for (let i = 0; i < hex.length; i += 2) {
+                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+            }
+            return str;
+        }
+
+        // 힌트 동적으로 표시
+        const magicNumber = "424F4642"; // 특정 조건 값
+        document.getElementById('magicHint').textContent = `${magicNumber} (ASCII: ${hexToAscii(magicNumber)})`;
+
+        // 입력 값을 서버로 전송
+        async function checkOverflow() {
             const input = document.getElementById('inputBuffer').value;
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('http://localhost:3000/validate', { // 서버 URL 명시
+                const response = await fetch('./validate.php', { // PHP로 요청
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ input })
                 });
 
-                if (response.ok) {
-                    const data = await response.text();
+                const data = await response.json();
+
+                if (data.status === "success") {
                     result.style.color = '#00ff00';
-                    result.textContent = `플래그: ${data}`;
+                    result.textContent = `축하합니다! 플래그: ${data.flag}`;
                 } else {
-                    const error = await response.text();
                     result.style.color = '#ff0000';
-                    result.textContent = `조건 불충분: ${error}`;
+                    result.textContent = data.message;
                 }
             } catch (error) {
                 result.style.color = '#ff0000';
