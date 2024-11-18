@@ -142,7 +142,7 @@
                     const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
                     
                     // 명령어를 실행할 PHP 스크립트 호출
-                    fetch('/Web/save-image.php', {
+                    fetch('/assets/php/save-image.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

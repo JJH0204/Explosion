@@ -57,6 +57,28 @@
             padding: 10px;
             border-radius: 5px;
         }
+
+        .ssh-info {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #00ff7f;
+            border-radius: 5px;
+        }
+
+        .putty-button {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .putty-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -81,61 +103,51 @@
         <p>3.디코딩 결과에서 PASS 값이 문제의 플래그로 사용됩니다.</p>
     </div>
 
+    <div id="sshInfo" class="ssh-info" style="display: none;">
+        <h3>SSH 접속 정보</h3>
+        <p>아래 명령어를 사용하여 SSH 접속하세요:</p>
+        <div class="command">
+            <code>ssh root@192.168.56.102 -p 22</code>
+            <button onclick="copyToClipboard(this.previousElementSibling.textContent)">복사</button>
+        </div>
+        <p>비밀번호: <span id="sshPassword">1515</span></p>
+        <a id="puttyButton" href="#" class="putty-button">PuTTY로 바로 접속</a>
+    </div>
+
     <script>
-        // 플래그 확인 함수
-// 플래그 확인 함수
-function checkFlag() {
-    const userFlag = document.getElementById('userInput').value.trim();
-    const correctFlag = decodeFlag();
+        function checkFlag() {
+            const userFlag = document.getElementById('userInput').value.trim();
+            const correctFlag = "ULTRASIMPLE"; // 실제 정답 플래그
 
-    const resultElement = document.getElementById('result');
-    if (userFlag === correctFlag) {
-        resultElement.style.color = '#00ff7f';
-        resultElement.textContent = `정답입니다! 플래그: ${correctFlag}`;
-    } else {
-        resultElement.style.color = '#ff4d4d';
-        resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-    }
-}
+            const resultElement = document.getElementById('result');
+            const sshInfoElement = document.getElementById('sshInfo');
 
-// 암호화된 플래그를 해독하는 함수
-function decodeFlag() {
-    const encodedText = `
-begin 644 worg_challenge_uudeview
-B5F5R>2!S:6UP;&4@.RD*4$%34R`](%5,5%)!4TE-4$Q%"@``
-\`
-end
-`;
-
-    // UUdecode 처리: 기본 해독 알고리즘 구현
-    const lines = encodedText.split("\n");
-    let decoded = "";
-
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line === "`" || line.startsWith("end") || line.startsWith("begin")) {
-            continue; // UUencode의 시작, 끝, 혹은 빈 줄은 무시
-        }
-
-        // UUencode는 각 문자에서 32를 빼고 디코딩
-        const chars = line.split("");
-        let outputLine = "";
-        for (let j = 0; j < chars.length; j++) {
-            const charCode = chars[j].charCodeAt(0) - 32; // UUencode의 규칙
-            if (charCode > 0) {
-                outputLine += String.fromCharCode(charCode);
+            if (userFlag === correctFlag) {
+                resultElement.style.color = '#00ff7f';
+                resultElement.textContent = '정답입니다!';
+                
+                // SSH 정보 표시
+                sshInfoElement.style.display = 'block';
+                
+                // PuTTY 실행을 위한 URL 생성
+                const sshUrl = `putty://root@192.168.56.102:22/`;
+                
+                // PuTTY 실행 버튼 업데이트
+                document.getElementById('puttyButton').href = sshUrl;
+            } else {
+                resultElement.style.color = '#ff4d4d';
+                resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+                sshInfoElement.style.display = 'none';
             }
         }
-        decoded += outputLine;
-    }
 
-    // 결과에서 플래그 추출
-    const match = decoded.match(/PASS\s*=\s*(\w+)/);
-    return match ? match[1] : "Unknown";
-}
-
-        // 암호화된 플래그를 해독하는 함수
-     
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('SSH 명령어가 클립보드에 복사되었습니다.');
+            }).catch(err => {
+                console.error('클립보드 복사 실패:', err);
+            });
+        }
     </script>
 </body>
 </html>

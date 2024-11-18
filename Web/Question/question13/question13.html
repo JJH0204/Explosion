@@ -52,39 +52,37 @@
 <body>
     <h1>Buffer Overflow Challenge</h1>
     <div class="container">
-        <p>적절한 값을 입력하여 숨겨진 결과를 찾아보세요.</p>
+        <p>조건을 만족하여 플래그를 획득하세요.</p>
         <input type="text" id="inputBuffer" placeholder="값을 입력하세요">
-        <button onclick="checkOverflow()">버퍼 전송</button>
+        <button onclick="sendRequest()">플래그 요청</button>
         <p id="result"></p>
     </div>
 
     <script>
-        function checkOverflow() {
+        async function sendRequest() {
             const input = document.getElementById('inputBuffer').value;
             const result = document.getElementById('result');
 
-            // 내부 논리 추가 (단순 길이 비교가 아닌 특정 입력 구조 필요)
-            const bufferSize = 32; // 버퍼 크기
-            const magicNumber = "424F4642"; // 특정 조건 (16진수 값)
-            const hiddenFlag = "FLAG{advanced_buffer_overflow}";
+            try {
+                const response = await fetch('http://localhost:3000/validate', { // 서버 URL 명시
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input })
+                });
 
-            // 버퍼 오버플로우 조건: 길이 초과 + 특정 패턴 확인
-            if (input.length > bufferSize && input.includes(hexToAscii(magicNumber))) {
-                result.style.color = '#00ff00';
-                result.textContent = `축하합니다! 플래그: ${hiddenFlag}`;
-            } else {
+                if (response.ok) {
+                    const data = await response.text();
+                    result.style.color = '#00ff00';
+                    result.textContent = `플래그: ${data}`;
+                } else {
+                    const error = await response.text();
+                    result.style.color = '#ff0000';
+                    result.textContent = `조건 불충분: ${error}`;
+                }
+            } catch (error) {
                 result.style.color = '#ff0000';
-                result.textContent = '조건을 만족하지 못했습니다. 다시 시도하세요.';
+                result.textContent = '오류 발생: 서버에 연결할 수 없습니다.';
             }
-        }
-
-        // 16진수를 ASCII 문자열로 변환하는 함수
-        function hexToAscii(hex) {
-            let str = '';
-            for (let i = 0; i < hex.length; i += 2) {
-                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-            }
-            return str;
         }
     </script>
 </body>

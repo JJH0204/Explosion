@@ -12,6 +12,8 @@ body {
     color: #ffffff;
     min-height: 100vh;
     overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100vh;
 }
 
 .container {
@@ -170,6 +172,8 @@ body {
     padding: 0;
     box-sizing: border-box;
     transition: transform 0.3s ease;
+    overflow-y: auto;
+    height: calc(100vh - 80px);
 }
 
 .main-content.sidebar-active {
@@ -653,4 +657,87 @@ body {
     .main-content.sidebar-active {
         transform: translateX(75px);
     }
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px 0;
+    width: 100%;
+    position: fixed;
+    bottom: -100%; /* 기본적으로 숨김 상태 */
+    left: 0;
+    z-index: 1000;
+    transition: bottom 0.3s ease;
+}
+
+.footer.active {
+    bottom: 0; /* 활성화 시 표시 */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 20px;
+}
+
+.footer-section {
+    flex: 1;
+    max-width: 400px;
+    padding: 0 20px;
+}
+
+.footer-section h4 {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.footer-section p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.footer-section a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #ffd700;
+    text-decoration: underline;
+}
+
+/* 메인 컨텐츠가 푸터와 겹치지 않도록 마진 추가 */
+.main-container {
+    margin-bottom: 120px;
+}
+
+/* 푸터 토글 버튼 */
+.footer-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1001;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.footer-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
 }
