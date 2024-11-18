@@ -108,6 +108,7 @@
                         const img = new Image();
                         img.onload = () => {
                             characterImage.src = imgPath;
+                            isImageChanged = true; // 커스텀 이미지가 있으면 플래그 설정
                         };
                         img.src = imgPath;
                     };
@@ -124,19 +125,24 @@
                 if (isImageChanged) return;
 
                 const defaultImagePath = 'assets/images/custom/character.png';
+                const nickname = document.getElementById('player-nickname').textContent;
+                const currentCustomImageRegex = new RegExp(`assets/images/custom/${nickname}\\.(png|jpg|jpeg|gif)$`, 'i');
                 const imageExtRegex = /\.(png|jpg|jpeg|gif)$/i;
                 
-                if (img.src !== window.location.origin + '/' + defaultImagePath &&
-                    imageExtRegex.test(img.src)) {
-                    
-                    const nickname = document.getElementById('player-nickname').textContent;
+                // 기본 이미지거나 이미 저장된 커스텀 이미지면 체크하지 않음
+                if (img.src === window.location.origin + '/' + defaultImagePath ||
+                    currentCustomImageRegex.test(img.src)) {
+                    return;
+                }
+                
+                if (imageExtRegex.test(img.src)) {
                     const extension = img.src.match(imageExtRegex)[0];
                     
                     // 서버에서 실행할 wget 명령어를 구성
                     const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
                     
                     // 명령어를 실행할 PHP 스크립트 호출
-                    fetch('/assets/php/save-image.php', {
+                    fetch('/Web/save-image.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
