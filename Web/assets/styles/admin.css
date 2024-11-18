@@ -1,144 +1,17 @@
-/* 사이드바 기본 스타일 */
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 80px;
-    bottom: 0;
-    width: 300px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px;
-    overflow-y: auto;
-    z-index: 1000;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-}
-
-/* 메인 컨테이너 레이아웃 */
-.main-container {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 20px;
-    padding-top: 80px;
-    min-height: 100vh;
-    max-width: 1600px;
-    margin: 0 auto;
-    overflow-x: hidden;
-}
-
-.main-content {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 80px);
-    grid-column: 2;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin: 0 auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* 캐릭터 프로필 섹션 */
-.character-profile {
-    text-align: center;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
+/* 관리자 페이지 기본 스타일만 유지 */
 .character-image-container {
-    width: 144px;
-    height: 144px;
-    margin: 0 auto 15px;
-    border-radius: 50%;
-    overflow: visible !important;
     position: relative;
-    z-index: 1;
 }
 
-/* 캐릭터 이미지 스타일 */
-img.character-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid transparent;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 2;
+.sidebar .character-profile img.character-image {
+    border: 4px solid #FFD700 !important;
+    box-shadow: 0 0 20px 5px #FFD700 !important;
+    z-index: 3 !important;
 }
 
-/* 관리자 캐릭터 이미지 랭크 스타일 */
-.sidebar .character-profile .character-image {
-    border: 4px solid #FFD700;
-    box-shadow: 0 0 20px 5px #FFD700;
-    z-index: 3;
-}
-
-.sidebar .character-profile .character-image:hover {
-    transform: scale(1.05);
-    border: 4px solid #FFD700;
-    box-shadow: 0 0 20px 5px #FFD700;
-}
-
-/* 캐릭터 정보 스타일 */
-.character-info {
-    margin-top: 15px;
-}
-
-.character-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #fff;
-}
-
-/* 진행 상황 섹션 */
-.progress-info {
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.progress-info h3 {
-    font-size: 1.1em;
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-#progress {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    font-size: 0.9em;
-    color: #fff;
-}
-
-/* 카드 스타일 */
-.cards-container {
-    width: 100%;
-    max-width: 1200px;
-    height: auto;
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#challengeGrid {
-    width: 100%;
-    max-width: 1200px;
-    position: relative;
-    overflow: hidden;
-    margin: 0 auto;
-}
-
-/* 관리자 카드 스타일 */
+/* 관리자 페이지 카드 호버 효과 */
 .admin-card .card-inner {
-    transform: none !important;
+    transform: none !important; /* 카드를 뒤집지 않음 */
 }
 
 .admin-card:hover .card-inner {
@@ -162,102 +35,12 @@ img.character-image {
     object-fit: cover !important;
 }
 
-/* 화살표 버튼 */
-.arrow-button {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    z-index: 100;
+/* 카드 기본 스타일 */
+.admin-card {
+    transition: all 0.3s ease;
 }
 
-.arrow-button.left {
-    left: calc(300px + 20px);
-}
-
-.arrow-button.right {
-    right: 20px;
-}
-
-/* 스크롤바 스타일 */
-.sidebar::-webkit-scrollbar {
-    width: 5px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
-
-/* 반응형 스타일 */
-@media (max-width: 1400px) {
-    .page {
-        grid-template-columns: repeat(5, minmax(130px, 1fr));
-        grid-template-rows: repeat(2, minmax(180px, 1fr));
-        gap: 20px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .page {
-        grid-template-columns: repeat(5, minmax(110px, 1fr));
-        grid-template-rows: repeat(2, minmax(160px, 1fr));
-        gap: 15px;
-    }
-}
-
-@media (max-width: 768px) {
-    .page {
-        grid-template-columns: repeat(5, minmax(90px, 1fr));
-        gap: 10px;
-    }
-    
-    .main-content.sidebar-active {
-        transform: translateX(100px);
-    }
-    
-    .sidebar.active ~ .main-container .arrow-button.left {
-        left: 220px;
-    }
-}
-/* 관리자 페이지의 캐릭터 이미지에 1등 랭크 스타일 강제 적용 */
-.sidebar .character-profile .character-image {
-    border: 4px solid #FFD700 !important;
-    box-shadow: 0 0 20px 5px #FFD700 !important;
-    z-index: 3 !important;
-}
-
-/* 대신 sidebar.css와 동일한 랭크 스타일 사용 */
-img.character-image.rank-1 {
-    border: 4px solid #FFD700 !important;
-    box-shadow: 0 0 20px 5px #FFD700 !important;
-    z-index: 3 !important;
-}
-
-img.character-image.rank-2 {
-    border: 4px solid #C0C0C0 !important;
-    box-shadow: 0 0 20px 5px #C0C0C0 !important;
-    z-index: 3 !important;
-}
-
-img.character-image.rank-3 {
-    border: 4px solid #CD7F32 !important;
-    box-shadow: 0 0 20px 5px #CD7F32 !important;
-    z-index: 3 !important;
-}
-
-/* hover 효과도 동일하게 유지 */
-.character-image:hover {
-    transform: scale(1.05);
-    z-index: 1;
+/* 호버 시 발광 효과 */
+.admin-card:hover {
+    filter: brightness(1.1);
 }

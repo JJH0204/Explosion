@@ -54,6 +54,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     setInterval(updateRanking, 30000);
 });
 
+// 로그아웃 함수
+async function logout() {
+    try {
+        const response = await fetch('assets/php/logout.php');
+        const data = await response.json();
+        if (data.success) {
+            window.location.replace('login.html');
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
+
 // 로그인 상태 체크 함수
 async function checkLoginStatus() {
     try {

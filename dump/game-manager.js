@@ -125,7 +125,7 @@ class GameManager {
 
     // 데이터베이스에 기록하는 메서드 추가
     async saveToDatabase(cardId, nickname) {
-        console.log('Saving to database with nickname:', nickname, 'and cardId:', cardId);
+        console.log('Saving to database with nickname:', nickname, 'and cardId:', cardId); // 디버깅 로그 추가
         try {
             const response = await fetch('./assets/php/saveScore.php', {
                 method: 'POST',
@@ -137,11 +137,11 @@ class GameManager {
                     nickname: nickname,
                 }),
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const result = await response.json();
             if (!result.success) {
                 throw new Error(result.error || 'Unknown error');
@@ -207,7 +207,7 @@ class GameManager {
             }
 
             if (challenge.link && challenge.link.trim() !== '') {
-                window.open(challenge.link, '_blank');
+                window.location.href = challenge.link;
             } else {
                 alert('이 문제는 아직 준비되지 않았습니다.');
             }
@@ -218,6 +218,7 @@ class GameManager {
     }
 
     async submitFlag(gameId) {
+        // 이미 제출 중이면 리턴
         if (this.isSubmitting) {
             return;
         }
@@ -244,39 +245,8 @@ class GameManager {
                 throw new Error('Challenge not found');
             }
 
-            let isCorrect;
-            
-            // 25번 문제일 경우 특별 처리
-            if (cardId === 25) {
-                try {
-                    // 현재 사용자의 FLAG 값을 조회하는 쿼리
-                    const response = await fetch('Question/question25/execute_query.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `query=SELECT FLAG FROM ${await this.getNicknameFromSession()}`
-                    });
-                    
-                    const result = await response.json();
-                    if (result.error) {
-                        throw new Error(result.error);
-                    }
-                    
-                    // DB에서 가져온 FLAG 값과 입력값 비교
-                    if (result.data && result.data[0] && result.data[0].FLAG === flag) {
-                        isCorrect = true;
-                    } else {
-                        isCorrect = false;
-                    }
-                } catch (error) {
-                    console.error('Error checking flag for challenge 25:', error);
-                    throw error;
-                }
-            } else {
-                // 다른 문제들은 기존 방식대로 처리
-                isCorrect = flag === challenge.answer;
-            }
+            // 정답 체크는 한 번만 수행
+            const isCorrect = flag === challenge.answer;
 
             if (isCorrect) {
                 const nickname = await this.getNicknameFromSession();
@@ -284,12 +254,12 @@ class GameManager {
                 await this.handleCorrectAnswer(cardId);
                 window.location.reload();
             } else {
+                // 오답 처리는 여기서 한 번만
                 alert('틀렸습니다. 다시 시도해주세요.');
-                flagInput.value = '';
+                flagInput.value = ''; // 입력 필드 초기화
             }
         } catch (error) {
             console.error('Error submitting flag:', error);
-            alert('오류가 발생했습니다. 다시 시도해주세요.');
         } finally {
             this.isSubmitting = false;
         }
@@ -397,6 +367,7 @@ class GameManager {
 
     // updateProgress 메서드 추가
     updateProgress() {
+        console.log('updateProgress this:', this); // this 확인
         const completedElement = document.getElementById('completed-challenges');
         const totalElement = document.getElementById('total-challenges');
     
