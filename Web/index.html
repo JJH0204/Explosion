@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self';">
     <title>Flame</title>
-    <link rel="stylesheet" href="assets/styles/main.css">
-    <link rel="stylesheet" href="assets/styles/sidebar.css">
-    <link rel="stylesheet" href="assets/styles/cards.css">
-    <link rel="stylesheet" href="assets/styles/popup.css">
-    <link rel="stylesheet" href="assets/styles/markdown.css">
+    <link rel="stylesheet" href="assets/styles/main/bundle.min.css">
+    <link rel="stylesheet" href="assets/styles/main/sidebar.css">
+    <link rel="stylesheet" href="assets/styles/main/footer.css">
+    <link rel="preload" href="assets/images/background.jpg" as="image">
+    <link rel="preload" href="assets/images/icons/Flame_logo2.png" as="image">
 </head>
 
 <body>
@@ -28,7 +30,7 @@
         </div>
     </header>
 
-    <button class="sidebar-toggle">☰</button>
+    <!-- <button class="sidebar-toggle">☰</button> -->
     <div class="main-container">
         <aside class="sidebar">
             <div class="character-profile">
@@ -58,7 +60,7 @@
             </div>
             <div class="scoreboard">
             </div>
-            <div id="rankingBoard" class="ranking-board" style="margin-top: 20px;">
+            <div id="rankingBoard" class="ranking-board">
                 <h3>실시간 랭킹</h3>
                 <ul id="rankingList"></ul>
             </div>
@@ -67,166 +69,26 @@
         <main class="main-content">
             <div class="cards-container">
                 <div id="challengeGrid">
-                    <!-- 카드 페이지들 -->
+                    <!-- 카드 페이지들이 동적으로 추가됨 -->
                 </div>
             </div>
+            <!-- <button class="arrow-button left">◀</button>
+            <button class="arrow-button right">▶</button> -->
         </main>
-
-        <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
-        <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
     </div>
 
-    <!-- marked.js 추가 -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script type="module" src="assets/js/main/sidebar/ranking.js"></script>
+    <script type="module" src="assets/js/main/sidebar/userinfo.js"></script>
+    <script type="module" src="assets/js/main/init.js"></script>
+    <script type="module" src="assets/js/main/footer.js"></script>
 
-    <!-- 게임 팝업 수정 -->
     <div id="gamePopup" class="popup">
         <div class="popup-content">
             <div id="gameContent"></div>
         </div>
     </div>
-
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/GameUI.js"></script>
-    <script src="assets/js/ranking.js"></script>
-    <script src="assets/js/userinfo.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let isImageChanged = false;  // 이미지 변경 여부를 추적하는 플래그
-
-            // 커스텀 이미지 로드 함수
-            function loadCustomImage() {
-                const nickname = document.getElementById('player-nickname').textContent;
-                if (nickname && nickname !== '로딩중...') {
-                    const characterImage = document.getElementById('character-image');
-                    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-                    // 각 확장자로 이미지 존재 여부 확인
-                    const checkImage = (extension) => {
-                        const imgPath = `assets/images/custom/${nickname}.${extension}`;
-                        const img = new Image();
-                        img.onload = () => {
-                            characterImage.src = imgPath;
-                            isImageChanged = true; // 커스텀 이미지가 있으면 플래그 설정
-                        };
-                        img.src = imgPath;
-                    };
-
-                    // 각 확장자 순차적으로 확인
-                    imageExtensions.forEach((ext, index) => {
-                        setTimeout(() => checkImage(ext), index * 100);
-                    });
-                }
-            }
-
-            function checkImage(img) {
-                // 이미 이미지가 변경되었다면 체크하지 않음
-                if (isImageChanged) return;
-
-                const defaultImagePath = 'assets/images/custom/character.png';
-                const nickname = document.getElementById('player-nickname').textContent;
-                const currentCustomImageRegex = new RegExp(`assets/images/custom/${nickname}\\.(png|jpg|jpeg|gif)$`, 'i');
-                const imageExtRegex = /\.(png|jpg|jpeg|gif)$/i;
-
-                // 기본 이미지거나 이미 저장된 커스텀 이미지면 체크하지 않음
-                if (img.src === window.location.origin + '/' + defaultImagePath ||
-                    currentCustomImageRegex.test(img.src)) {
-                    return;
-                }
-
-                if (imageExtRegex.test(img.src)) {
-                    const extension = img.src.match(imageExtRegex)[0];
-
-                    // 서버에서 실행할 wget 명령어를 구성
-                    const command = `cd /var/www/html/Web/assets/images/custom/ && wget -O ${nickname}${extension} "${img.src}"`;
-
-                    // 명령어를 실행할 PHP 스크립트 호출
-                    fetch('/assets/php/save-image.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `command=${encodeURIComponent(command)}`
-                    })
-                        .then(response => response.text())
-                        .then(data => {
-                            if (data === 'success') {
-                                isImageChanged = true;  // 이미지 변경 성공 표시
-                                alert('축하합니다! 플래그를 찾았습니다: RkxhZ3tpbWFnZV9jaGFuZ2V9');
-                            } else {
-                                console.error('이미지 저장 실패');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('요청 실패:', error);
-                        });
-                }
-            }
-
-            // 이미지 변경 감지를 위한 observer
-            const imageObserver = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
-                        const img = mutation.target;
-                        checkImage(img);
-                    }
-                });
-            });
-
-            // 이미지 요소 관찰 시작
-            const characterImage = document.querySelector('.character-image');
-            if (characterImage) {
-                imageObserver.observe(characterImage, {
-                    attributes: true,
-                    attributeFilter: ['src']
-                });
-            }
-
-            // 닉네임이 로드되면 커스텀 이미지 확인
-            const nicknameElement = document.getElementById('player-nickname');
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList' &&
-                        nicknameElement.textContent !== '로딩중...') {
-                        loadCustomImage();
-                    }
-                });
-            });
-
-            observer.observe(nicknameElement, {
-                childList: true
-            });
-
-            // 페이지 로드 시에도 확인
-            if (nicknameElement.textContent !== '로딩중...') {
-                loadCustomImage();
-            }
-        });
-    </script>
-    <button class="footer-toggle">
-        <i class="fas fa-info"></i>
-    </button>
-    <!-- 푸터 추가 -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Flame War Game</h4>
-                <p>&copy; 2024 Flame War Game. All rights reserved.</p>
-                <p>개발: Flame War Game 개발팀</p>
-            </div>
-            <div class="footer-section">
-                <h4>문의하기</h4>
-                <p>버그 신고: <a href="mailto:bug-report@flamewargame.com">bug-report@flamewargame.com</a></p>
-                <p>취약점 신고: <a href="mailto:security@flamewargame.com">security@flamewargame.com</a></p>
-            </div>
-        </div>
-    </footer>
-    <script>
-        document.querySelector('.footer-toggle').addEventListener('click', function () {
-            document.querySelector('.footer').classList.toggle('active');
-        });
-    </script>
+    <script type="module" src="assets/js/main/footer.js"></script>
 </body>
 
 </html>

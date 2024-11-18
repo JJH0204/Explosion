@@ -1,4 +1,54 @@
 {
+    "paths": {
+        "images": "./assets/images/monsters/",
+        "markdown": "./data/markdown/",
+        "php": "./php/",
+        "questions": "./Question/",
+        "json": "./data/"
+    },
+    "game": {
+        "totalCards": 40,
+        "cardsPerPage": 10,
+        "totalPages": 4,
+        "gridColumns": 5,
+        "gridRows": 2
+    },
+    "categories": {
+        "sql": {
+            "name": "SQL 인젝션",
+            "description": "데이터베이스 관련 취약점"
+        },
+        "xss": {
+            "name": "크로스 사이트 스크립팅",
+            "description": "스크립트 인젝션 취약점"
+        },
+        "upload": {
+            "name": "파일 업로드",
+            "description": "파일 업로드 관련 취약점"
+        },
+        "auth": {
+            "name": "인증 및 인가",
+            "description": "권한 관련 취약점"
+        },
+        "csrf": {
+            "name": "CSRF",
+            "description": "요청 위조 관련 취약점"
+        }
+    },
+    "difficulty": {
+        "beginner": {
+            "name": "초급",
+            "points": 100
+        },
+        "intermediate": {
+            "name": "중급",
+            "points": 200
+        },
+        "advanced": {
+            "name": "고급",
+            "points": 300
+        }
+    },
     "challenges": [
         {
             "id": 1,
