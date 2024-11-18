@@ -1,51 +1,19 @@
-/* 관리자 페이지 기본 스타일만 유지 */
-.character-image-container {
-    position: relative;
+/* 사이드바 기본 스타일 */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 80px;
+    bottom: 0;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.sidebar .character-profile img.character-image {
-    border: 4px solid #FFD700 !important;
-    box-shadow: 0 0 20px 5px #FFD700 !important;
-    z-index: 3 !important;
-}
-
-/* 관리자 페이지 카드 호버 효과 */
-.admin-card .card-inner {
-    transform: none !important;
-}
-
-.admin-card:hover .card-inner {
-    transform: translateY(-10px) scale(1.05) !important;
-    box-shadow: 
-        0 10px 20px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(255, 215, 0, 0.3) !important;
-    transition: all 0.3s ease !important;
-}
-
-.admin-card .card-front {
-    transform: none !important;
-    background: none !important;
-    border: 3px solid rgba(255, 215, 0, 0.3) !important;
-}
-
-.admin-card .card-front img {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-
-/* 카드 기본 스타일 */
-.admin-card {
-    transition: all 0.3s ease;
-}
-
-/* 호버 시 발광 효과 */
-.admin-card:hover {
-    filter: brightness(1.1);
-}
-
-/* 관리자 페이지 레이아웃 */
+/* 메인 컨테이너 레이아웃 */
 .main-container {
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -73,7 +41,82 @@
     scrollbar-width: none;
 }
 
-/* 카드 컨테이너 스타일 */
+/* 캐릭터 프로필 섹션 */
+.character-profile {
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.character-image-container {
+    width: 144px;
+    height: 144px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    overflow: visible !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* 캐릭터 이미지 스타일 */
+img.character-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+/* 관리자 캐릭터 이미지 랭크 스타일 */
+.sidebar .character-profile .character-image {
+    border: 4px solid #FFD700;
+    box-shadow: 0 0 20px 5px #FFD700;
+    z-index: 3;
+}
+
+.sidebar .character-profile .character-image:hover {
+    transform: scale(1.05);
+    border: 4px solid #FFD700;
+    box-shadow: 0 0 20px 5px #FFD700;
+}
+
+/* 캐릭터 정보 스타일 */
+.character-info {
+    margin-top: 15px;
+}
+
+.character-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+/* 진행 상황 섹션 */
+.progress-info {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-info h3 {
+    font-size: 1.1em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#progress {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #fff;
+}
+
+/* 카드 스타일 */
 .cards-container {
     width: 100%;
     max-width: 1200px;
@@ -93,7 +136,33 @@
     margin: 0 auto;
 }
 
-/* 화살표 버튼 위치 조정 */
+/* 관리자 카드 스타일 */
+.admin-card .card-inner {
+    transform: none !important;
+}
+
+.admin-card:hover .card-inner {
+    transform: translateY(-10px) scale(1.05) !important;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 215, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.admin-card .card-front {
+    transform: none !important;
+    background: none !important;
+    border: 3px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.admin-card .card-front img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* 화살표 버튼 */
 .arrow-button {
     position: fixed;
     top: 50%;
@@ -110,6 +179,24 @@
 
 .arrow-button.right {
     right: 20px;
+}
+
+/* 스크롤바 스타일 */
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 /* 반응형 스타일 */
@@ -142,4 +229,35 @@
     .sidebar.active ~ .main-container .arrow-button.left {
         left: 220px;
     }
+}
+/* 관리자 페이지의 캐릭터 이미지에 1등 랭크 스타일 강제 적용 */
+.sidebar .character-profile .character-image {
+    border: 4px solid #FFD700 !important;
+    box-shadow: 0 0 20px 5px #FFD700 !important;
+    z-index: 3 !important;
+}
+
+/* 대신 sidebar.css와 동일한 랭크 스타일 사용 */
+img.character-image.rank-1 {
+    border: 4px solid #FFD700 !important;
+    box-shadow: 0 0 20px 5px #FFD700 !important;
+    z-index: 3 !important;
+}
+
+img.character-image.rank-2 {
+    border: 4px solid #C0C0C0 !important;
+    box-shadow: 0 0 20px 5px #C0C0C0 !important;
+    z-index: 3 !important;
+}
+
+img.character-image.rank-3 {
+    border: 4px solid #CD7F32 !important;
+    box-shadow: 0 0 20px 5px #CD7F32 !important;
+    z-index: 3 !important;
+}
+
+/* hover 효과도 동일하게 유지 */
+.character-image:hover {
+    transform: scale(1.05);
+    z-index: 1;
 }

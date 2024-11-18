@@ -45,3 +45,8 @@ SQL Injection 공격에 취약
 준비된 구문(Prepared Statement) 사용  
 서버 측에서의 보안 검증 강화  
 최소 권한 원칙 적용  
+
+## 6. 최종 플래그
+```
+flag{sql_injection_success}
+```

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subnetting Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 35%;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result, #flag {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .range-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .range-group span {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Subnetting Challenge</h1>
+    <div class="container">
+        <p>
+            네트워크 <b>192.168.0.0/24</b>을 4개의 서브넷으로 나누어야 합니다.<br>
+            각 서브넷의 요구 사항은 다음과 같습니다:
+        </p>
+        <ul>
+            <li><b>Subnet A:</b> 50개 호스트</li>
+            <li><b>Subnet B:</b> 30개 호스트</li>
+            <li><b>Subnet C:</b> 10개 호스트</li>
+            <li><b>Subnet D:</b> 10개 호스트</li>
+        </ul>
+
+        <h3>문제 1</h3>
+        <p>Subnet A, B, C, D의 네트워크 주소와 브로드캐스트 주소를 각각 입력하세요.</p>
+        <!-- Subnet A -->
+        <div class="range-group">
+            <input type="text" id="subnetAStart" placeholder="192.168.x.x">
+            <span>-</span>
+            <input type="text" id="subnetAEnd" placeholder="192.168.x.x">
+        </div>
+        <!-- Subnet B -->
+        <div class="range-group">
+            <input type="text" id="subnetBStart" placeholder="192.168.x.x">
+            <span>-</span>
+            <input type="text" id="subnetBEnd" placeholder="192.168.x.x">
+        </div>
+        <!-- Subnet C -->
+        <div class="range-group">
+            <input type="text" id="subnetCStart" placeholder="192.168.x.x">
+            <span>-</span>
+            <input type="text" id="subnetCEnd" placeholder="192.168.x.x">
+        </div>
+        <!-- Subnet D -->
+        <div class="range-group">
+            <input type="text" id="subnetDStart" placeholder="192.168.x.x">
+            <span>-</span>
+            <input type="text" id="subnetDEnd" placeholder="192.168.x.x">
+        </div>
+
+        <h3>문제 2</h3>
+        <p>Subnet A와 Subnet B가 통신하려면 라우터 인터페이스에 어떤 IP를 할당해야 하나요?</p>
+        <input type="text" id="subnet2" placeholder="192.168.x.x, 192.168.x.x">
+
+        <h3>문제 3</h3>
+        <p>서브넷 마스크를 어떻게 설정하면 모든 서브넷 요구 사항을 충족할 수 있나요?</p>
+        <input type="text" id="subnet3" placeholder="/xx, /xx, /xx, /xx">
+
+        <button onclick="checkAll()">제출</button>
+        <p id="result"></p>
+        <p id="flag"></p>
+    </div>
+
+    <script>
+        async function checkAll() {
+            const inputs = {
+                subnetAStart: document.getElementById('subnetAStart').value.trim(),
+                subnetAEnd: document.getElementById('subnetAEnd').value.trim(),
+                subnetBStart: document.getElementById('subnetBStart').value.trim(),
+                subnetBEnd: document.getElementById('subnetBEnd').value.trim(),
+                subnetCStart: document.getElementById('subnetCStart').value.trim(),
+                subnetCEnd: document.getElementById('subnetCEnd').value.trim(),
+                subnetDStart: document.getElementById('subnetDStart').value.trim(),
+                subnetDEnd: document.getElementById('subnetDEnd').value.trim(),
+                subnet2: document.getElementById('subnet2').value.trim(),
+                subnet3: document.getElementById('subnet3').value.trim()
+            };
+
+            const response = await fetch("question18.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(inputs)
+            });
+
+            const result = await response.json();
+
+            const resultElement = document.getElementById('result');
+            const flagElement = document.getElementById('flag');
+
+            if (result.status === "success") {
+                resultElement.style.color = '#00ff00';
+                resultElement.textContent = '모든 문제를 정확히 해결했습니다!';
+                flagElement.style.color = '#00ff00';
+                flagElement.textContent = `플래그: ${result.flag}`;
+            } else {
+                resultElement.style.color = '#ff0000';
+                resultElement.textContent = '틀린 답이 있습니다. 모든 문제를 맞춰야 플래그가 생성됩니다.';
+                flagElement.textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>

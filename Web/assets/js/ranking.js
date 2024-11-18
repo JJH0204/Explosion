@@ -67,6 +67,6 @@ function updateRanking() {
 // 5초마다 랭킹 갱신
 document.addEventListener("DOMContentLoaded", () => {
     updateRanking(); // 첫 로드 시 랭킹 표시
-    setInterval(updateRanking, 5000); // 5초마다 업데이트
+    setInterval(updateRanking, 180000); // 1분마다 업데이트
 });
 

@@ -26,11 +26,7 @@ localStorage.setItem('solvedCards', JSON.stringify(solvedCards));
 
 ## 3. 플래그 획득
 1. LocalStorage 조작 시 alert으로 다음 값이 출력됨:
-   `RkxhZ3tMb2NhbFN0b3JhZ2VfTW9kaWZpY2F0aW9ufQ==`
-
-2. Base64 디코딩
-   - 인코딩된 값: `RkxhZ3tMb2NhbFN0b3JhZ2VfTW9kaWZpY2F0aW9ufQ==`
-   - 디코딩된 플래그: `Flag{LocalStorage_Modification}`
+   `Flag{LocalStorage_Modification}`
 
 ## 4. 취약점 설명
 - 클라이언트 측 저장소인 LocalStorage는 사용자가 쉽게 조작 가능
@@ -42,3 +38,8 @@ localStorage.setItem('solvedCards', JSON.stringify(solvedCards));
 2. LocalStorage는 임시 데이터 저장용으로만 사용
 3. 클라이언트 데이터 사용 시 항상 서버 측 검증 수행
 4. 주기적인 데이터 동기화 및 무결성 검사 구현
+
+## 최종 플래그
+```
+Flag{LocalStorage_Modification}
+```

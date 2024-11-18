@@ -109,48 +109,91 @@
         padding: 5px 10px;
         border-radius: 3px;
     }
+
+    .sql-terminal {
+        margin-top: 3px;
+        text-align: left;
+    }
+    
+    .sql-terminal textarea {
+        width: 96%;
+        margin-bottom: 10px;
+        font-family: 'Courier New', monospace;
+        background-color: #2a2a2a;
+        color: #00ff00;
+    }
+    
+    #queryResult {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #2a2a2a;
+        border: 1px solid #00ff00;
+        min-height: 100px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
     </style>
 </head>
 <body>
     <h1>Cryptanalysis Challenge</h1>
     <div class="container">
-        <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
-        <textarea id="cipherText">
-            8f6b1ecc7d7c0377c707ec6913cbbc3d
-
-        </textarea>
-        <p>해독된 플래그를 입력하세요:</p>
-        <input type="text" id="userInput" placeholder="해독된 플래그 입력">
-    <div class="button-group">
-        <button onclick="checkFlag()">제출</button>
-        <button id="submitButton" onclick="location.href='/Flame_WarGame/Web/index.html'" style="display: none;">정답 제출하기</button>
-    </div>
     <p id="result"></p>
+
+    <div class="sql-terminal">
+        <h2>SQL 터미널</h2>
+        <textarea id="sqlQuery" placeholder="SQL 쿼리를 입력하세요..." rows="4"></textarea>
+        <button onclick="executeQuery()">쿼리 실행</button>
+        <div id="queryResult"></div>
+    </div>
     </div>
 
-    <div class="hint">
-        <p>1.Python 및 리눅스 명령어</p>
-        <p>2.해싱 및 크래킹</p>
-    </div>
 
     </div>
 
     <script>
      function checkFlag() {
         const userFlag = document.getElementById('userInput').value.trim();
-        const correctFlag = "shadows";
         const resultElement = document.getElementById('result');
         const submitButton = document.getElementById('submitButton');
 
-        if (userFlag === correctFlag) {
-            resultElement.style.color = '#00ff7f';
-            resultElement.textContent = '정답입니다!';
-            submitButton.style.display = 'inline-block'; // 정답일 때 버튼 표시
-        } else {
+        // DB에서 FLAG 값 가져오기
+        fetch('execute_query.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'query=' + encodeURIComponent(`SELECT FLAG FROM ${userTable}`)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data && data.data.length > 0) {
+                const correctFlag = data.data[0].FLAG;
+                
+                if (userFlag === correctFlag) {
+                    // config.json 파일에서 현재 문제의 answer 값 가져오기
+                    fetch('../../data/config.json')
+                    .then(response => response.json())
+                    .then(config => {
+                        const challenge = config.challenges.find(c => c.id === 25);
+                        if (challenge) {
+                            alert('정답입니다! Flag: ' + challenge.answer);
+                            resultElement.style.color = '#00ff7f';
+                            resultElement.textContent = '정답입니다!';
+                            submitButton.style.display = 'inline-block';
+                        }
+                    });
+                } else {
+                    resultElement.style.color = '#ff4d4d';
+                    resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+                    submitButton.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
             resultElement.style.color = '#ff4d4d';
-            resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-            submitButton.style.display = 'none'; // 오답일 때 버튼 숨김
-        }
+            resultElement.textContent = '오류가 발생했습니다.';
+        });
     }
 
     function toggleSSHInfo() {
@@ -160,6 +203,50 @@
         } else {
             sshInfo.style.display = 'none';
         }
+    }
+
+    function executeQuery() {
+        const query = document.getElementById('sqlQuery').value;
+        const resultDiv = document.getElementById('queryResult');
+        
+        fetch('execute_query.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'query=' + encodeURIComponent(query)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                resultDiv.innerHTML = `<span style="color: #ff4d4d;">오류: ${data.error}</span>`;
+            } else if (data.success) {
+                resultDiv.innerHTML = `<span style="color: #00ff7f;">${data.success}</span>`;
+            } else if (data.data) {
+                let output = '<table border="1" style="width:100%; border-collapse: collapse;">';
+                // 테이블 헤더 생성
+                if (data.data.length > 0) {
+                    output += '<tr>';
+                    for (let key in data.data[0]) {
+                        output += `<th style="padding: 5px;">${key}</th>`;
+                    }
+                    output += '</tr>';
+                }
+                // 데이터 행 생성
+                data.data.forEach(row => {
+                    output += '<tr>';
+                    for (let key in row) {
+                        output += `<td style="padding: 5px;">${row[key]}</td>`;
+                    }
+                    output += '</tr>';
+                });
+                output += '</table>';
+                resultDiv.innerHTML = output;
+            }
+        })
+        .catch(error => {
+            resultDiv.innerHTML = `<span style="color: #ff4d4d;">오류: ${error.message}</span>`;
+        });
     }
 
     </script>

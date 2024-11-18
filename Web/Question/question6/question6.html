@@ -79,7 +79,56 @@
         </form>
     </div>
     <div id="result" class="result"></div>
-    <script src="script.js"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+
+            fetch('question6.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.data) {
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                ${data.message}
+                                <pre>${JSON.stringify(data.data, null, 2)}</pre>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                ${data.message}
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ${data.message}
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        서버 오류가 발생했습니다.
+                    </div>
+                `;
+            });
+        });
+    </script>
 </body>
 
 </html>

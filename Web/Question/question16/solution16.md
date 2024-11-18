@@ -8,13 +8,14 @@
 ### 1. 문제 조건 분석
 입력해야 하는 SQL 명령어는 다음 조건을 충족해야 합니다:
 - 유저는 'test'@'localhost'입니다.
-- 대상 테이블은 USER_db.test입니다.
+- 대상 테이블은 userDB.test입니다.
 - 부여할 권한은 SELECT 및 DELETE입니다.
+- 대,소문자는 상관 없습니다.
 
 ### 2. 정답 SQL 명령어 작성
 이다음 SQL 명령어를 작성해야 합니다: 스크립트는 다음과 같은 작업을 수행합니다:
 ```
-GRANT SELECT, DELETE ON USER_db.test TO 'test'@'localhost';
+GRANT SELECT, DELETE ON userDB.test TO 'test'@'localhost';
 ```
 
 ### 3. 제출 및 검증

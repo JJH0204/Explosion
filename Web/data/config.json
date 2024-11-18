@@ -14,7 +14,7 @@
             "markdownFile": "mk_2.md",
             "description": "This is the second challenge.",
             "link": "./Question/question2/question2.html",
-            "answer": "flag{answer2}"
+            "answer": "FLAG{source_code_analysis}"
         },
         {
             "id": 3,
@@ -38,7 +38,7 @@
             "markdownFile": "mk_5.md",
             "description": "This is the fifth challenge.",
             "link": "./Question/question5/question5.html",
-            "answer": "flag{answer5}"
+            "answer": "Salted__~2024+secret+key+to+decrypt+flag"
         },
         {
             "id": 6,
@@ -54,7 +54,7 @@
             "markdownFile": "mk_7.md",
             "description": "This is the seventh challenge.",
             "link": "./Question/question7/question7.html",
-            "answer": "flag{answer7}"
+            "answer": "FLAG_mem{hack}"
         },
         {
             "id": 8,
@@ -70,7 +70,7 @@
             "markdownFile": "mk_9.md",
             "description": "This is the ninth challenge.",
             "link": "./Question/question9/question9.html",
-            "answer": "FLag{LocalStorage_Modification}"
+            "answer": "Flag{LocalStorage_Modification}"
         },
         {
             "id": 10,
@@ -134,7 +134,23 @@
             "markdownFile": "mk_17.md",
             "description": "This is the seventeenth challenge.",
             "link": "./Question/question17/question17.html",
-            "answer": "FLAG{sql_grant_correct}"
+            "answer": "FLAG{snake_master}"
+        },
+        {
+            "id": 18,
+            "title": "Challenge 18",
+            "markdownFile": "mk_18.md",
+            "description": "This is the eighteenth challenge.",
+            "link": "./Question/question18/question18.html",
+            "answer": "FLAG{SUBNETTING_SUCCESS}"
+        },
+        {
+            "id": 19,
+            "title": "Challenge 19",
+            "markdownFile": "mk_19.md",
+            "description": "This is the nineteenth challenge.",
+            "link": "./Question/question19/question19.html",
+            "answer": "FLAG{SUBNETTING_SUCCESS}"
         },
         {
             "id": 21,
@@ -142,39 +158,55 @@
             "markdownFile": "mk_21.md",
             "description": "This is the twenty-first challenge.",
             "link": "./Question/question21/question21.html",
-            "answer": "Challenges21flage"
+            "answer": "Flag{Le_flag}"
         },
         {
             "id": 22,
             "title": "Challenge 22",
             "markdownFile": "mk_22.md",
-            "description": "This is the twenty-first challenge.",
+            "description": "This is the twenty-second challenge.",
             "link": "./Question/question22/question22.html",
-            "answer": "shadows"
+            "answer": "Flag{hashing_practice}"
         },
         {
             "id": 23,
             "title": "Challenge 23",
             "markdownFile": "mk_23.md",
-            "description": "This is the twenty-first challenge.",
+            "description": "This is the twenty-third challenge.",
             "link": "./Question/question23/question23.html",
-            "answer": "F1rstP4sSw0rD"
+            "answer": "Flag{insecure_storage}"
         },
         {
             "id": 24,
             "title": "Challenge 24",
             "markdownFile": "mk_24.md",
-            "description": "This is the twenty-first challenge.",
+            "description": "This is the twenty-fourth challenge.",
             "link": "./Question/question24/question24.html",
-            "answer": "Challenges21flage"
+            "answer": "flag{24Challengesflag}"
         },   
         {
             "id": 25,
             "title": "Challenge 25",
-            "markdownFile": "mk_21.md",
-            "description": "This is the twenty-first challenge.",
-            "link": "./Question/question21/question21.html",
-            "answer": "Challenges21flage"
+            "markdownFile": "mk_25.md",
+            "description": "This is the twenty-fifth challenge.",
+            "link": "./Question/question25/question25.html",
+            "answer": ""
+        },
+        {
+            "id": 26,
+            "title": "Challenge 26",
+            "markdownFile": "mk_26.md",
+            "description": "This is the twenty-fifth challenge.",
+            "link": "./Question/question26/question26.html",
+            "answer": "Flag{BOMB_game}"
+        },
+        {
+            "id": 27,
+            "title": "Challenge 27",
+            "markdownFile": "mk_27.md",
+            "description": "This is the twenty-fifth challenge.",
+            "link": "./Question/question27/question27.html",
+            "answer": "flag{questionChallenges27flag}"
         }
 
     ]

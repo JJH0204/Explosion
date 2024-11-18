@@ -9,59 +9,93 @@
             background-color: #1a1a1a;
             color: #00ff00;
             font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #00ff00;
         }
         #login-form {
             display: none;
+            margin-top: 20px;
         }
         .error-msg {
             color: red;
             font-size: 12px;
         }
+        input {
+            background-color: #1a1a1a;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 5px 10px;
+            margin: 10px;
+        }
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
     <!-- 힌트1: 소스 코드를 확인하세요 -->
-    <h1>404 - Page Not Found</h1>
-    <div id="login-form">
-        <input type="password" id="auth-key" placeholder="인증 키를 입력하세요">
-        <button onclick="authenticate()">확인</button>
-        <p id="result"></p>
+    <div class="container">
+        <h1>404 - Page Not Found</h1>
+        <div id="login-form">
+            <input type="password" id="auth-key" placeholder="인증 키를 입력하세요">
+            <button onclick="authenticate()">확인</button>
+            <p id="result"></p>
+        </div>
     </div>
 
     <script>
         const _0x4e8a=['getElementById','value','auth-key','result','innerHTML','정답입니다! 플래그는: ','틀렸습니다!','display','block','login-form','에러 발생:','&amp;','&lt;','&gt;','&quot;','&#039;','aGFja2VyMTIz','hacker123','FLAG{base64_decode_success}','힌트2: 비밀 키는 Base64로 인코딩되어 있습니다.','힌트3: 개발자 도구의 콘솔에서 atob() 함수를 사용해보세요.'];
         const _0x2d4f=function(_0x4e8aa){return _0x4e8a[_0x4e8aa]};
+        // 힌트2: 비밀 키는 Base64로 인코딩되어 있습니다.
+        // 힌트3: 개발자 도구의 콘솔에서 atob() 함수를 사용해보세요.
+        console.log('힌트2: 비밀 키는 Base64로 인코딩되어 있습니다.');
+        console.log('힌트3: 개발자 도구의 콘솔에서 atob() 함수를 사용해보세요.');
 
-        console['\x6c\x6f\x67'](_0x2d4f(19));
-        console['\x6c\x6f\x67'](_0x2d4f(20));
-
-        const _0x3c7b=function(_0x3c7ba){
-            return _0x3c7ba
-                ['\x72\x65\x70\x6c\x61\x63\x65'](/&/g,_0x2d4f(11))
-                ['\x72\x65\x70\x6c\x61\x63\x65'](/</g,_0x2d4f(12))
-                ['\x72\x65\x70\x6c\x61\x63\x65'](/>/g,_0x2d4f(13))
-                ['\x72\x65\x70\x6c\x61\x63\x65'](/"/g,_0x2d4f(14))
-                ['\x72\x65\x70\x6c\x61\x63\x65'](/'/g,_0x2d4f(15));
-        };
-
-        function authenticate(){
-            const _0x1f2d=document[_0x2d4f(0)](_0x2d4f(2))[_0x2d4f(1)];
-            const _0x5b4e=document[_0x2d4f(0)](_0x2d4f(3));
+        function authenticate() {
+            const input = document.getElementById('auth-key').value;
+            const resultElement = document.getElementById('result');
             
-            try{
-                if(atob(_0x1f2d)===_0x2d4f(17)){
-                    const _0x7d9c=_0x2d4f(18);
-                    _0x5b4e[_0x2d4f(4)]=_0x2d4f(5)+_0x3c7b(_0x7d9c);
-                }else{
-                    _0x5b4e[_0x2d4f(4)]=_0x2d4f(6);
+            fetch('question3.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ input: input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultElement.style.color = '#00ff00';
+                    resultElement.textContent = '정답입니다! 플래그는: ' + data.flag;
+                } else {
+                    resultElement.style.color = '#ff0000';
+                    resultElement.textContent = '틀렸습니다!';
                 }
-            }catch(_0x9e3f){
-                console['\x6c\x6f\x67'](_0x2d4f(10),_0x9e3f);
-            }
+            })
+            .catch(error => {
+                console.log('에러 발생:', error);
+            });
         }
 
-        window['\x6f\x6e\x6c\x6f\x61\x64']=function(){
-            document[_0x2d4f(0)](_0x2d4f(9))['\x73\x74\x79\x6c\x65'][_0x2d4f(7)]=_0x2d4f(8);
+        window.onload = function() {
+            document.getElementById('login-form').style.display = 'block';
         };
     </script>
 </body>

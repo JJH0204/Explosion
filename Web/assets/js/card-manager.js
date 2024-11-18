@@ -1,13 +1,11 @@
 class CardManager {
-    constructor(gameManager, uiManager) {
-        this.gameManager = gameManager;
-        this.uiManager = uiManager;
-        this.currentPage = 0; // 기본값 설정
+    constructor() {
+        this.currentPage = parseInt(localStorage.getItem('currentCardPage')) || 0;
         this.cardsPerPage = CONFIG.GAME.CARDS_PER_PAGE;
         this.totalPages = CONFIG.GAME.TOTAL_PAGES;
         this.isAnimating = false;
+        this.solvedCards = new Set();
 
-        // DOM이 완전히 로드된 후 초기화
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 this.initializeCards();
@@ -36,7 +34,7 @@ class CardManager {
             const data = await response.json();
             
             if (data.success) {
-                this.gameManager.initializeClearedCards(data.clearedCards);
+                this.solvedCards = new Set(data.clearedCards);
             }
         } catch (error) {
             console.error('Error fetching cleared cards:', error);
@@ -77,29 +75,64 @@ class CardManager {
         card.className = 'card';
         card.dataset.id = number;
 
-        const isSolved = this.gameManager.solvedCards.has(number.toString());
+        const isSolved = this.solvedCards.has(number.toString());
         if (isSolved) {
             card.classList.add('solved');
         }
 
         card.innerHTML = `
-            <div class="card-inner" ${isSolved ? 'style="transform: rotateY(180deg)"' : ''}>
-                <div class="card-front"></div>
+            <div class="card-inner">
+                <div class="card-front">
+                    <img src="assets/images/monsters/monster_image${number}.png" alt="Monster ${number}" class="monster-image">
+                </div>
                 <div class="card-back">
-                    ${isSolved 
-                        ? `<img src="assets/images/monsters/monster_image${number}.png" alt="Monster ${number}" class="monster-image">` 
-                        : `<img src="assets/images/card_back.jpg" alt="Default card" class="default-image">`}
+                    <img src="assets/images/card_back.jpg" alt="Card Back" class="card-back-image">
                 </div>
             </div>
         `;
 
-        card.addEventListener('click', () => {
-            if (!card.classList.contains('solved')) {
-                this.gameManager.revealGame(card, `game${number}`);
+        card.addEventListener('click', () => this.handleCardClick(number, isSolved));
+        return card;
+    }
+
+    async handleCardClick(number, isSolved) {
+        try {
+            const response = await fetch(`Question/question${number}/question${number}.md`);
+            if (!response.ok) throw new Error('Question content not found');
+            
+            const content = await response.text();
+            const popup = document.getElementById('gamePopup');
+            const gameContent = document.getElementById('gameContent');
+            
+            gameContent.innerHTML = marked.parse(content);
+            popup.style.display = 'flex';
+
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            }, { once: true });
+        } catch (error) {
+            console.error('Error loading question:', error);
+            alert('문제 내용을 불러올 수 없습니다.');
+        }
+    }
+
+    showPage(pageNumber) {
+        const pages = document.querySelectorAll('.page');
+        pages.forEach((page, index) => {
+            if (index === pageNumber) {
+                page.classList.add('active');
+                page.style.display = 'grid';
+            } else {
+                page.classList.remove('active');
+                page.style.display = 'none';
             }
         });
-
-        return card;
+        
+        this.currentPage = pageNumber;
+        localStorage.setItem('currentCardPage', pageNumber);
+        this.updateArrowButtons();
     }
 
     updateArrowButtons() {
@@ -128,52 +161,18 @@ class CardManager {
             rightArrow.addEventListener('click', () => this.nextPage());
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                this.prevPage();
-            } else if (e.key === 'ArrowRight') {
-                this.nextPage();
-            }
-        });
-
-        this.updateArrowButtons();
-    }
-
-    showPage(pageNumber) {
-        if (this.isAnimating) return;
-        
-        const pages = document.querySelectorAll('.page');
-        if (!pages.length) return;
-        
-        this.isAnimating = true;
-        
-        pages.forEach((page, index) => {
-            if (index === pageNumber) {
-                page.classList.add('active');
-            } else {
-                page.classList.remove('active');
-            }
-        });
-        
-        setTimeout(() => {
-            this.isAnimating = false;
-        }, 500);
-        
-        this.currentPage = pageNumber;
         this.updateArrowButtons();
     }
 
     nextPage() {
-        if (this.currentPage < this.totalPages - 1 && !this.isAnimating) {
-            this.currentPage++;
-            this.showPage(this.currentPage);
+        if (this.currentPage < this.totalPages - 1) {
+            this.showPage(this.currentPage + 1);
         }
     }
 
     prevPage() {
-        if (this.currentPage > 0 && !this.isAnimating) {
-            this.currentPage--;
-            this.showPage(this.currentPage);
+        if (this.currentPage > 0) {
+            this.showPage(this.currentPage - 1);
         }
     }
 }

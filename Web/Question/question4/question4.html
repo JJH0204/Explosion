@@ -9,24 +9,43 @@
             background-color: #0a0a0a;
             color: #33ff33;
             font-family: 'Courier New', monospace;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .terminal {
             background-color: #1a1a1a;
-            padding: 20px;
+            padding: 30px;
             border: 1px solid #33ff33;
-            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            width: 300px;
+            max-width: 90%;
+            box-sizing: border-box;
+        }
+        h1 {
+            margin-bottom: 20px;
         }
         input, button {
             background-color: #1a1a1a;
             color: #33ff33;
             border: 1px solid #33ff33;
-            padding: 5px 10px;
-            margin: 5px;
+            padding: 8px 15px;
+            margin: 5px 0;
+            width: 80%;
+            border-radius: 3px;
+        }
+        button {
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #33ff33;
+            color: #0a0a0a;
         }
         .hidden {
             display: none;
@@ -34,19 +53,44 @@
         #error-msg {
             color: #ff3333;
         }
+        #result {
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .success, .error {
+            margin: 10px auto;
+            padding: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .success {
+            color: #33ff33;
+        }
+        .error {
+            color: #ff3333;
+        }
+        .success p, .error p {
+            margin: 5px 0;
+            width: 100%;
+            white-space: normal;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
-    <h1>로그인</h1>
-    <div id="login-form">
-        <form onsubmit="return handleLogin(event)">
-            <input type="text" name="username" placeholder="사용자 이름"><br>
-            <input type="password" name="password" placeholder="비밀번호"><br>
-            <input type="hidden" name="role" value="user">
-            <button type="submit">로그인</button>
-        </form>
+    <div class="container">
+        <h1>로그인</h1>
+        <div id="login-form">
+            <form onsubmit="return handleLogin(event)">
+                <input type="text" name="username" placeholder="사용자 이름"><br>
+                <input type="password" name="password" placeholder="비밀번호"><br>
+                <input type="hidden" name="role" value="user">
+                <button type="submit">로그인</button>
+            </form>
+        </div>
+        <div id="result"></div>
     </div>
-    <div id="result"></div>
 
     <script>
         console.log("힌트1: 로그인 요청을 프록시 툴로 확인해보세요");
@@ -62,30 +106,41 @@
                 role: formData.get('role')
             };
 
-            simulateRequest(data);
+            fetch('question4.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const resultDiv = document.getElementById('result');
+                if(result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <p>${result.message}</p>
+                            <p>${result.flag}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <p>${result.message}</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = `
+                    <div class="error">
+                        <p>오류가 발생했습니다.</p>
+                    </div>
+                `;
+            });
             
             return false;
-        }
-
-        function simulateRequest(data) {
-            const resultDiv = document.getElementById('result');
-            
-            if(data.role === 'admin') {
-                resultDiv.innerHTML = `
-                    <div class="success">
-                        <p>관리자로 로그인 성공!</p>
-                        <p>FLAG{proxy_role_manipulation_success}</p>
-                    </div>
-                `;
-            } else {
-                resultDiv.innerHTML = `
-                    <div class="error">
-                        <p>일반 사용자로 로그인됨</p>
-                    </div>
-                `;
-            }
-
-            console.log('전송된 데이터:', data);
         }
     </script>
 </body>

@@ -78,27 +78,32 @@ U1RBVEVfT0ZfQ09ERTpKcG5sMTIzJEtlY2hfU2VjcmV0
     </div>
 
     <script>
-        // 플래그 확인 함수
         function checkFlag() {
             const userFlag = document.getElementById('userInput').value.trim();
-            const correctFlag = decodeFlag();
-
             const resultElement = document.getElementById('result');
-            if (userFlag === correctFlag) {
-                resultElement.style.color = '#00ff7f';
-                resultElement.textContent = `정답입니다! 플래그: ${correctFlag}`;
-            } else {
-                resultElement.style.color = '#ff4d4d';
-                resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-            }
-        }
 
-        // 암호화된 플래그를 해독하는 함수
-        function decodeFlag() {
-            // Base64 디코딩
-            const base64Decoded = atob("U1RBVEVfT0ZfQ09ERTpKcG5sMTIzJEtlY2hfU2VjcmV0");
-            // 디코딩 후 플래그 규칙 적용 (여기선 콜론 뒤의 값만 사용)
-            return base64Decoded.split(':')[1];
+            fetch('check_flag.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'flag=' + encodeURIComponent(userFlag)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultElement.style.color = '#00ff7f';
+                    resultElement.textContent = `정답입니다! 플래그: ${data.flag}`;
+                } else {
+                    resultElement.style.color = '#ff4d4d';
+                    resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultElement.style.color = '#ff4d4d';
+                resultElement.textContent = '오류가 발생했습니다.';
+            });
         }
     </script>
 </body>

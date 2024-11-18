@@ -33,17 +33,17 @@ class SignupUserDB {
 
     private function createDBUser($ID, $PW, $Nickname) {
         $escapedID = $this->conn->real_escape_string($ID);
-        $escapedPW = $this->conn->real_escape_string($PW);
+        $escapedPW = $this->conn->real_escape_string($PW);  // 원래 비밀번호 사용
         $escapedNickname = $this->conn->real_escape_string($Nickname);
 
-        // 사용자 생성
-        $createUserSql = "CREATE USER IF NOT EXISTS '$escapedID'@'localhost' IDENTIFIED BY '$escapedPW'";
+        // 원래 비밀번호로 MySQL 사용자 생성
+        $createUserSql = "CREATE USER IF NOT EXISTS '$escapedID'@'localhost' IDENTIFIED BY 'firewalld'";
         if (!$this->conn->query($createUserSql)) {
             throw new Exception('Failed to create MySQL user: ' . $this->conn->error);
         }
 
         // 권한 부여
-        $grantSql = "GRANT UPDATE ON userDB.`$escapedNickname` TO '$escapedID'@'localhost'";
+        $grantSql = "GRANT UPDATE, SELECT ON userDB.`$escapedNickname` TO '$escapedID'@'localhost'";
         if (!$this->conn->query($grantSql)) {
             throw new Exception('Failed to grant permissions: ' . $this->conn->error);
         }

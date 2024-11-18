@@ -35,7 +35,7 @@ function showAdminPanel() {
     adminPanel.classList.remove('hidden');
 
     const flag = decrypt('U2FsdGVkX19+MjAyNCtzZWNyZXQra2V5K3RvK2RlY3J5cHQrZmxhZw==');
-    document.getElementById('admin-content').innerHTML = `축하합니다! 플래그: ${flag}`;
+    document.getElementById('admin-content').innerHTML = `축하합니다! 플래그를 찾았습니다: ${flag}`;
 }
 
 // 암호화된 플래그 복호화

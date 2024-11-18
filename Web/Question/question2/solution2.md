@@ -43,5 +43,5 @@ endLine: 65
 
 ## 최종 플래그
 ```
-flag{hidden_flag_123}
+FLAG{source_code_analysis}
 ```

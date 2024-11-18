@@ -3,85 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Grant Challenge</title>
+    <title>지렁이 게임</title>
     <style>
         body {
             background-color: #121212;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
+            color: #fff;
+            font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
         }
-        .container {
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 600px;
+        canvas {
+            display: block;
+            margin: 20px auto;
             background-color: #1e1e1e;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
+            border: 2px solid #00ff00;
         }
-        textarea {
-            background-color: #2a2a2a;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 10px;
-            width: 80%;
-            height: 100px;
-            margin-bottom: 10px;
-        }
-        button {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #33ff99;
-        }
-        #result {
-            margin-top: 20px;
-            font-size: 1.2em;
+        #score {
+            font-size: 1.5rem;
         }
     </style>
 </head>
 <body>
-    <h1>SQL Grant Challenge</h1>
-    <div class="container">
-        <p>
-            'USER_info' 테이블에 있는 사용자를 대상으로 
-            testDB.USER_info 테이블에 대한 SELECT, DELETE 권한을 부여하는 SQL 명령어를 작성하세요.
-        </p>
-        <textarea id="sqlInput" placeholder="예: GRANT SELECT, DELETE ON testDB.USER_info TO 'test';"></textarea>
-        <button onclick="submitSQL()">명령어 실행</button>
-        <p id="result"></p>
-    </div>
+    <h1>지렁이 게임</h1>
+    <p id="score">점수: 0</p>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="result" style="margin-top: 20px; font-size: 1.2em;"></div>
+
     <script>
-        async function submitSQL() {
-            const input = document.getElementById("sqlInput").value;
-            const result = document.getElementById("result");
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
+        const box = 20; // 한 칸의 크기
+        const canvasSize = canvas.width / box; // 캔버스는 box 단위로 나뉨
+
+        let snake = [{ x: 10, y: 10 }]; // 지렁이 초기 위치 (중앙)
+        let direction = "RIGHT"; // 초기 방향
+        let food = {
+            x: Math.floor(Math.random() * canvasSize),
+            y: Math.floor(Math.random() * canvasSize),
+        };
+        let score = 0;
+        let gameSpeed = 200; // 게임 속도 (ms)
+        let gameInterval;
+
+        // 음식 그리기
+        function drawFood() {
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x * box, food.y * box, box, box);
+        }
+
+        // 지렁이 그리기
+        function drawSnake() {
+            ctx.fillStyle = "#00ff00";
+            snake.forEach((segment) => {
+                ctx.fillRect(segment.x * box, segment.y * box, box, box);
+            });
+        }
+
+        // 게임 오버 확인
+        function checkCollision() {
+            // 벽 충돌 확인
+            const head = snake[0];
+            if (
+                head.x < 0 ||
+                head.y < 0 ||
+                head.x >= canvasSize ||
+                head.y >= canvasSize
+            ) {
+                return true;
+            }
+
+            // 자기 자신과 충돌 확인
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // 서버에서 플래그 가져오기
+        async function getFlag() {
             try {
-                const response = await fetch("./validate_sql.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ sql: input })
-                });
-
+                const response = await fetch('./question17.php');
                 const data = await response.json();
+                const resultElement = document.getElementById('result');
 
-                if (data.status === "success") {
-                    result.style.color = "#00ff00";
-                    result.textContent = data.message;
+                if (data.status === 'success') {
+                    resultElement.style.color = '#00ff00';
+                    resultElement.innerHTML = `축하합니다! 플래그를 획득했습니다.<br>플래그: ${data.flag}`;
                 } else {
-                    result.style.color = "#ff0000";
-                    result.textContent = data.message;
+                    resultElement.style.color = '#ff0000';
+                    resultElement.textContent = '플래그를 가져오지 못했습니다. 다시 시도해주세요.';
                 }
             } catch (error) {
-                result.style.color = "#ff0000";
-                result.textContent = "오류 발생: 서버에 연결할 수 없습니다.";
+                const resultElement = document.getElementById('result');
+                resultElement.style.color = '#ff0000';
+                resultElement.textContent = '플래그 요청 중 오류가 발생했습니다.';
             }
         }
+
+        // 게임 업데이트
+        async function updateGame() {
+            const head = { ...snake[0] };
+
+            // 방향에 따라 머리 이동
+            if (direction === "UP") head.y -= 1;
+            if (direction === "DOWN") head.y += 1;
+            if (direction === "LEFT") head.x -= 1;
+            if (direction === "RIGHT") head.x += 1;
+
+            snake.unshift(head);
+
+            // 음식 먹었는지 확인
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                document.getElementById("score").textContent = `점수: ${score}`;
+                // 새로운 음식 생성
+                food = {
+                    x: Math.floor(Math.random() * canvasSize),
+                    y: Math.floor(Math.random() * canvasSize),
+                };
+
+                // 10점이 되면 플래그를 표시하지만 게임은 계속 진행
+                if (score === 10) {
+                    await getFlag(); // 서버에서 플래그 가져오기
+                }
+            } else {
+                snake.pop();
+            }
+
+            // 충돌 확인
+            if (checkCollision()) {
+                clearInterval(gameInterval);
+                const resultElement = document.getElementById('result');
+                // 이미 플래그가 표시되어 있다면 그대로 유지하고, 게임오버 메시지만 위에 추가
+                if (!resultElement.textContent.includes('플래그')) {
+                    resultElement.style.color = '#ff0000';
+                    resultElement.textContent = `게임 오버! 최종 점수: ${score}`;
+                }
+            }
+        }
+
+        // 방향 업데이트
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+            if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+            if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+            if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+        });
+
+        // 게임 루프
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 캔버스 초기화
+            drawFood(); // 음식 그리기
+            drawSnake(); // 지렁이 그리기
+            updateGame(); // 게임 업데이트
+        }
+
+        // 게임 시작
+        function startGame() {
+            gameInterval = setInterval(gameLoop, gameSpeed); // 게임 루프 실행
+        }
+
+        startGame();
     </script>
 </body>
 </html>

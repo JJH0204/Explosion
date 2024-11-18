@@ -30,6 +30,7 @@
             width: 80%;
             margin-bottom: 10px;
             resize: none;
+            text-align: center;
         }
 
         button {
@@ -109,23 +110,30 @@
         padding: 5px 10px;
         border-radius: 3px;
     }
+
+    input {
+        background-color: #2a2a2a !important;
+        color: #00ff00 !important;
+    }
+
+    input:focus {
+        background-color: #2a2a2a !important;
+        color: #00ff00 !important;
+        outline: none;
+    }
     </style>
 </head>
 <body>
     <h1>Cryptanalysis Challenge</h1>
     <div class="container">
         <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
-        <textarea id="cipherText">
-            8f6b1ecc7d7c0377c707ec6913cbbc3d
-
-        </textarea>
+        <textarea id="cipherText" readonly style="width: 50%; text-align: center;">8f6b1ecc7d7c0377c707ec6913cbbc3d</textarea>
         <p>해독된 플래그를 입력하세요:</p>
-        <input type="text" id="userInput" placeholder="해독된 플래그 입력">
-    <div class="button-group">
-        <button onclick="checkFlag()">제출</button>
-        <button id="submitButton" onclick="location.href='/Flame_WarGame/Web/index.html'" style="display: none;">정답 제출하기</button>
-    </div>
-    <p id="result"></p>
+        <input type="text" id="userInput" placeholder="해독된 플래그 입력" style="display: block; width: 30%; margin: 10px auto; padding: 10px; text-align: center; background-color: #2a2a2a; color: #00ff00; border: 1px solid #00ff00; outline: none;">
+        <div class="button-group">
+            <button onclick="checkFlag()">제출</button>
+        </div>
+        <p id="result"></p>
     </div>
 
     <div class="hint">
@@ -136,22 +144,34 @@
     </div>
 
     <script>
-     function checkFlag() {
-        const userFlag = document.getElementById('userInput').value.trim();
-        const correctFlag = "shadows";
-        const resultElement = document.getElementById('result');
-        const submitButton = document.getElementById('submitButton');
+        async function checkFlag() {
+            const userFlag = document.getElementById('userInput').value.trim();
+            const resultElement = document.getElementById('result');
 
-        if (userFlag === correctFlag) {
-            resultElement.style.color = '#00ff7f';
-            resultElement.textContent = '정답입니다!';
-            submitButton.style.display = 'inline-block'; // 정답일 때 버튼 표시
-        } else {
-            resultElement.style.color = '#ff4d4d';
-            resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-            submitButton.style.display = 'none'; // 오답일 때 버튼 숨김
+            try {
+                const response = await fetch('question22.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: 'flag=' + encodeURIComponent(userFlag)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultElement.style.color = '#00ff7f';
+                    resultElement.textContent = `정답입니다! 플래그: ${data.flag}`;
+                } else {
+                    resultElement.style.color = '#ff4d4d';
+                    resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+                }
+            } catch (error) {
+                resultElement.style.color = '#ff4d4d';
+                resultElement.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+            }
         }
-    }
 
     function toggleSSHInfo() {
         const sshInfo = document.getElementById('sshInfo');

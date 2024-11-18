@@ -44,7 +44,8 @@
     
     <div class="challenge-box">
         <h2>문제 설명</h2>
-        <p>이 페이지에 숨겨진 플래그를 찾으세요. 힌트: 페이지 소스를 확인해보세요!</p>
+        <p>이 페이지에 숨겨진 플래그를 찾으세요.</p>
+        <p>힌트: 페이지 소스를 확인해보세요!</p>
         
         <!-- 힌트: flag는 'hidden_flag_123' -->
         <input type="password" id="flagInput" placeholder="플래그를 입력하세요">
@@ -53,20 +54,32 @@
     </div>
 
     <script>
-        // 실제 플래그 값을 저장
-        const correctFlag = 'hidden_flag_123';
-        
         function checkFlag() {
             const input = document.getElementById('flagInput').value;
             const messageDiv = document.getElementById('message');
             
-            if (input === correctFlag) {
-                messageDiv.style.color = '#00ff00';
-                messageDiv.textContent = '축하합니다! 정답입니다!';
-            } else {
+            fetch('question2.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ flag: input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.style.color = '#00ff00';
+                    messageDiv.textContent = data.message + ': ' + data.flag;
+                } else {
+                    messageDiv.style.color = '#ff0000';
+                    messageDiv.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 messageDiv.style.color = '#ff0000';
-                messageDiv.textContent = '틀렸습니다. 다시 시도해보세요.';
-            }
+                messageDiv.textContent = '오류가 발생했습니다.';
+            });
         }
     </script>
 </body>

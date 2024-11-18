@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 35%;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result, #flag {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .task-group {
+            margin: 15px 0;
+        }
+
+        .task-group input {
+            margin-bottom: 5px;
+        }
+
+        .task-group span {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Routing Challenge</h1>
+    <div class="container">
+        <p>
+            아래 네트워크 토폴로지를 참고하여 다음 질문을 해결하세요.<br>
+            모든 문제를 정확히 풀어야 플래그를 획득할 수 있습니다.
+        </p>
+        <h3>네트워크 토폴로지</h3>
+        <pre>
+           OSPF 영역 0                          RIP 네트워크
+        +-------------------+           +-------------------+
+        |                   |           |                   |
+      [PC1]--192.168.1.0/24-[R1]-------[R2]--10.0.0.0/8----[R3]
+                (OSPF)                  (Redistribution)      (RIP)
+        </pre>
+
+        <h3>문제 1</h3>
+        <p>R1에서 OSPF를 설정하여 네트워크 <code>192.168.1.0/24</code>를 라우팅하세요.</p>
+        <div class="task-group">
+            <input type="text" id="task1Command1" placeholder="R1 OSPF 명령어 1">
+            <input type="text" id="task1Command2" placeholder="R1 OSPF 명령어 2">
+        </div>
+
+        <h3>문제 2</h3>
+        <p>R2에서 OSPF와 RIP 간 경로를 재분배(Redistribution)하세요.</p>
+        <div class="task-group">
+            <input type="text" id="task2Command1" placeholder="R2 Redistribution 명령어 1">
+            <input type="text" id="task2Command2" placeholder="R2 Redistribution 명령어 2">
+        </div>
+
+        <h3>문제 3</h3>
+        <p>R3에서 RIP를 설정하여 네트워크 <code>10.0.0.0/8</code>를 라우팅하세요.</p>
+        <div class="task-group">
+            <input type="text" id="task3Command1" placeholder="R3 RIP 명령어 1">
+            <input type="text" id="task3Command2" placeholder="R3 RIP 명령어 2">
+        </div>
+
+        <h3>문제 4</h3>
+        <p>PC1에서 PC2(10.0.0.2)로 <code>ping</code> 테스트를 성공시키기 위해 설정해야 할 명령어는 무엇인가요?</p>
+        <div class="task-group">
+            <input type="text" id="task4Command" placeholder="라우팅 명령어">
+        </div>
+
+        <button onclick="submitTasks()">제출</button>
+        <p id="result"></p>
+        <p id="flag"></p>
+    </div>
+
+    <script>
+        async function submitTasks() {
+            const inputs = {
+                task1Command1: document.getElementById('task1Command1').value.trim(),
+                task1Command2: document.getElementById('task1Command2').value.trim(),
+                task2Command1: document.getElementById('task2Command1').value.trim(),
+                task2Command2: document.getElementById('task2Command2').value.trim(),
+                task3Command1: document.getElementById('task3Command1').value.trim(),
+                task3Command2: document.getElementById('task3Command2').value.trim(),
+                task4Command: document.getElementById('task4Command').value.trim()
+            };
+
+            const response = await fetch("./routing_challenge.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(inputs)
+            });
+
+            const result = await response.json();
+
+            const resultElement = document.getElementById('result');
+            const flagElement = document.getElementById('flag');
+
+            if (result.status === "success") {
+                resultElement.style.color = '#00ff00';
+                resultElement.textContent = '모든 문제를 정확히 해결했습니다!';
+                flagElement.style.color = '#00ff00';
+                flagElement.textContent = `플래그: ${result.flag}`;
+            } else {
+                resultElement.style.color = '#ff0000';
+                resultElement.textContent = '틀린 답이 있습니다. 모든 문제를 맞춰야 플래그가 생성됩니다.';
+                flagElement.textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>

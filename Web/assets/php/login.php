@@ -45,7 +45,8 @@ try {
                 $_SESSION['user_id'] = $user['ID'];
                 $_SESSION['nickname'] = $user['NICKNAME'];
                 $_SESSION['logged_in'] = true;
-                
+              
+
                 echo json_encode(['success' => true]);
             } else {
                 error_log("Password verification failed for user: " . $ID);

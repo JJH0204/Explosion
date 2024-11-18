@@ -73,7 +73,7 @@
             if (input === secretKey) {
                 const flag = decryptFlag();
                 result.style.color = '#00ff00';
-                result.textContent = `플래그: ${flag}`;
+                result.innerHTML = `축하합니다. 숨겨진 플래그를 찾았습니다.<br>플래그: ${flag}`;
             } else {
                 result.style.color = '#ff0000';
                 result.textContent = '암호가 틀렸습니다. 다시 시도하세요.';

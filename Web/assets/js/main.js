@@ -1,34 +1,3 @@
-// 로그인 상태 체크 함수
-async function checkLoginStatus() {
-    try {
-        const response = await fetch('assets/php/checkSession.php');
-        const data = await response.json();
-        if (!data.success) {
-            window.location.href = 'login.html';
-            return false;
-        }
-        return true;
-    } catch (error) {
-        console.error('Login check failed:', error);
-        window.location.href = 'login.html';
-        return false;
-    }
-}
-
-// 로그아웃 함수 수정
-async function logout() {
-    try {
-        const response = await fetch('assets/php/logout.php');
-        const data = await response.json();
-        if (data.success) {
-            // 캐시 제거 및 히스토리 관리
-            window.location.replace('login.html'); // replace를 사용하여 히스토리에서 현재 페이지 제거
-        }
-    } catch (error) {
-        console.error('Logout failed:', error);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     // 뒤로가기 방지
     window.history.pushState(null, null, window.location.href);
@@ -46,9 +15,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const isLoggedIn = await checkLoginStatus();
     if (!isLoggedIn) return;
 
-    const uiManager = new UIManager();
-    const gameManager = new GameManager();
-    const cardManager = new CardManager(gameManager, uiManager);
+    // 카드 매니저 초기화 (admin-main.js 방식으로 변경)
+    const cardManager = new CardManager();
+    window.cardManager = cardManager; // 전역 접근을 위해 window 객체에 할당
 
     // 사용자 정보 업데이트 함수
     async function updateUserInfo() {
@@ -92,7 +61,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 로그아웃 버튼 이벤트 리스너 수정
+    // 초기 데이터 로드
+    updateUserInfo();
+    updateRanking();
+    
+    // 주기적 업데이트 설정
+    setInterval(updateRanking, 30000);
+    setInterval(updateUserInfo, 30000);
+
+    // 로그아웃 버튼 이벤트 리스너
     document.getElementById('logoutBtn').addEventListener('click', logout);
 
     // 이벤트 버튼 이벤트 리스너
@@ -100,3 +77,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('이벤트 준비중입니다!');
     });
 });
+
+// 로그인 상태 체크 함수
+async function checkLoginStatus() {
+    try {
+        const response = await fetch('assets/php/checkSession.php');
+        const data = await response.json();
+        if (!data.success) {
+            window.location.href = 'login.html';
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Login check failed:', error);
+        window.location.href = 'login.html';
+        return false;
+    }
+}
+
+// 로그아웃 함수 수정
+async function logout() {
+    try {
+        const response = await fetch('assets/php/logout.php');
+        const data = await response.json();
+        if (data.success) {
+            // 캐시 제거 및 히스토리 관리
+            window.location.replace('login.html'); // replace를 사용하여 히스토리에서 현재 페이지 제거
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
+
+// 로그아웃 함수
+async function logout() {
+    try {
+        const response = await fetch('assets/php/logout.php');
+        const data = await response.json();
+        if (data.success) {
+            window.location.replace('login.html');
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}

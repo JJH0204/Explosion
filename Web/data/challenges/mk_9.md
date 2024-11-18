@@ -5,19 +5,15 @@
 개발자 도구를 활용하여 LocalStorage의 값을 조작해보세요.
 
 ## 입력 조건
-- LocalStorage의 'solvedCards' 키에 저장된 값을 수정해야 합니다
-- 스테이지 9를 클리어한 것처럼 값을 조작해야 합니다
-- 배열 형식의 JSON 문자열이어야 합니다 (예: ["1","2","9"])
+- LocalStorage의 'solvedCards' 키에 저장된 값을 수정해야 합니다.
+- 스테이지 9를 클리어한 것처럼 값을 조작해야 합니다.
 
 ## 출력 조건
-올바른 방법으로 LocalStorage를 조작하면 Base64로 인코딩된 플래그가 출력됩니다.
+올바른 방법으로 LocalStorage를 조작하면 플래그가 출력됩니다.
 
 ## 힌트
-1. 브라우저의 개발자 도구(F12)를 사용해보세요
-2. Application 탭에서 LocalStorage를 찾아보세요
-3. solvedCards 값에 스테이지 9를 추가해보세요
-
-## 플래그 형식
-플래그는 Base64로 인코딩되어 있으며, 디코딩하면 Flag{...} 형식입니다.
+1. 브라우저의 개발자 도구(F12)를 사용해보세요.
+2. Application 탭에서 LocalStorage를 찾아보세요.
+3. solvedCards 값에 스테이지 9를 추가해보세요.
 
 ---

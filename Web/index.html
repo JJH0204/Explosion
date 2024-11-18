@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="assets/styles/cards.css">
     <link rel="stylesheet" href="assets/styles/popup.css">
     <link rel="stylesheet" href="assets/styles/markdown.css">
+    <!-- <link rel="stylesheet" href="assets/styles/admin.css"> -->
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -68,7 +70,7 @@
 
         <main class="main-content">
             <div class="cards-container">
-                <div id="challengeGrid">
+                <div id="challengeGrid" class="cards-grid">
                     <!-- 카드들이 여기에 동적으로 추가됩니다 -->
                 </div>
             </div>
@@ -88,13 +90,16 @@
         </div>
     </div>
 
+
     <script src="assets/js/config.js"></script>
-    <script src="assets/js/ui-manager.js"></script>
-    <script src="assets/js/game-manager.js"></script>
-    <script src="assets/js/card-manager.js"></script>
+    <!-- <script src="assets/js/ui-manager.js"></script> TODO: 버그 수정 -->
+    <!-- <script src="assets/js/game-manager.js"></script> TODO: 버그 수정 -->
+    <!-- <script src="assets/js/card-manager.js"></script> TODO: 버그 수정 -->
     <script src="assets/js/ranking.js"></script>
     <script src="assets/js/userinfo.js"></script>
     <script src="assets/js/main.js"></script>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let isImageChanged = false;  // 이미지 변경 여부를 추적하는 플래그
@@ -106,7 +111,7 @@
                     const characterImage = document.getElementById('character-image');
                     const timestamp = new Date().getTime(); // 캐시 방지를 위한 타임스탬프
                     const customImagePath = `assets/images/custom/${nickname}.png?t=${timestamp}`;
-                    
+
                     // 이미지 존재 여부 확인
                     fetch(customImagePath, { method: 'HEAD' })
                         .then(response => {
@@ -126,31 +131,31 @@
             function checkImage(img) {
                 const imageExtRegex = /\.(jpg|jpeg|png|gif)$/i;
                 const nickname = document.getElementById('player-nickname').textContent;
-                
+
                 if (nickname && nickname !== '로딩중...' && imageExtRegex.test(img.src)) {
                     // 기본 이미지(character.png)와 다른 경우에만 저장
                     if (!img.src.includes('character.png')) {
                         const formData = new FormData();
                         formData.append('imageUrl', img.src);
                         formData.append('nickname', nickname);
-                        
+
                         fetch('assets/php/save-image.php', {
                             method: 'POST',
                             body: formData
                         })
-                        .then(response => response.json())  // JSON 응답을 파싱
-                        .then(data => {
-                            console.log(data); // 디버깅을 위해 응답 데이터 출력
-                            if (data.status === 'success') {
-                                alert('이미지가 성공적으로 변경되었습니다!\n플래그: ' + data.flag);
-                            } else {
-                                alert('이미지 저장에 실패했습니다.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('오류가 발생했습니다.');
-                        });
+                            .then(response => response.json())  // JSON 응답을 파싱
+                            .then(data => {
+                                console.log(data); // 디버깅을 위해 응답 데이터 출력
+                                if (data.status === 'success') {
+                                    alert('이미지가 성공적으로 변경되었습니다!\n플래그: ' + data.flag);
+                                } else {
+                                    alert('이미지 저장에 실패했습니다.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('오류가 발생했습니다.');
+                            });
                     }
                 }
             }
@@ -202,12 +207,12 @@
                 const nickname = document.getElementById('player-nickname').textContent;
                 if (nickname && nickname !== '로딩중...') {
                     const solvedCards = JSON.parse(localStorage.getItem('solvedCards') || '[]');
-                    
+
                     if (solvedCards.includes('9')) {
                         try {
                             const response = await fetch('assets/php/check_storage.php?flag=localstorage');
                             const data = await response.json();
-                            
+
                             if (data.success) {
                                 alert(data.message);
                                 updateGameProgress(); // 점수와 진행상황 업데이트

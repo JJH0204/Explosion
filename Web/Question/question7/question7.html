@@ -184,7 +184,7 @@
                 this.updateStatus('메모리 수정 완료');
             }
 
-            execute() {
+            async execute() {
                 this.updateStatus('실행 중...');
                 
                 // 메모리 상태 검증
@@ -198,9 +198,9 @@
                     }
                 }
 
-                setTimeout(() => {
+                setTimeout(async () => {
                     if(validExec) {
-                        const flag = this.decodeFlag();
+                        const flag = await this.decodeFlag();
                         this.updateStatus(`성공! Flag: ${flag}`);
                     } else {
                         this.updateStatus('실행 실패. 메모리 상태가 올바르지 않습니다.');
@@ -208,11 +208,21 @@
                 }, 1000);
             }
 
-            decodeFlag() {
-                // XOR 복호화
-                const key = 0xFF;
-                const encoded = [0x7F, 0x6E, 0x61, 0x67, 0x7B, 0x6D, 0x65, 0x6D, 0x5F, 0x68, 0x61, 0x63, 0x6B, 0x7D];
-                return 'FLAG_' + encoded.map(b => String.fromCharCode(b ^ key)).join('');
+            async decodeFlag() {
+                try {
+                    const response = await fetch('question7.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ action: 'decode_flag' })
+                    });
+                    const data = await response.json();
+                    return data.flag;
+                } catch (error) {
+                    console.error('Error:', error);
+                    return 'Error decoding flag';
+                }
             }
         }
 

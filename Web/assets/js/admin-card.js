@@ -1,6 +1,6 @@
 class AdminCardManager {
     constructor() {
-        this.currentPage = 0;
+        this.currentPage = parseInt(localStorage.getItem('adminCurrentPage')) || 0;
         this.cardsPerPage = CONFIG.GAME.CARDS_PER_PAGE;
         this.totalPages = CONFIG.GAME.TOTAL_PAGES;
         this.isAnimating = false;
@@ -67,14 +67,42 @@ class AdminCardManager {
             <div class="card-inner">
                 <div class="card-front">
                     <img src="assets/images/monsters/monster_image${number}.png" alt="Monster ${number}" class="monster-image">
+                    <h3>문제 ${number}</h3>
+                    <p>Solution</p>
                 </div>
                 <div class="card-back">
                     <img src="assets/images/monsters/monster_image${number}.png" alt="Monster ${number}" class="monster-image">
+                    <h3>문제 ${number}</h3>
+                    <p>풀이 보기</p>
                 </div>
             </div>
         `;
 
+        card.addEventListener('click', () => this.showSolution(number));
         return card;
+    }
+
+    async showSolution(number) {
+        try {
+            const response = await fetch(`Question/question${number}/solution${number}.md`);
+            if (!response.ok) throw new Error('Solution not found');
+            
+            const content = await response.text();
+            const popup = document.getElementById('gamePopup');
+            const gameContent = document.getElementById('gameContent');
+            
+            gameContent.innerHTML = marked.parse(content);
+            popup.style.display = 'flex';
+
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        } catch (error) {
+            console.error('Error loading solution:', error);
+            alert('솔루션을 불러올 수 없습니다.');
+        }
     }
 
     updateArrowButtons() {
@@ -135,6 +163,7 @@ class AdminCardManager {
         }, 500);
         
         this.currentPage = pageNumber;
+        localStorage.setItem('adminCurrentPage', pageNumber);
         this.updateArrowButtons();
     }
 
@@ -142,6 +171,7 @@ class AdminCardManager {
         if (this.currentPage < this.totalPages - 1 && !this.isAnimating) {
             this.currentPage++;
             this.showPage(this.currentPage);
+            localStorage.setItem('adminCurrentPage', this.currentPage);
         }
     }
 
@@ -149,6 +179,7 @@ class AdminCardManager {
         if (this.currentPage > 0 && !this.isAnimating) {
             this.currentPage--;
             this.showPage(this.currentPage);
+            localStorage.setItem('adminCurrentPage', this.currentPage);
         }
     }
 } 

@@ -51,5 +51,5 @@ Python 및 리눅스 명령어: 해시 크래킹과 분석 작업을 수행하�
 
 ## 최종 플래그
 ```
-shadows
+Flag{hashing_practice}
 ```
