@@ -1,246 +1,128 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureBank - 관리자 시스템</title>
+    <title>login</title>
     <style>
         body {
-            background-color: #000;
-            color: #0f0;
-            font-family: monospace;
-            margin: 0;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
             padding: 20px;
         }
-        .terminal {
-            background-color: #111;
-            border: 1px solid #0f0;
-            padding: 20px;
-            margin: 10px;
-            height: 400px;
-            overflow-y: auto;
-        }
-        .input-line {
-            display: flex;
+
+        .panel {
+            background-color: #1a1a1a;
+            border: 1px solid #00ff00;
+            padding: 15px;
             margin: 10px 0;
         }
-        .prompt {
-            color: #0f0;
-            margin-right: 10px;
+
+        input,
+        textarea {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px;
+            margin: 5px 0;
+            width: 100%;
         }
-        input {
-            background-color: transparent;
+
+        button {
+            background-color: #00ff00;
+            color: #000;
             border: none;
-            color: #0f0;
-            flex: 1;
-            font-family: monospace;
-            outline: none;
+            padding: 8px 15px;
+            cursor: pointer;
         }
-        .error { color: #f00; }
-        .success { color: #0f0; }
-        .hidden { display: none; }
+
+        .message-board {
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
+
 <body>
-    <div class="terminal" id="main-terminal">
-        <div id="output"></div>
-        <div class="input-line">
-            <span class="prompt">$</span>
-            <input type="text" id="command-input" autocomplete="off">
-        </div>
+    <h1>User Login</h1>
+    <div class="login-form">
+        <form id="loginForm">
+            <div>
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div style="margin-top: 10px;">
+                <button type="submit">Login</button>
+            </div>
+        </form>
     </div>
+    <div id="result" class="result"></div>
 
     <script>
-        // 난독화된 시스템 코드
-        const _0x5f2a=['log','응답','명령어를','실행중...','help','clear','connect','analyze','decrypt','exit','시스템','명령어:','help:','모든','명령어','표시','clear:','화면','초기화','connect:','서버에','연결','analyze:','시스템','분석','decrypt:','암호화된','데이터','복호화','exit:','프로그램','종료'];
-        
-        // 암호화된 플래그
-        const encryptedFlag = 'fKd9c2hpZnRfY2lwaGVyX2lzX25vdF9zZWN1cmV9';
-        
-        // WebSocket 서버 주소 (실제로는 작동하지 않음)
-        const wsServer = 'ws://localhost:8080';
-        
-        // 시스템 상태
-        let systemState = {
-            connected: false,
-            analyzed: false,
-            decrypted: false,
-            attempts: 0
-        };
+        // 가상의 데이터베이스 테이블
+        const users = [
+            { id: 1, username: 'admin', password: 'admin123', isAdmin: true },
+            { id: 2, username: 'user1', password: 'password123', isAdmin: false },
+            { id: 3, username: 'user2', password: 'password456', isAdmin: false }
+        ];
 
-        // 명령어 처리기
-        class CommandProcessor {
-            constructor() {
-                this.commands = new Map();
-                this.initCommands();
-                this.outputDiv = document.getElementById('output');
-                this.commandInput = document.getElementById('command-input');
-                this.setupEventListeners();
-            }
+        // SQL 쿼리 시뮬레이션 함수
+        function simulateSQL(username, password) {
+            const query = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
+            console.log('실행된 쿼리:', query);
 
-            initCommands() {
-                this.commands.set('help', () => this.showHelp());
-                this.commands.set('clear', () => this.clearScreen());
-                this.commands.set('connect', () => this.connect());
-                this.commands.set('analyze', () => this.analyze());
-                this.commands.set('decrypt', () => this.decrypt());
-                this.commands.set('exit', () => this.exit());
-            }
-
-            setupEventListeners() {
-                this.commandInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        const command = this.commandInput.value.trim().toLowerCase();
-                        this.processCommand(command);
-                        this.commandInput.value = '';
-                    }
-                });
-            }
-
-            processCommand(command) {
-                this.print(`$ ${command}`);
-                
-                if (this.commands.has(command)) {
-                    this.commands.get(command)();
-                } else {
-                    this.print('알 수 없는 명령어입니다. "help"를 입력하여 도움말을 확인하세요.', 'error');
-                }
-            }
-
-            print(message, className = '') {
-                const div = document.createElement('div');
-                div.textContent = message;
-                if (className) div.className = className;
-                this.outputDiv.appendChild(div);
-                this.outputDiv.scrollTop = this.outputDiv.scrollHeight;
-            }
-
-            showHelp() {
-                this.print('사용 가능한 명령어:');
-                this.print('  help    - 도움말 표시');
-                this.print('  clear   - 화면 지우기');
-                this.print('  connect - 서버 연결');
-                this.print('  analyze - 시스템 분석');
-                this.print('  decrypt - 데이터 복호화');
-                this.print('  exit    - 프로그램 종료');
-            }
-
-            clearScreen() {
-                this.outputDiv.innerHTML = '';
-            }
-
-            connect() {
-                if (systemState.connected) {
-                    this.print('이미 연결되어 있습니다.', 'error');
-                    return;
-                }
-
-                this.print('서버에 연결 시도중...');
-                
-                // 가짜 WebSocket 연결 시뮬레이션
-                setTimeout(() => {
-                    systemState.connected = true;
-                    this.print('연결 성공!', 'success');
-                    // 숨겨진 힌트
-                    console.log('힌트: XOR 키는 시스템 시간과 관련이 있습니다.');
-                }, 1500);
-            }
-
-            analyze() {
-                if (!systemState.connected) {
-                    this.print('먼저 서버에 연결하세요.', 'error');
-                    return;
-                }
-
-                this.print('시스템 분석 중...');
-                
-                setTimeout(() => {
-                    systemState.analyzed = true;
-                    this.print('분석 완료!', 'success');
-                    this.print('발견된 암호화 알고리즘: XOR with Time-based key');
-                }, 2000);
-            }
-
-            decrypt() {
-                if (!systemState.analyzed) {
-                    this.print('먼저 시스템을 분석하세요.', 'error');
-                    return;
-                }
-
-                systemState.attempts++;
-                
-                if (systemState.attempts === 3) {
-                    console.log('힌트: 현재 시간(초)를 키로 사용해보세요.');
-                }
-
-                this.print('복호화 시도 중...');
-                
-                // 복호화 로직
-                try {
-                    const currentTime = Math.floor(Date.now() / 1000);
-                    const key = currentTime % 60; // 현재 초를 키로 사용
-                    
-                    if (this.attemptDecryption(key)) {
-                        this.print('복호화 성공!', 'success');
-                        const flag = this.getFlag(key);
-                        this.print(`플래그: ${flag}`, 'success');
-                        systemState.decrypted = true;
-                    } else {
-                        this.print('복호화 실패. 다시 시도하세요.', 'error');
-                    }
-                } catch (e) {
-                    this.print('오류가 발생했습니다.', 'error');
-                }
-            }
-
-            attemptDecryption(key) {
-                // XOR 복호화 검증
-                const testVector = [65, 66, 67, 68];
-                const encrypted = testVector.map(b => b ^ key);
-                const decrypted = encrypted.map(b => b ^ key);
-                return JSON.stringify(testVector) === JSON.stringify(decrypted);
-            }
-
-            getFlag(key) {
-                // Base64 디코딩 후 XOR 복호화
-                const decoded = atob(encryptedFlag);
-                return Array.from(decoded)
-                    .map(c => String.fromCharCode(c.charCodeAt(0) ^ key))
-                    .join('');
-            }
-
-            exit() {
-                this.print('프로그램을 종료합니다...');
-                setTimeout(() => {
-                    window.close();
-                }, 1000);
+            try {
+                // SQL 인젝션 취약점이 있는 검증 로직
+                let result = eval(`users.find(u => u.username === '${username}' && u.password === '${password}')`);
+                return { success: true, query: query, result: result };
+            } catch (error) {
+                return { success: false, query: query, error: error.message };
             }
         }
 
-        // 시스템 초기화
-        const processor = new CommandProcessor();
-        processor.print('SecureBank 관리자 시스템 v2.0');
-        processor.print('시작하려면 "help" 를 입력하세요.');
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        // 추가 보안 조치
-        setInterval(() => {
-            if (systemState.attempts > 10) {
-                processor.print('너무 많은 시도. 시스템을 재시작합니다.', 'error');
-                location.reload();
-            }
-        }, 1000);
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
 
-        // Anti-debugging
-        (function(){
-            const start = new Date();
-            debugger;
-            const end = new Date();
-            if (end - start > 100) {
-                console.clear();
-                alert('디버거 감지됨!');
-                location.reload();
+            const queryResult = simulateSQL(username, password);
+
+            if (queryResult.success && queryResult.result) {
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        로그인 성공!<br>
+                        사용자: ${queryResult.result.username}<br>
+                        관리자 권한: ${queryResult.result.isAdmin ? 'Yes' : 'No'}
+                    </div>
+                    <div>실행된 쿼리: ${queryResult.query}</div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        로그인 실패!<br>
+                        ${queryResult.error ? '오류: ' + queryResult.error : '잘못된 사용자명 또는 비밀번호'}
+                    </div>
+                    <div>실행된 쿼리: ${queryResult.query}</div>
+                `;
             }
-        })();
+        });
     </script>
 </body>
+
 </html>

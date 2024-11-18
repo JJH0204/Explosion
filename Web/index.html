@@ -35,11 +35,14 @@
                     <img src="assets/images/character.png" alt="Character" class="character-image">
                 </div>
                 <div class="character-info">
-                    <div class="level-info">
-                        <p>랭킹: <span id="current-level">-</span></p>
-                    </div>
                     <div class="character-name">
                         <p id="player-nickname">로딩중...</p>
+                    </div>
+                    <div class="rank-info">
+                        <p>랭킹: <span id="current-level">-</span> 위</p>
+                    </div>
+                    <div class="score-info">
+                        <p>점수: <span id="player-score">-</span> pt</p>
                     </div>
                 </div>
             </div>
@@ -67,10 +70,11 @@
                 </div>
             </div>
         </main>
+        
+        <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
+        <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
     </div>
-
-    <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
-    <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
+    
 
     <!-- marked.js 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

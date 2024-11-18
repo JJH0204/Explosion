@@ -19,13 +19,13 @@ if ($conn->connect_error) {
     ]));
 }
 
-// user_id와 username 모두 확인
-if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
+// user_id와 nickname 모두 확인
+if (isset($_SESSION['user_id']) && isset($_SESSION['nickname'])) {
     $user_id = $_SESSION['user_id'];
-    $nickname = $_SESSION['username'];
+    $nickname = $_SESSION['nickname'];
     
-    // Score 테이블에서 사용자 정보 조회
-    $stmt = $conn->prepare("SELECT NICKNAME, SCORE, STRAGE FROM Score WHERE NICKNAME = ?");
+    // SCORE 테이블에서 사용자 정보 조회
+    $stmt = $conn->prepare("SELECT NICKNAME, SCORE, STAGE FROM SCORE WHERE NICKNAME = ?");
     if (!$stmt) {
         error_log("Prepare failed: " . $conn->error);
         die(json_encode(['success' => false, 'error' => 'Query prepare failed']));
@@ -38,20 +38,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
     if ($result->num_rows > 0) {
         $user_data = $result->fetch_assoc();
     } else {
-        // Score 테이블에 사용자 정보가 없으면 새로 추가
-        $insert_stmt = $conn->prepare("INSERT INTO Score (NICKNAME, SCORE, STRAGE) VALUES (?, 0, 1)");
+        // SCORE 테이블에 사용자 정보가 없으면 새로 추가
+        $insert_stmt = $conn->prepare("INSERT INTO SCORE (NICKNAME, SCORE, STAGE) VALUES (?, 0, 1)");
         $insert_stmt->bind_param("s", $nickname);
         $insert_stmt->execute();
         
         $user_data = [
             'NICKNAME' => $nickname,
             'SCORE' => 0,
-            'STRAGE' => 1
+            'STAGE' => 1
         ];
     }
     
     // 전체 랭킹에서 사용자의 순위 계산
-    $rank_query = "SELECT COUNT(*) + 1 as rank FROM Score WHERE SCORE > ?";
+    $rank_query = "SELECT COUNT(*) + 1 as rank FROM SCORE WHERE SCORE > ?";
     $rank_stmt = $conn->prepare($rank_query);
     $rank_stmt->bind_param("i", $user_data['SCORE']);
     $rank_stmt->execute();
@@ -63,7 +63,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
         'data' => [
             'nickname' => $user_data['NICKNAME'],
             'score' => $user_data['SCORE'],
-            'stage' => $user_data['STRAGE'],
+            'stage' => $user_data['STAGE'],
             'rank' => $rank_data['rank']
         ]
     ]);

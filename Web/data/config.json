@@ -55,6 +55,14 @@
             "description": "This is the seventh challenge.",
             "link": "./Question/question7/question7.html",
             "answer": "flag{answer7}"
+        },
+        {
+            "id": 11,
+            "title": "Challenge 11",
+            "markdownFile": "mk_11.md",
+            "description": "This is the eleventh challenge.",
+            "link": "./Question/question11/question11.html",
+            "answer": "flag{answer11}"
         }
     ]
 } 

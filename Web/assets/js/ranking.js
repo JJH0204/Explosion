@@ -3,12 +3,19 @@ function updateScore() {
     fetch("./assets/php/Scoreboard2.php")
         .then(response => response.json())
         .then(data => {
-            document.getElementById("score").textContent = data.score;
-            document.getElementById("level").textContent = data.stage;
+            const scoreElement = document.getElementById("score");
+            const levelElement = document.getElementById("level");
+            
+            // null 체크 추가
+            if (scoreElement) {
+                scoreElement.textContent = data.score;
+            }
+            if (levelElement) {
+                levelElement.textContent = data.stage;
+            }
         })
         .catch(error => console.error("Error updating score:", error));
 }
-
 // 페이지 로드 시 점수 불러오기
 document.addEventListener("DOMContentLoaded", () => {
     updateScore();
@@ -44,7 +51,7 @@ function updateRanking() {
                     const listItem = document.createElement("li");
                     listItem.innerHTML = `                    
                         <strong>${index + 1}위</strong>
-                        <span>${player.username}</span>
+                        <span>${player.nickname}</span>
                         <span>점수: ${player.score}</span>`;
                     rankingList.appendChild(listItem);
                 });
@@ -60,3 +67,4 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRanking(); // 첫 로드 시 랭킹 표시
     setInterval(updateRanking, 5000); // 5초마다 업데이트
 });
+

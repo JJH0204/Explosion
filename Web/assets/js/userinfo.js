@@ -2,14 +2,25 @@ function updateUserInfo() {
     fetch('assets/php/user_info.php')
         .then(response => response.json())
         .then(data => {
-            if (data.username) {
-                const nicknameElement = document.getElementById('player-nickname');
-                const levelElement = document.getElementById('current-level');
-                if (nicknameElement) nicknameElement.textContent = data.username;
-                if (levelElement) levelElement.textContent = data.rank || '-';
+            console.log('User info response:', data); // 디버깅용 로그
+            if (data.success) {
+                document.getElementById('player-nickname').textContent = data.data.nickname;
+                document.getElementById('current-level').textContent = data.data.rank;
+                document.getElementById('completed-challenges').textContent = data.data.stage;
+                document.getElementById('player-score').textContent = data.data.score;
+            } else {
+                console.error('Failed to get user info:', data.error);
+                document.getElementById('player-nickname').textContent = 'Guest';
+                document.getElementById('current-level').textContent = '-';
+                document.getElementById('player-score').textContent = '-';
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error fetching user info:', error);
+            document.getElementById('player-nickname').textContent = 'Guest';
+            document.getElementById('current-level').textContent = '-';
+            document.getElementById('player-score').textContent = '-';
+        });
 }
 
 async function updateGameProgress() {
@@ -29,6 +40,9 @@ async function updateGameProgress() {
             console.error(scoreData.error);
             return;
         }
+
+        document.getElementById("score").textContent = scoreData.score;
+        document.getElementById("level").textContent = scoreData.stage;
 
         updateUserInfo();
         updateRanking();

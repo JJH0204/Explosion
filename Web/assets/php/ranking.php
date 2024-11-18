@@ -14,16 +14,16 @@ if ($conn->connect_error) {
 }
 
 // 상위 랭킹 10명의 사용자 정보를 가져오는 SQL 쿼리
-$sql = "SELECT NICKNAME, SCORE, STRAGE FROM Score ORDER BY SCORE DESC, STRAGE DESC LIMIT 10";
+$sql = "SELECT NICKNAME, SCORE, STAGE FROM SCORE ORDER BY SCORE DESC, STAGE DESC LIMIT 10";
 $result = $conn->query($sql);
 
 $rankings = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $rankings[] = [
-            'username' => $row['NICKNAME'],  // NICKNAME 필드 사용
+            'nickname' => $row['NICKNAME'],  // NICKNAME 필드 사용
             'score' => $row['SCORE'],        // SCORE 필드 사용
-            'stage' => $row['STRAGE']        // STRAGE 필드 사용
+            'stage' => $row['STAGE']        // STAGE 필드 사용
         ];
     }
 }

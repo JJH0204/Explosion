@@ -57,8 +57,8 @@ try {
                 throw new Exception('Failed to execute statement for ID_info: ' . $stmt1->error);
             }
 
-            // Score 테이블에 사용자 정보 삽입
-            $sql2 = "INSERT INTO Score (ID, Nickname) VALUES (?, ?)";
+            // SCORE 테이블에 사용자 정보 삽입
+            $sql2 = "INSERT INTO SCORE (ID, Nickname) VALUES (?, ?)";
             $stmt2 = $conn->prepare($sql2);
             if (!$stmt2) {
                 throw new Exception('Failed to prepare statement for Score: ' . $conn->error);

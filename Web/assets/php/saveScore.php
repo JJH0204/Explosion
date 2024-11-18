@@ -31,7 +31,7 @@ if (!$nickname || !$cardId) {
 }
 
 // 데이터 삽입
-$sql = "INSERT INTO TOTAL_SCORE (NICKNAME, ANSWER) VALUES (?, ?)";
+$sql = "INSERT INTO CLEARED_STAGE (NICKNAME, ANSWER) VALUES (?, ?)";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     echo json_encode(['success' => false, 'error' => 'Database statement preparation failed']);

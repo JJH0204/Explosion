@@ -2,12 +2,12 @@
 session_start();
 
 // 로그인 확인
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nickname'])) {
     echo json_encode(['success' => false, 'error' => 'User not logged in']);
     exit;
 }
 
-$nickname = $_SESSION['username'];
+$nickname = $_SESSION['nickname'];
 
 try {
     // 데이터베이스 연결
@@ -17,8 +17,8 @@ try {
         exit;
     }
 
-    // TOTAL_SCORE 테이블에서 클리어한 ANSWER 가져오기
-    $sql = "SELECT NICKNAME, GROUP_CONCAT(ANSWER ORDER BY ANSWER ASC) AS ANSWERS FROM TOTAL_SCORE WHERE NICKNAME = ? GROUP BY NICKNAME";
+    // CLEARED_STAGE 테이블에서 클리어한 ANSWER 가져오기
+    $sql = "SELECT NICKNAME, GROUP_CONCAT(ANSWER ORDER BY ANSWER ASC) AS ANSWERS FROM CLEARED_STAGE WHERE NICKNAME = ? GROUP BY NICKNAME";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         echo json_encode(['success' => false, 'error' => 'Failed to prepare statement']);

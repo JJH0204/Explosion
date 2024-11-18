@@ -2,7 +2,7 @@
 session_start();
 
 // 로그인 확인
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['nickname'])) {
     echo json_encode(['success' => false, 'error' => 'User not logged in']);
     exit;
 }
@@ -12,7 +12,7 @@ if (!isset($_POST['cardId'])) {
     exit;
 }
 
-$nickname = $_SESSION['username'];
+$nickname = $_SESSION['nickname'];
 $cardId = intval($_POST['cardId']); // 카드 ID
 
 try {
@@ -23,8 +23,8 @@ try {
         exit;
     }
 
-    // TOTAL_SCORE 테이블에 데이터 삽입
-    $sql = "INSERT INTO TOTAL_SCORE (NICKNAME, ANSWER) VALUES (?, ?)";
+    // CLEARED_STAGE 테이블에 데이터 삽입
+    $sql = "INSERT INTO CLEARED_STAGE (NICKNAME, ANSWER) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         echo json_encode(['success' => false, 'error' => 'Failed to prepare statement']);

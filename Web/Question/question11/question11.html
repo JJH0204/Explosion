@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory Traversal Challenge</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 50px;
+        }
+        input {
+            width: 80%;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            background-color: #000;
+            color: #00ff00;
+        }
+        button {
+            padding: 10px 20px;
+            border: 1px solid #00ff00;
+            background-color: #00ff00;
+            color: #000;
+            cursor: pointer;
+        }
+        pre {
+            margin-top: 20px;
+            text-align: left;
+            width: 80%;
+            margin: 0 auto;
+            background-color: #000;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Directory Traversal Challenge</h1>
+    <p>명령어를 입력하세요 (예: ls, cd root, cat flag.txt)</p>
+    <form id="command-form">
+        <input type="text" id="command-input" name="command" placeholder="명령어 입력">
+        <button type="submit">실행</button>
+    </form>
+    <pre id="output"></pre>
+
+    <script>
+        document.getElementById("command-form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const command = document.getElementById("command-input").value.trim();
+            const response = await fetch("./process-command.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `command=${encodeURIComponent(command)}`
+            });
+
+            const result = await response.text();
+            document.getElementById("output").textContent = result;
+        });
+    </script>
+</body>
+</html>

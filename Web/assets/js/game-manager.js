@@ -80,9 +80,17 @@ class GameManager {
                     <button class="challenge-button" data-card-id="${challenge.id}">
                         ${challenge.link ? '도전하기' : '준비중'}
                     </button>
-                    <button class="submit-button" data-game-id="${gameId}">정답 제출</button>
+                    <button class="submit-button" id="submitFlagBtn" data-game-id="${gameId}">정답 제출</button>
                 </div>
             `;
+
+            // 버튼에 직접 이벤트 리스너 추가
+            const submitButton = gameContent.querySelector('#submitFlagBtn');
+            if (submitButton) {
+                submitButton.addEventListener('click', () => {
+                    this.submitFlag(gameId);
+                }, { once: true }); // once: true를 추가하여 한 번만 실행되도록 설정
+            }
         } catch (error) {
             console.error('Error in revealGame:', error);
             gameContent.innerHTML = `
@@ -153,8 +161,8 @@ class GameManager {
                 throw new Error('Failed to fetch user info');
             }
             const data = await response.json();
-            if (data.username) {
-                return data.username;
+            if (data.data && data.data.nickname) {
+                return data.data.nickname;
             }
             throw new Error(data.error || 'Unknown error');
         } catch (error) {
@@ -206,43 +214,54 @@ class GameManager {
     }
 
     async submitFlag(gameId) {
+        // 이미 제출 중이면 리턴
+        if (this.isSubmitting) {
+            return;
+        }
+
         const flagInput = document.getElementById('flagInput');
         if (!flagInput) {
             alert('플래그 입력 필드를 찾을 수 없습니다.');
             return;
         }
-    
+
         const flag = flagInput.value.trim();
         if (!flag) {
             alert('플래그를 입력해주세요.');
             return;
         }
-    
+
+        this.isSubmitting = true;
+
         try {
             const cardId = parseInt(gameId.replace('game', ''));
             const challenge = this.questionsData.challenges.find(c => c.id === cardId);
-    
+
             if (!challenge) {
                 throw new Error('Challenge not found');
             }
-    
-            if (flag === challenge.answer) {
-                this.handleCorrectAnswer(cardId);
-    
-                // 닉네임 가져오기 및 저장
+
+            // 정답 체크는 한 번만 수행
+            const isCorrect = flag === challenge.answer;
+
+            if (isCorrect) {
                 const nickname = await this.getNicknameFromSession();
                 await this.saveToDatabase(cardId, nickname);
+                await this.handleCorrectAnswer(cardId);
             } else {
+                // 오답 처리는 여기서 한 번만
                 alert('틀렸습니다. 다시 시도해주세요.');
+                flagInput.value = ''; // 입력 필드 초기화
             }
         } catch (error) {
             console.error('Error submitting flag:', error);
+        } finally {
+            this.isSubmitting = false;
         }
     }
 
     async handleCorrectAnswer(cardId) {
         try {
-            // 기존 알림
             alert('축하합니다! 정답입니다!');
             
             const card = document.querySelector(`.card[data-id="${cardId}"]`);
@@ -254,7 +273,6 @@ class GameManager {
             // 카드 활성화
             this.activateCard(card);
             
-            // 점수와 진행상황 업데이트
             try {
                 // 게임 요청 설정
                 const requestResponse = await fetch('assets/php/set_game_request.php');
@@ -273,7 +291,6 @@ class GameManager {
                     console.error('Score update error:', scoreData.error);
                 } else {
                     console.log('Score updated successfully:', scoreData);
-                    // UI 업데이트
                     if (typeof updateUserInfo === 'function') {
                         updateUserInfo();
                     }
@@ -286,7 +303,11 @@ class GameManager {
             }
 
             // 팝업 닫기
-            this.closePopup();
+            const popup = document.getElementById('gamePopup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+
         } catch (error) {
             console.error('Error in handleCorrectAnswer:', error);
         }
@@ -332,11 +353,6 @@ class GameManager {
             if (target.classList.contains('challenge-button')) {
                 const cardId = target.dataset.cardId;
                 this.startChallenge(cardId);
-            }
-
-            if (target.classList.contains('submit-button')) {
-                const gameId = target.dataset.gameId;
-                this.submitFlag(gameId);
             }
         });
 

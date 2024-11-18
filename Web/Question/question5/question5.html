@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>보안 테스트 시스템 v1.0</title>
+    <title>FileHub</title>
     <style>
         body {
             background-color: #0a0a0a;
@@ -55,29 +55,14 @@
 
 <body>
     <div class="container">
-        <h1>보안 테스트 시스템 v1.0</h1>
-
-        <!-- 검색 패널 -->
-        <div class="panel">
-            <h3>사용자 검색</h3>
-            <input type="text" id="search-user" placeholder="사용자 ID 검색...">
-            <button onclick="searchUser()">검색</button>
-            <div id="search-result"></div>
-        </div>
-
-        <!-- 메시지 게시판 -->
-        <div class="panel">
-            <h3>메시지 게시판</h3>
-            <textarea id="message-content" placeholder="메시지를 입력하세요..."></textarea>
-            <button onclick="postMessage()">게시</button>
-            <div id="message-board" class="message-board"></div>
-        </div>
+        <h1>FileHub</h1>
 
         <!-- 파일 업로드 -->
         <div class="panel">
             <h3>파일 업로드</h3>
             <input type="file" id="file-upload">
             <button onclick="uploadFile()">업로드</button>
+            <a class="button-link" href="script.txt" target="_blank">script</a>
             <div id="upload-result"></div>
         </div>
 
@@ -88,104 +73,7 @@
         </div>
     </div>
 
-    <script>
-        // 가상의 데이터베이스
-        const users = [
-            { id: 1, username: 'admin', password: 'super_secret_password_2024', role: 'admin' },
-            { id: 2, username: 'user1', password: 'password123', role: 'user' }
-        ];
-
-        const messages = [];
-
-        // SQL 인젝션 취약점이 있는 검색 함수
-        function searchUser() {
-            const searchTerm = document.getElementById('search-user').value;
-            const resultDiv = document.getElementById('search-result');
-
-            try {
-                // 취약한 SQL 쿼리 시뮬레이션
-                const query = `SELECT * FROM users WHERE username LIKE '%${searchTerm}%'`;
-                console.log('실행된 쿼리:', query);
-
-                // 결과 필터링
-                const results = users.filter(user =>
-                    eval(`"${user.username}".match(/${searchTerm}/i)`)
-                );
-
-                resultDiv.innerHTML = `검색 결과: ${JSON.stringify(results, null, 2)}`;
-            } catch (error) {
-                resultDiv.innerHTML = '검색 오류 발생';
-            }
-        }
-
-        // XSS 취약점이 있는 메시지 게시 함수
-        function postMessage() {
-            const content = document.getElementById('message-content').value;
-            const messageBoard = document.getElementById('message-board');
-
-            // 취약한 메시지 렌더링
-            messages.push(content);
-            messageBoard.innerHTML += `<div class="message">${content}</div>`;
-        }
-
-        // 파일 업로드 취약점
-        function uploadFile() {
-            const fileInput = document.getElementById('file-upload');
-            const resultDiv = document.getElementById('upload-result');
-
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                // 취약한 파일 확장자 검사
-                const fileName = file.name.toLowerCase();
-
-                if (fileName.endsWith('.txt') || fileName.endsWith('.jpg')) {
-                    resultDiv.innerHTML = `파일 "${file.name}" 업로드 성공!`;
-                    checkFileContent(file);
-                } else {
-                    resultDiv.innerHTML = '허용되지 않는 파일 형식입니다.';
-                }
-            }
-        }
-
-        // 파일 내용 검사 (취약점 포함)
-        function checkFileContent(file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const content = e.target.result;
-                if (content.includes('ADMIN_KEY')) {
-                    showAdminPanel();
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        // 관리자 패널 표시
-        function showAdminPanel() {
-            const adminPanel = document.getElementById('admin-panel');
-            adminPanel.classList.remove('hidden');
-
-            // 플래그 표시
-            const flag = decrypt('U2FsdGVkX19+MjAyNCtzZWNyZXQra2V5K3RvK2RlY3J5cHQrZmxhZw==');
-            document.getElementById('admin-content').innerHTML = `축하합니다! 플래그: ${flag}`;
-        }
-
-        // 암호화된 플래그 복호화
-        function decrypt(encoded) {
-            return atob(encoded);
-        }
-
-        // 초기 설정 및 힌트
-        window.onload = function () {
-            console.log('힌트1: SQL 인젝션으로 admin 계정을 찾아보세요.');
-            console.log('힌트2: XSS 취약점으로 다른 사용자의 쿠키를 탈취할 수 있습니다.');
-            console.log('힌트3: 파일 업로드 필터를 우회해보세요.');
-
-            // 숨겨진 힌트
-            setTimeout(() => {
-                console.log('힌트4: ADMIN_KEY를 포함한 파일을 업로드하면 특별한 일이 일어날 수 있습니다.');
-            }, 30000);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

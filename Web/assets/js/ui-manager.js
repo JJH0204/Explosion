@@ -3,6 +3,8 @@ class UIManager {
         this.sidebar = document.querySelector('.sidebar');
         this.mainContent = document.querySelector('.main-content');
         this.sidebarToggle = document.querySelector('.sidebar-toggle');
+        this.leftArrowButton = document.querySelector('.arrow-button.left');
+        
         
         this.initializeSidebar();
         this.initializeResponsiveLayout();
@@ -16,10 +18,27 @@ class UIManager {
                 this.sidebar.classList.toggle('active');
                 this.mainContent.classList.toggle('sidebar-active');
                 
-                requestAnimationFrame(() => {
-                    this.adjustLayout();
-                });
+                // 왼쪽 화살표 버튼 위치 조정
+                if (this.leftArrowButton) {
+                    const isActive = this.sidebar.classList.contains('active');
+                    this.leftArrowButton.style.left = isActive ? '270px' : '20px';
+                    
+                    // 모바일 대응
+                    if (window.innerWidth <= 768) {
+                        this.leftArrowButton.style.left = isActive ? '220px' : '20px';
+                    }
+                }
             });
+        }
+    }
+
+    updateArrowButtonState() {
+        if (this.sidebar.classList.contains('active')) {
+            this.leftArrowButton.style.opacity = '1';
+            this.leftArrowButton.style.pointerEvents = 'auto';
+        } else {
+            this.leftArrowButton.style.opacity = '0.3';
+            this.leftArrowButton.style.pointerEvents = 'none';
         }
     }
 
@@ -48,6 +67,11 @@ class UIManager {
 
     handleResize() {
         this.adjustLayout();
+        
+        // 화면 크기 변경 시 왼쪽 화살표 위치 조정
+        if (this.leftArrowButton && this.sidebar.classList.contains('active')) {
+            this.leftArrowButton.style.left = window.innerWidth <= 768 ? '220px' : '270px';
+        }
     }
 
     isSidebarActive() {
@@ -67,11 +91,11 @@ class UIManager {
             }
             const data = await response.json();
     
-            if (data.nickname) {
+            if (data.success && data.data) {
                 // 유저 정보를 UI에 반영
                 const nicknameElement = document.getElementById('player-nickname');
                 if (nicknameElement) {
-                    nicknameElement.textContent = data.nickname;
+                    nicknameElement.textContent = data.data.nickname;
                 } else {
                     console.error('Nickname element not found');
                 }

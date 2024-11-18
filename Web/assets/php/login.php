@@ -37,7 +37,7 @@ try {
                 session_start();
                 session_regenerate_id(true); // 세션 ID 재생성
                 $_SESSION['user_id'] = $user['ID'];
-                $_SESSION['username'] = $user['NICKNAME'];
+                $_SESSION['nickname'] = $user['NICKNAME'];
 
                 echo json_encode(['success' => true, 'ID' => $user['ID'], 'NICKNAME' => $user['NICKNAME']]);
             } else {
