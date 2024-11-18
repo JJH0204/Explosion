@@ -78,7 +78,24 @@
             "markdownFile": "mk_12.md",
             "description": "This is the twelfth challenge.",
             "link": "./Question/question12/question12.html",
-            "answer": "FLAG{js_code_analysis}"
+            "answer": "Jpnl123$Kech_Secret"
+        },
+        {
+            "id": 13,
+            "title": "Challenge 13",
+            "markdownFile": "mk_13.md",
+            "description": "This is the thirteen challenge.",
+            "link": "./Question/question13/question13.html",
+            "answer": "FLAG{header_manipulation_success}"
+        },
+        {
+            "id": 21,
+            "title": "Challenge 21",
+            "markdownFile": "mk_21.md",
+            "description": "This is the twenty-first challenge.",
+            "link": "./Question/question21/question21.html",
+            "answer": "FLAG{header_manipulation_success}"
         }
+
     ]
 } 

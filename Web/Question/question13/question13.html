@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffer Overflow Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buffer Overflow Challenge</h1>
+    <div class="container">
+        <p>적절한 값을 입력하여 숨겨진 결과를 찾아보세요.</p>
+        <input type="text" id="inputBuffer" placeholder="값을 입력하세요">
+        <button onclick="checkOverflow()">버퍼 전송</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function checkOverflow() {
+            const input = document.getElementById('inputBuffer').value;
+            const result = document.getElementById('result');
+
+            // 내부 논리 추가 (단순 길이 비교가 아닌 특정 입력 구조 필요)
+            const bufferSize = 32; // 버퍼 크기
+            const magicNumber = "424F4642"; // 특정 조건 (16진수 값)
+            const hiddenFlag = "FLAG{advanced_buffer_overflow}";
+
+            // 버퍼 오버플로우 조건: 길이 초과 + 특정 패턴 확인
+            if (input.length > bufferSize && input.includes(hexToAscii(magicNumber))) {
+                result.style.color = '#00ff00';
+                result.textContent = `축하합니다! 플래그: ${hiddenFlag}`;
+            } else {
+                result.style.color = '#ff0000';
+                result.textContent = '조건을 만족하지 못했습니다. 다시 시도하세요.';
+            }
+        }
+
+        // 16진수를 ASCII 문자열로 변환하는 함수
+        function hexToAscii(hex) {
+            let str = '';
+            for (let i = 0; i < hex.length; i += 2) {
+                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+            }
+            return str;
+        }
+    </script>
+</body>
+</html>
