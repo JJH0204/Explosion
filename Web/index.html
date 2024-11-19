@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self';">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Flame</title>
     <link rel="stylesheet" href="assets/styles/main/bundle.min.css">
     <link rel="stylesheet" href="assets/styles/main/sidebar.css">
@@ -17,7 +20,19 @@
     <link rel="stylesheet" href="assets/styles/main/footer.css">
     <link rel="stylesheet" href="assets/styles/main/popup.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+
+    <script>
+        // 페이지 진입 시 즉시 세션 체크
+        if (sessionStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        // 뒤로가기 방지
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
+    </script>
 </head>
 
 <body>
@@ -71,27 +86,34 @@
     <div class="main-container">
         <main class="main-content">
             <div class="cards-container">
-                <div id="challengeGrid">
-                    <!-- 카드 페이지들이 동적으로 추가됨 -->
-                </div>
+                <div id="challengeGrid"></div>
             </div>
-            <!-- <button class="arrow-button left">◀</button>
-            <button class="arrow-button right">▶</button> -->
         </main>
     </div>
 
-    
-    <script type="module" src="assets/js/main/sidebar/ranking.js"></script>
-    <script type="module" src="assets/js/main/sidebar/userinfo.js"></script>
-    <script type="module" src="assets/js/main/init.js"></script>
-    <script type="module" src="assets/js/main/footer.js"></script>
-
-    <div id="gamePopup" class="popup">
+    <div class="popup-overlay">
         <div class="popup-content">
-            <div id="gameContent"></div>
+            <button class="popup-close">×</button>
+            <div class="popup-header"></div>
+            <div class="challenge-info"></div>
+            <div class="markdown-content"></div>
+            <div class="challenge-actions">
+                <div class="flag-input-container">
+                    <input type="text" class="flag-input" placeholder="플래그를 입력하세요">
+                    <button class="submit-btn">제출</button>
+                </div>
+                <button class="goto-challenge-btn">문제 페이지로 이동</button>
+            </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script type="module" src="assets/js/main/sidebar/ranking.js"></script>
+    <script type="module" src="assets/js/main/sidebar/userinfo.js"></script>
+    <script type="module" src="assets/js/main/Manager/MainContent.js"></script>
+    <script type="module" src="assets/js/main/init.js"></script>
     <script type="module" src="assets/js/main/footer.js"></script>
+    <!-- TODO: 사용자 계정 이미지 바꾸는 문제 다시 출제 -->
+    <!-- TODO: 로컬 스토리지 활용 문제 다시 출제 -->
 </body>
 
 </html>

@@ -1,7 +1,18 @@
 import MainContent from './Manager/MainContent.js';
 import { ImageManager } from './Manager/ImageManager.js';
 
+// 세션 체크 함수 추가
+function checkLoginStatus() {
+    const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
+    if (!isLoggedIn) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    if (!checkLoginStatus()) return;
     // 메인 컨텐츠 초기화
     const mainContent = new MainContent();
     await mainContent.init();

@@ -71,7 +71,9 @@
             "markdownFile": "mk_2.md",
             "description": "This is the second challenge.",
             "link": "./Question/question2/question2.html",
-            "answer": "FLAG{source_code_analysis}"
+            "answer": "FLAG{source_code_analysis}",
+            "category": "cryptology",
+            "difficulty": "beginner"
         },
         {
             "id": 3,
@@ -79,7 +81,9 @@
             "markdownFile": "mk_3.md",
             "description": "This is the third challenge.",
             "link": "./Question/question3/question3.html",
-            "answer": "FLAG{base64_decode_success}"
+            "answer": "FLAG{base64_decode_success}",
+            "category": "cryptology",
+            "difficulty": "beginner"
         },
         {
             "id": 4,
@@ -87,7 +91,9 @@
             "markdownFile": "mk_4.md",
             "description": "This is the fourth challenge.",
             "link": "./Question/question4/question4.html",
-            "answer": "FLAG{proxy_role_manipulation_success}"
+            "answer": "FLAG{proxy_role_manipulation_success}",
+            "category": "cryptology",
+            "difficulty": "beginner"
         },
         {
             "id": 5,
@@ -95,7 +101,9 @@
             "markdownFile": "mk_5.md",
             "description": "This is the fifth challenge.",
             "link": "./Question/question5/question5.html",
-            "answer": "Salted__~2024+secret+key+to+decrypt+flag"
+            "answer": "Salted__~2024+secret+key+to+decrypt+flag",
+            "category": "cryptology",
+            "difficulty": "beginner"
         },
         {
             "id": 6,
@@ -103,7 +111,9 @@
             "markdownFile": "mk_6.md",
             "description": "This is the sixth challenge.",
             "link": "./Question/question6/question6.html",
-            "answer": "flag{sql_injection_success}"
+            "answer": "flag{sql_injection_success}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 7,
@@ -111,7 +121,9 @@
             "markdownFile": "mk_7.md",
             "description": "This is the seventh challenge.",
             "link": "./Question/question7/question7.html",
-            "answer": "FLAG_mem{hack}"
+            "answer": "FLAG_mem{hack}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 8,
@@ -119,7 +131,9 @@
             "markdownFile": "mk_8.md",
             "description": "This is the eighth challenge.",
             "link": "./Question/question8/question8.html",
-            "answer": "FLag{image_change}"
+            "answer": "FLag{image_change}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 9,
@@ -127,7 +141,9 @@
             "markdownFile": "mk_9.md",
             "description": "This is the ninth challenge.",
             "link": "./Question/question9/question9.html",
-            "answer": "Flag{LocalStorage_Modification}"
+            "answer": "Flag{LocalStorage_Modification}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 10,
@@ -135,7 +151,9 @@
             "markdownFile": "mk_10.md",
             "description": "This is the tenth challenge.",
             "link": "./Question/question10/question10.html",
-            "answer": "flag{answer10}"
+            "answer": "flag{answer10}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 11,
@@ -143,7 +161,9 @@
             "markdownFile": "mk_11.md",
             "description": "This is the eleventh challenge.",
             "link": "./Question/question11/question11.html",
-            "answer": "FLAG{js_code_analysis}"
+                "answer": "FLAG{js_code_analysis}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 12,
@@ -151,7 +171,9 @@
             "markdownFile": "mk_12.md",
             "description": "This is the twelfth challenge.",
             "link": "./Question/question12/question12.html",
-            "answer": "Jpnl123$Kech_Secret"
+            "answer": "Jpnl123$Kech_Secret",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 13,
@@ -159,7 +181,9 @@
             "markdownFile": "mk_13.md",
             "description": "This is the thirteenth challenge.",
             "link": "./Question/question13/question13.html",
-            "answer": "FLAG{advanced_buffer_overflow}"
+            "answer": "FLAG{advanced_buffer_overflow}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 14,
@@ -167,7 +191,9 @@
             "markdownFile": "mk_14.md",
             "description": "This is the fourteenth challenge.",
             "link": "./Question/question14/question14.html",
-            "answer": "FLAG{number_baseball_success}"
+            "answer": "FLAG{number_baseball_success}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 15,
@@ -175,7 +201,9 @@
             "markdownFile": "mk_15.md",
             "description": "This is the fifteenth challenge.",
             "link": "./Question/question15/question15.html",
-            "answer": "FLAG{hidden_with_lsb}"
+            "answer": "FLAG{hidden_with_lsb}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 16,
@@ -183,7 +211,9 @@
             "markdownFile": "mk_16.md",
             "description": "This is the sixteenth challenge.",
             "link": "./Question/question16/question16.html",
-            "answer": "FLAG{sql_grant_correct}"
+            "answer": "FLAG{sql_grant_correct}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 17,
@@ -191,7 +221,9 @@
             "markdownFile": "mk_17.md",
             "description": "This is the seventeenth challenge.",
             "link": "./Question/question17/question17.html",
-            "answer": "FLAG{snake_master}"
+            "answer": "FLAG{snake_master}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 18,
@@ -199,7 +231,9 @@
             "markdownFile": "mk_18.md",
             "description": "This is the eighteenth challenge.",
             "link": "./Question/question18/question18.html",
-            "answer": "FLAG{SUBNETTING_SUCCESS}"
+            "answer": "FLAG{SUBNETTING_SUCCESS}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 19,
@@ -207,14 +241,18 @@
             "markdownFile": "mk_19.md",
             "description": "This is the nineteenth challenge.",
             "link": "./Question/question19/question19.html",
-            "answer": "FLAG{SUBNETTING_SUCCESS}"
+            "answer": "FLAG{SUBNETTING_SUCCESS}",
+            "category": "sql",
+            "difficulty": "beginner"
         },{
             "id": 20,
             "title": "Challenge 20",
             "markdownFile": "mk_20.md",
             "description": "This is the twentieth challenge.",
             "link": "./Question/question20/question20.html",
-            "answer": "FLAG{SUBNETTING_SUCCESS}"
+            "answer": "FLAG{SUBNETTING_SUCCESS}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 21,
@@ -222,7 +260,9 @@
             "markdownFile": "mk_21.md",
             "description": "This is the twenty-first challenge.",
             "link": "./Question/question21/question21.html",
-            "answer": "Flag{Le_flag}"
+            "answer": "Flag{Le_flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 22,
@@ -230,7 +270,9 @@
             "markdownFile": "mk_22.md",
             "description": "This is the twenty-second challenge.",
             "link": "./Question/question22/question22.html",
-            "answer": "Flag{hashing_practice}"
+            "answer": "Flag{hashing_practice}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 23,
@@ -238,7 +280,9 @@
             "markdownFile": "mk_23.md",
             "description": "This is the twenty-third challenge.",
             "link": "./Question/question23/question23.html",
-            "answer": "Flag{insecure_storage}"
+            "answer": "Flag{insecure_storage}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 24,
@@ -246,7 +290,9 @@
             "markdownFile": "mk_24.md",
             "description": "This is the twenty-fourth challenge.",
             "link": "./Question/question24/question24.html",
-            "answer": "flag{24Challengesflag}"
+            "answer": "flag{24Challengesflag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },   
         {
             "id": 25,
@@ -254,7 +300,9 @@
             "markdownFile": "mk_25.md",
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question25/question25.html",
-            "answer": ""
+            "answer": "flag{25Challengesflag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 26,
@@ -262,7 +310,9 @@
             "markdownFile": "mk_26.md",
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question26/question26.html",
-            "answer": "Flag{BOMB_game}"
+            "answer": "Flag{BOMB_game}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 27,
@@ -270,7 +320,9 @@
             "markdownFile": "mk_27.md",
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question27/question27.html",
-            "answer": "flag{questionChallenges27flag}"
+            "answer": "flag{questionChallenges27flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 28,
@@ -278,7 +330,9 @@
             "markdownFile": "mk_28.md",
             "description": "This is the twenty-eighth challenge.",
             "link": "./Question/question28/question28.html",
-            "answer": "flag{questionChallenges28flag}"
+            "answer": "flag{questionChallenges28flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 29,
@@ -286,7 +340,9 @@
             "markdownFile": "mk_29.md",
             "description": "This is the twenty-ninth challenge.",
             "link": "./Question/question29/question29.html",
-            "answer": "flag{questionChallenges29flag}"
+            "answer": "flag{questionChallenges29flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 30,
@@ -294,7 +350,9 @@
             "markdownFile": "mk_30.md",
             "description": "This is the thirtyth challenge.",
             "link": "./Question/question30/question30.html",
-            "answer": "flag{questionChallenges30flag}"
+            "answer": "flag{questionChallenges30flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 31,
@@ -302,7 +360,9 @@
             "markdownFile": "mk_31.md",
             "description": "This is the thirty-first challenge.",
             "link": "./Question/question31/question31.html",
-            "answer": "flag{questionChallenges31flag}"
+            "answer": "flag{questionChallenges31flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 32,
@@ -310,7 +370,9 @@
             "markdownFile": "mk_32.md",
             "description": "This is the thirty-second challenge.",
             "link": "./Question/question32/question32.html",
-            "answer": "flag{questionChallenges32flag}"
+            "answer": "flag{questionChallenges32flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 33,
@@ -318,7 +380,9 @@
             "markdownFile": "mk_33.md",
             "description": "This is the thirty-third challenge.",
             "link": "./Question/question33/question33.html",
-            "answer": "flag{questionChallenges33flag}"
+            "answer": "flag{questionChallenges33flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 34,
@@ -326,7 +390,9 @@
             "markdownFile": "mk_34.md",
             "description": "This is the thirty-fourth challenge.",
             "link": "./Question/question34/question34.html",
-            "answer": "flag{questionChallenges34flag}"
+            "answer": "flag{questionChallenges34flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 35,
@@ -334,7 +400,9 @@
             "markdownFile": "mk_35.md",
             "description": "This is the thirty-fifth challenge.",
             "link": "./Question/question35/question35.html",
-            "answer": "flag{questionChallenges35flag}"
+            "answer": "flag{questionChallenges35flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 36,
@@ -342,7 +410,9 @@
             "markdownFile": "mk_36.md",
             "description": "This is the thirty-sixth challenge.",
             "link": "./Question/question36/question36.html",
-            "answer": "flag{questionChallenges36flag}"
+            "answer": "flag{questionChallenges36flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 37,
@@ -350,7 +420,9 @@
             "markdownFile": "mk_37.md",
             "description": "This is the thirty-seventh challenge.",
             "link": "./Question/question37/question37.html",
-            "answer": "flag{questionChallenges37flag}"
+            "answer": "flag{questionChallenges37flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 38,
@@ -358,7 +430,9 @@
             "markdownFile": "mk_38.md",
             "description": "This is the thirty-eighth challenge.",
             "link": "./Question/question38/question38.html",
-            "answer": "flag{questionChallenges38flag}"
+            "answer": "flag{questionChallenges38flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 39,
@@ -366,7 +440,9 @@
             "markdownFile": "mk_39.md",
             "description": "This is the thirty-ninth challenge.",
             "link": "./Question/question39/question39.html",
-            "answer": "flag{questionChallenges39flag}"
+            "answer": "flag{questionChallenges39flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         },
         {
             "id": 40,
@@ -374,7 +450,9 @@
             "markdownFile": "mk_40.md",
             "description": "This is the fortyth challenge.",
             "link": "./Question/question40/question40.html",
-            "answer": "flag{questionChallenges40flag}"
+            "answer": "flag{questionChallenges40flag}",
+            "category": "sql",
+            "difficulty": "beginner"
         }
     ]
 } 
