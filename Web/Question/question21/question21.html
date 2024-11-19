@@ -116,58 +116,42 @@
     <div class="container">
         <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
         <textarea id="cipherText" readonly>
-            begin 644 worg_challenge_uudeview
-            B5F5R>2!S:6UP;&4@.RD*4$%34R`](%5,5%)!4TE-4$Q%"@``
-            `
-            end
+            4c6520666c6167206465206365206368616c6c656e6765206573743a353133323638363836323437373836633632366436343663363337613439373835613664373836383561333235353364
+
         </textarea>
         <p>해독된 플래그를 입력하세요:</p>
         <input type="text" id="userInput" placeholder="해독된 플래그 입력">
     <div class="button-group">
         <button onclick="checkFlag()">제출</button>
-        <button onclick="toggleSSHInfo()" id="sshButton">SSH 접속 정보</button>
+        <button id="submitButton" onclick="location.href='/Flame_WarGame/Web/index.html'" style="display: none;">정답 제출하기</button>
     </div>
     <p id="result"></p>
     </div>
 
     <div class="hint">
-        <p>1.데이터가 UUencode 형식임을 이해하고 begin과 end를 활용하여 디코딩을 수행합니다.</p>
-        <p>2.Python, 리눅스 명령어(uudecode), 또는 온라인 도구를 사용하여 UUdecode를 실행할 수 있습니다.</p>
-        <p>3.디코딩 결과에서 PASS 값이 문제의 플래그로 사용됩니다.</p>
+        <p>1.데이터 형식: 주어진 데이터는 16진수(헥사)로 인코딩되어 있습니다. 각 2자리마다 1바이트를 표현합니다.</p>
+        <p>2.Python 또는 리눅스 사용: 데이터를 Python 스크립트 또는 리눅스의 xxd와 같은 도구를 사용해 디코딩할 수 있습니다.</p>
+        <p>3.ASCII 변환 규칙: 디코딩한 결과에서 "Le flag"와 함께 표시된 값이 플래그로 사용됩니다.</p>
+        <p>4.base64</p>
     </div>
-    <div id="sshInfo" class="ssh-info" style="display: none;">
-        <h3>SSH 접속 정보</h3>
-        <p>아래 명령어를 사용하여 SSH 접속하세요:</p>
-        <div class="command">
-           
-        </div>
-        <p>비밀번호: <span id="sshPassword">Challenge21passwd</span></p>
-        <div class="putty-info">
-            <p>PuTTY로 접속하기:</p>
-            <ol>
-                <li>PuTTY 실행</li>
-                <li>Host Name: Challenge21@192.168.1.170</li>
-                <li>Port: 22</li>
-                <li>Connection type: SSH</li>
-            </ol>
-            
-        </div>
+
     </div>
 
     <script>
      function checkFlag() {
         const userFlag = document.getElementById('userInput').value.trim();
-        const correctFlag = "ULTRASIMPLE";
+        const correctFlag = "Challenges21flage";
         const resultElement = document.getElementById('result');
+        const submitButton = document.getElementById('submitButton');
 
         if (userFlag === correctFlag) {
             resultElement.style.color = '#00ff7f';
             resultElement.textContent = '정답입니다!';
-            document.getElementById('sshInfo').style.display = 'block'; // 정답일 때 SSH 정보 표시
-            document.getElementById('sshButton').style.display = 'inline-block'; // SSH 버튼 표시
+            submitButton.style.display = 'inline-block'; // 정답일 때 버튼 표시
         } else {
             resultElement.style.color = '#ff4d4d';
             resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+            submitButton.style.display = 'none'; // 오답일 때 버튼 숨김
         }
     }
 
