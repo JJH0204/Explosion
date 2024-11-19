@@ -39,24 +39,30 @@ function updateRanking() {
             const rankingList = document.getElementById("rankingList");
             rankingList.innerHTML = ""; // 기존 랭킹 초기화
 
-            // data.rankings가 배열인지 확인하고 순회
             if (data.success && Array.isArray(data.rankings)) {
                 data.rankings.forEach((player, index) => {
                     const listItem = document.createElement("li");
-                    // 랭킹에 따른 스타일 적용
-                    let rankStyle = '';
+                    listItem.className = 'ranking-item';
+                    
+                    // 랭킹 아이콘 또는 숫자 결정
+                    let rankDisplay;
                     if (index === 0) {
-                        rankStyle = 'color: #FFD700;'; // 금색
+                        rankDisplay = '🥇';
                     } else if (index === 1) {
-                        rankStyle = 'color: #C0C0C0;'; // 은색
+                        rankDisplay = '🥈';
                     } else if (index === 2) {
-                        rankStyle = 'color: #CD7F32;'; // 동색
+                        rankDisplay = '🥉';
+                    } else {
+                        rankDisplay = `${index + 1}`;
                     }
                     
-                    listItem.innerHTML = `                    
-                        <strong style="${rankStyle}">${index + 1}위</strong>
-                        <span>${player.nickname}</span>
-                        <span>점수: ${player.score} pt</span>`;
+                    listItem.innerHTML = `
+                        <div class="rank">${rankDisplay}</div>
+                        <div class="player-info">
+                            <span class="nickname">${player.nickname}</span>
+                            <span class="score">${player.score}pt</span>
+                        </div>
+                    `;
                     rankingList.appendChild(listItem);
                 });
             }

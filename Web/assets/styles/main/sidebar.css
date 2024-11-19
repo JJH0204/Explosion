@@ -140,6 +140,60 @@
 #rankingList {
     list-style: none;
     padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.ranking-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.ranking-item .rank {
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.ranking-item .player-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.ranking-item .nickname {
+    font-weight: 500;
+    color: #fff;
+}
+
+.ranking-item .score {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* 상위 3위까지 특별한 스타일 적용 */
+.ranking-item:nth-child(1) {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.ranking-item:nth-child(2) {
+    background: rgba(192, 192, 192, 0.1);
+}
+
+.ranking-item:nth-child(3) {
+    background: rgba(205, 127, 50, 0.1);
 }
 
 /* 기타 랭킹 관련 스타일 */

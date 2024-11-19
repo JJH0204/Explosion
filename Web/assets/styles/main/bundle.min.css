@@ -4,9 +4,9 @@
     --secondary-color: #34495e;
     --accent-color: #e74c3c;
     --text-color: #ecf0f1;
-    --background-overlay: rgba(0, 0, 0, 0.7);
-    --sidebar-width: 300px;
-    --header-height: 60px;
+    --background-overlay: rgba(0, 0, 0, 0.8);
+    --sidebar-width: 280px;
+    --header-height: 80px;
     --footer-height: 200px;
     --z-background: -1;
     --z-main: 1;
@@ -14,6 +14,7 @@
     --z-sidebar: 1000;
     --z-footer: 98;
     --z-popup: 2000;
+    --blur-effect: blur(5px);
 }
 
 /* 리셋 및 기본 스타일 */
@@ -24,9 +25,9 @@
 }
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Arial', sans-serif;
     color: var(--text-color);
-    overflow-x: hidden;
+    overflow: hidden;
     min-height: 100vh;
 }
 
@@ -95,22 +96,6 @@ body {
 
 .menu-button:hover {
     background: darken(var(--accent-color), 10%);
-}
-
-/* 메인 컨텐츠 영역 */
-.main-container {
-    margin-left: var(--sidebar-width);
-    margin-top: var(--header-height);
-    padding: 20px;
-    min-height: calc(100vh - var(--header-height));
-    z-index: var(--z-main);
-}
-
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
 }
 
 /* 팝업 스타일 */

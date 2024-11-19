@@ -1,7 +1,8 @@
 {
     "paths": {
-        "images": "./assets/images/monsters/",
-        "markdown": "./data/markdown/",
+        "monstersImages": "./assets/images/monsters/",
+        "cardBackImages": "./assets/images/",
+        "markdown": "/data/challenges/",
         "php": "./php/",
         "questions": "./Question/",
         "json": "./data/"
@@ -33,6 +34,10 @@
         "csrf": {
             "name": "CSRF",
             "description": "요청 위조 관련 취약점"
+        },
+        "cryptology": {
+            "name": "암호학",
+            "description": "암호학 관련 취약점"
         }
     },
     "difficulty": {
@@ -56,7 +61,9 @@
             "markdownFile": "mk_1.md",
             "description": "This is the first challenge.",
             "link": "./Question/question1/question1.html",
-            "answer": "flame1answer"
+            "answer": "flame1answer",
+            "category": "cryptology",
+            "difficulty": "beginner"
         },
         {
             "id": 2,
@@ -201,6 +208,13 @@
             "description": "This is the nineteenth challenge.",
             "link": "./Question/question19/question19.html",
             "answer": "FLAG{SUBNETTING_SUCCESS}"
+        },{
+            "id": 20,
+            "title": "Challenge 20",
+            "markdownFile": "mk_20.md",
+            "description": "This is the twentieth challenge.",
+            "link": "./Question/question20/question20.html",
+            "answer": "FLAG{SUBNETTING_SUCCESS}"
         },
         {
             "id": 21,
@@ -257,8 +271,110 @@
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question27/question27.html",
             "answer": "flag{questionChallenges27flag}"
+        },
+        {
+            "id": 28,
+            "title": "Challenge 28",
+            "markdownFile": "mk_28.md",
+            "description": "This is the twenty-eighth challenge.",
+            "link": "./Question/question28/question28.html",
+            "answer": "flag{questionChallenges28flag}"
+        },
+        {
+            "id": 29,
+            "title": "Challenge 29",
+            "markdownFile": "mk_29.md",
+            "description": "This is the twenty-ninth challenge.",
+            "link": "./Question/question29/question29.html",
+            "answer": "flag{questionChallenges29flag}"
+        },
+        {
+            "id": 30,
+            "title": "Challenge 30",
+            "markdownFile": "mk_30.md",
+            "description": "This is the thirtyth challenge.",
+            "link": "./Question/question30/question30.html",
+            "answer": "flag{questionChallenges30flag}"
+        },
+        {
+            "id": 31,
+            "title": "Challenge 31",
+            "markdownFile": "mk_31.md",
+            "description": "This is the thirty-first challenge.",
+            "link": "./Question/question31/question31.html",
+            "answer": "flag{questionChallenges31flag}"
+        },
+        {
+            "id": 32,
+            "title": "Challenge 32",
+            "markdownFile": "mk_32.md",
+            "description": "This is the thirty-second challenge.",
+            "link": "./Question/question32/question32.html",
+            "answer": "flag{questionChallenges32flag}"
+        },
+        {
+            "id": 33,
+            "title": "Challenge 33",
+            "markdownFile": "mk_33.md",
+            "description": "This is the thirty-third challenge.",
+            "link": "./Question/question33/question33.html",
+            "answer": "flag{questionChallenges33flag}"
+        },
+        {
+            "id": 34,
+            "title": "Challenge 34",
+            "markdownFile": "mk_34.md",
+            "description": "This is the thirty-fourth challenge.",
+            "link": "./Question/question34/question34.html",
+            "answer": "flag{questionChallenges34flag}"
+        },
+        {
+            "id": 35,
+            "title": "Challenge 35",
+            "markdownFile": "mk_35.md",
+            "description": "This is the thirty-fifth challenge.",
+            "link": "./Question/question35/question35.html",
+            "answer": "flag{questionChallenges35flag}"
+        },
+        {
+            "id": 36,
+            "title": "Challenge 36",
+            "markdownFile": "mk_36.md",
+            "description": "This is the thirty-sixth challenge.",
+            "link": "./Question/question36/question36.html",
+            "answer": "flag{questionChallenges36flag}"
+        },
+        {
+            "id": 37,
+            "title": "Challenge 37",
+            "markdownFile": "mk_37.md",
+            "description": "This is the thirty-seventh challenge.",
+            "link": "./Question/question37/question37.html",
+            "answer": "flag{questionChallenges37flag}"
+        },
+        {
+            "id": 38,
+            "title": "Challenge 38",
+            "markdownFile": "mk_38.md",
+            "description": "This is the thirty-eighth challenge.",
+            "link": "./Question/question38/question38.html",
+            "answer": "flag{questionChallenges38flag}"
+        },
+        {
+            "id": 39,
+            "title": "Challenge 39",
+            "markdownFile": "mk_39.md",
+            "description": "This is the thirty-ninth challenge.",
+            "link": "./Question/question39/question39.html",
+            "answer": "flag{questionChallenges39flag}"
+        },
+        {
+            "id": 40,
+            "title": "Challenge 40",
+            "markdownFile": "mk_40.md",
+            "description": "This is the fortyth challenge.",
+            "link": "./Question/question40/question40.html",
+            "answer": "flag{questionChallenges40flag}"
         }
-
     ]
-    
 } 

@@ -5,13 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flame</title>
-    <link rel="stylesheet" href="assets/styles/main.css">
-    <link rel="stylesheet" href="assets/styles/sidebar.css">
-    <link rel="stylesheet" href="assets/styles/cards.css">
-    <link rel="stylesheet" href="assets/styles/popup_flag.css">
-    <link rel="stylesheet" href="assets/styles/popup_solution.css">
-    <link rel="stylesheet" href="assets/styles/markdown.css">
-    <link rel="stylesheet" href="assets/styles/admin.css">
+    <link rel="stylesheet" href="assets/styles/admin/admin_1.css">
+    <link rel="stylesheet" href="assets/styles/admin/admin_2.css">
     <style>
         .character-image-container {
             position: relative;
@@ -33,7 +28,7 @@
     <header class="header">
         <div class="logo-container">
             <img src="assets/images/icons/Flame_logo2.png" alt="Logo" class="logo">
-            <span class="logo-text">Flame War Game [Admin]</span>
+            <span class="logo-text">Flame War Game</span>
         </div>
         <div class="header-menu">
             <button class="menu-button" id="flagBtn">플래그 생성</button>
@@ -63,13 +58,14 @@
 
             <div class="progress-info">
                 <h3>진행 상황</h3>
-                <div id="progress">
-                    40 / 40
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <div class="progress-text">40 / 40</div>
                 </div>
             </div>
             <div class="scoreboard">
             </div>
-            <div id="rankingBoard" class="ranking-board" style="margin-top: 20px;">
+            <div id="rankingBoard" class="ranking-board" style="margin-top: 10px;">
                 <h3>실시간 랭킹</h3>
                 <ul id="rankingList"></ul>
             </div>
@@ -77,14 +73,13 @@
 
         <main class="main-content">
             <div class="cards-container">
-                <div id="challengeGrid" class="cards-grid">
-                    <!-- 카드들이 여기에 동적으로 추가됩니다 -->
+                <div class="cards-wrapper">
+                    <!-- 그리드는 JavaScript에서 동적으로 생성됩니다 -->
                 </div>
+                <button class="arrow-button left">◀</button>
+                <button class="arrow-button right">▶</button>
             </div>
         </main>
-
-        <button class="arrow-button left" onclick="cardManager.prevPage()">◀</button>
-        <button class="arrow-button right" onclick="cardManager.nextPage()">▶</button>
     </div>
 
     <div id="flagPopup" class="flag-popup">
@@ -103,8 +98,18 @@
         </div>
     </div>
 
+    <div id="eventPopup" class="flag-popup">
+        <div class="flag-popup-content">
+            <h2 class="event-title">FLAME EVENT!</h2>
+            <p class="event-message">현재 진행 중인 이벤트가 없습니다.</p>
+            <div class="flag-popup-buttons">
+                <button id="closeEvent" class="flag-popup-button">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
     <button class="footer-toggle">
-        <img src="assets/images/qna.png" alt="QnA" style="width: 24px; height: 24px;">
+        <img src="assets/images/icons/qna.png" alt="QnA" style="width: 24px; height: 24px;">
     </button>
 
     <footer class="footer">
@@ -170,11 +175,7 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/admin-card.js"></script>
-    <script src="assets/js/ranking.js"></script>
-    <script src="assets/js/admin-main.js"></script>
+    <script src="assets/js/admin/admin.js"></script>
 </body>
 
 </html>

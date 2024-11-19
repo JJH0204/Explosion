@@ -1,0 +1,240 @@
+/* 카드 관련 변수 */
+:root {
+    --card-ratio: 1.6;
+    --border-radius: 15px;
+    --purple-glow: rgba(147, 112, 219, 0.3);
+    --purple-dark: rgba(75, 0, 130, 0.2);
+    --blueviolet-glow: rgba(138, 43, 226, 0.1);
+    --white-transparent: rgba(255, 255, 255, 0.2);
+    --white-glow: rgba(255, 255, 255, 0.3);
+    --black-shadow: rgba(0, 0, 0, 0.3);
+    --black-deep-shadow: rgba(0, 0, 0, 0.4);
+    --primary-color: #F0E68C;
+    --secondary-color: #DFC766;
+}
+
+/* 카드 컨테이너 */
+.cards-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.cards-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 40px;
+    max-width: 1400px;
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+    min-width: 100%;
+    padding: 0 60px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* 카드 스타일 */
+.card {
+    aspect-ratio: 2/3;
+    background-color: #2a2a2a;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 20px 5px rgba(255, 229, 180, 0.5);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    border: 4px solid var(--secondary-color);
+    box-shadow: 0 0 30px 8px rgba(218, 165, 32, 0.5);
+}
+
+/* 팝업 스타일 */
+.flag-popup,
+.solution-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.flag-popup-content,
+.solution-popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.solution-popup-content {
+    width: 80%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+/* 버튼 스타일 */
+.arrow-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 20px;
+    cursor: pointer;
+    z-index: 100;
+    border-radius: 50%;
+}
+
+.arrow-button.left {
+    left: 20px;
+}
+
+.arrow-button.right {
+    right: 20px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1400px) {
+    .cards-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1200px) {
+    .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 슬라이드 방향 클래스 */
+.slide-left {
+    transform: translateX(-100%);
+}
+
+.slide-right {
+    transform: translateX(100%);
+}
+
+.slide-center {
+    transform: translateX(0);
+}
+
+/* 플래그 팝업 스타일 수정 */
+.flag-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.flag-popup-content {
+    background-color: #2a2a2a;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 20px 5px rgba(240, 230, 140, 0.3);
+}
+
+.flag-input {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    background-color: #1a1a1a;
+    border: 2px solid var(--secondary-color);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.flag-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(240, 230, 140, 0.2);
+}
+
+.flag-popup-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.flag-popup-button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: #1a1a1a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.flag-popup-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.flag-popup-button:active {
+    transform: translateY(1px);
+}
+
+/* 이벤트 팝업 관련 스타일 */
+.event-title {
+    color: var(--primary-color);
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(240, 230, 140, 0.3);
+}
+
+.event-message {
+    color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 20px;
+} 

@@ -22,17 +22,12 @@ class ImageManager {
     }
 
     async loadCustomImages() {
-        try {
-            const response = await fetch('/api/custom-images');
+        const response = await fetch('/assets/images/custom/');
             const images = await response.json();
             this.customImages = images.map(img => ({
-                path: `${this.config.customImagePath}${img}`,
-                name: img.split('.')[0]
-            }));
-        } catch (error) {
-            console.error('커스텀 이미지 로딩 실패:', error);
-            this.customImages = [];
-        }
+            path: `${this.config.customImagePath}${img}`,
+            name: img.split('.')[0]
+        }));
     }
 
     async setDefaultImage() {

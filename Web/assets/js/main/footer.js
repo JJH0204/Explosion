@@ -25,7 +25,7 @@ class Footer {
                 </div>
             </footer>
             <button class="footer-toggle">
-                <img src="assets/images/icons/info.png" alt="정보">
+                <img src="assets/images/icons/qna.png" alt="정보">
             </button>
         `;
 

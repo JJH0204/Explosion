@@ -5,13 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self';">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self';">
     <title>Flame</title>
     <link rel="stylesheet" href="assets/styles/main/bundle.min.css">
     <link rel="stylesheet" href="assets/styles/main/sidebar.css">
-    <link rel="stylesheet" href="assets/styles/main/footer.css">
     <link rel="preload" href="assets/images/background.jpg" as="image">
     <link rel="preload" href="assets/images/icons/Flame_logo2.png" as="image">
+    <link rel="stylesheet" href="assets/styles/main/cards.css">
+    <link rel="stylesheet" href="assets/styles/main/layout.css">
+    <link rel="stylesheet" href="assets/styles/main/footer.css">
+    <link rel="stylesheet" href="assets/styles/main/popup.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
 </head>
 
 <body>
@@ -29,43 +35,40 @@
             <button class="menu-button" id="logoutBtn">로그아웃</button>
         </div>
     </header>
+    <aside class="sidebar">
+        <div class="character-profile">
+            <div class="character-image-container">
+                <img src="assets/images/custom/character.png" alt="Character" class="character-image"
+                    id="character-image">
+            </div>
+            <div class="character-info">
+                <div class="character-name">
+                    <p id="player-nickname">로딩중...</p>
+                </div>
+                <div class="rank-info">
+                    <p>랭킹: <span id="current-level">-</span> 위</p>
+                </div>
+                <div class="score-info">
+                    <p>점수: <span id="player-score">-</span> pt</p>
+                </div>
+            </div>
+        </div>
 
-    <!-- <button class="sidebar-toggle">☰</button> -->
+        <div class="progress-info">
+            <h3>진행 상황</h3>
+            <div id="progress">
+                <span id="completed-challenges">0</span> /
+                <span id="total-challenges">40</span>
+            </div>
+        </div>
+        <div class="scoreboard">
+        </div>
+        <div id="rankingBoard" class="ranking-board">
+            <h3>실시간 랭킹</h3>
+            <ul id="rankingList"></ul>
+        </div>
+    </aside>
     <div class="main-container">
-        <aside class="sidebar">
-            <div class="character-profile">
-                <div class="character-image-container">
-                    <img src="assets/images/custom/character.png" alt="Character" class="character-image"
-                        id="character-image">
-                </div>
-                <div class="character-info">
-                    <div class="character-name">
-                        <p id="player-nickname">로딩중...</p>
-                    </div>
-                    <div class="rank-info">
-                        <p>랭킹: <span id="current-level">-</span> 위</p>
-                    </div>
-                    <div class="score-info">
-                        <p>점수: <span id="player-score">-</span> pt</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="progress-info">
-                <h3>진행 상황</h3>
-                <div id="progress">
-                    <span id="completed-challenges">0</span> /
-                    <span id="total-challenges">40</span>
-                </div>
-            </div>
-            <div class="scoreboard">
-            </div>
-            <div id="rankingBoard" class="ranking-board">
-                <h3>실시간 랭킹</h3>
-                <ul id="rankingList"></ul>
-            </div>
-        </aside>
-
         <main class="main-content">
             <div class="cards-container">
                 <div id="challengeGrid">
@@ -77,7 +80,7 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    
     <script type="module" src="assets/js/main/sidebar/ranking.js"></script>
     <script type="module" src="assets/js/main/sidebar/userinfo.js"></script>
     <script type="module" src="assets/js/main/init.js"></script>
