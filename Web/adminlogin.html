@@ -87,7 +87,7 @@
                     if (data.success) {
                         sessionStorage.setItem('loggedIn', 'true');
                         sessionStorage.removeItem('refreshed');
-                        window.location.href = 'admindashboard.html';
+                        window.location.href = 'admin.html';
                     } else {
                         document.getElementById('error-message').textContent = 'ID 또는 PW가 잘못되었습니다.';
                         document.getElementById('error-message').style.display = 'block';

@@ -4,6 +4,10 @@
     --sidebar-width: 300px;
     --common-background: rgba(0, 0, 0, 0.7);
     --blur-effect: blur(5px);
+    --card-ratio: 1.6;
+    --border-radius: 15px;
+    --primary-color: #F0E68C;
+    --secondary-color: #DFC766;
 }
 
 /* 전역 스타일 및 기본 레이아웃 */
@@ -58,7 +62,7 @@ body {
     align-items: center;
     padding: 0 20px;
     z-index: 1001;
-    backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); */
 }
 
 /* 로고 컨테이너 스타일 수정 */
@@ -142,6 +146,7 @@ body {
     z-index: var(--z-sidebar);
     -ms-overflow-style: none;
     scrollbar-width: none;
+    /* backdrop-filter: blur(5px); */
 }
 
 /* 캐릭터 프로필 */
@@ -258,8 +263,44 @@ body {
 }
 
 /* 메인 컨텐츠 영역 */
-.main-content {
+.main-container {
     margin-left: var(--sidebar-width);
+    margin-top: var(--header-height);
+    padding: 20px;
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-content {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 카드 컨테이너 스타일 추가 */
+.cards-container {
+    width: 100%;
+    height: calc(100% - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#challengeGrid {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(min(200px, 20%), 1fr));
+    grid-template-rows: repeat(2, minmax(min(300px, 45vh), 1fr));
+    gap: clamp(20px, 3vw, 40px);
+    padding: clamp(10px, 2vw, 30px);
 }
 
 /* 푸터 토글 버튼 */
@@ -289,51 +330,121 @@ body {
 .footer {
     position: fixed;
     left: 0;
-    bottom: -100%; /* 초기에는 화면 밖에 위치 */
+    bottom: -100%;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
+    /* backdrop-filter: blur(5px); */
     color: #ffffff;
-    padding: 20px;
-    z-index: 1001;
-    transition: bottom 0.5s ease-in-out;
-    margin-left: 280px;
+    padding: 30px 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+    margin-left: var(--sidebar-width);
 }
 
-/* 푸터가 보이는 상태 */
 .footer.show {
     bottom: 0;
 }
 
-/* 푸터 내용 스타일링 */
+.footer-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #000;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.footer-toggle:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.footer-toggle.active {
+    transform: rotate(180deg);
+}
+
 .footer-content {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 0;
+    gap: 40px;
+    flex-wrap: wrap;
 }
 
 .footer-section {
-    padding: 0 20px;
+    flex: 1;
+    min-width: 250px;
 }
 
 .footer-section h4 {
-    margin-bottom: 10px;
     color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .footer-section p {
-    margin: 5px 0;
+    margin: 12px 0;
     color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 .footer-section a {
-    color: #4a9eff;
+    color: #ffffff;
     text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .footer-section a:hover {
-    text-decoration: underline;
+    color: var(--secondary-color);
+}
+
+.footer-section a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--secondary-color);
+    transition: width 0.3s ease;
+}
+
+.footer-section a:hover::after {
+    width: 100%;
+}
+
+/* 푸터 반응형 스타일 */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-section {
+        margin: 0;
+        min-width: 100%;
+    }
+
+    .footer {
+        padding: 20px 15px;
+    }
 }
 
 /* 반응형 스타일 */
@@ -354,28 +465,33 @@ body {
 
 /* 실시간 랭킹 섹션 스타일 수정 */
 .ranking-board {
-    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    backdrop-filter: blur(5px);
 }
 
 .ranking-board h3 {
-    color: var(--text-color);
-    margin-bottom: 10px;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.2em;
 }
 
 #rankingList {
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 100%;
 }
 
 .ranking-item {
     display: flex;
     align-items: center;
-    padding: 6px 10px;
-    margin: 3px 0;
+    padding: 8px 12px;
+    margin: 5px 0;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    border-radius: 8px;
     transition: background-color 0.3s ease;
 }
 
@@ -386,7 +502,6 @@ body {
 .ranking-item .rank {
     width: 30px;
     text-align: center;
-    font-weight: bold;
     font-size: 1.2em;
 }
 
@@ -399,43 +514,25 @@ body {
 }
 
 .ranking-item .nickname {
-    font-weight: 500;
-    font-size: 1.0em;
     color: #fff;
+    font-weight: 500;
 }
 
 .ranking-item .score {
-    color: #ffd700;
+    color: var(--primary-color);
     font-weight: bold;
-    font-size: 1.0em;
 }
 
-/* 상위 3위까지 특별한 스타일 */
+/* 상위 3위 스타일 */
 .ranking-item:nth-child(1) {
-    background: rgba(255, 215, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.ranking-item:nth-child(2) {
-    background: rgba(192, 192, 192, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.ranking-item:nth-child(3) {
-    background: rgba(205, 127, 50, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-/* hover 효과 수정 */
-.ranking-item:nth-child(1):hover {
     background: rgba(255, 215, 0, 0.2);
 }
 
-.ranking-item:nth-child(2):hover {
+.ranking-item:nth-child(2) {
     background: rgba(192, 192, 192, 0.2);
 }
 
-.ranking-item:nth-child(3):hover {
+.ranking-item:nth-child(3) {
     background: rgba(205, 127, 50, 0.2);
 }
 
@@ -455,10 +552,4 @@ body {
     height: 100%;
     object-fit: cover;
 }
-
-/* 메인 컨텐츠 영역 */
-.main-container {
-    margin-left: 10px;
-    margin-top: 10px;
-    padding: 20px;
-} 
+ 

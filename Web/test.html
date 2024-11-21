@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flame</title>
-    <link rel="stylesheet" href="assets/styles/admin/admin_1.css">
-    <link rel="stylesheet" href="assets/styles/admin/admin_2.css">
+    <link rel="stylesheet" href="assets/styles/admin/test1.css">
+    <link rel="stylesheet" href="assets/styles/admin/test2.css">
     <style>
         .character-image-container {
             position: relative;
@@ -73,11 +73,10 @@
 
         <main class="main-content">
             <div class="cards-container">
-                <div class="cards-wrapper">
-                    <!-- 그리드는 JavaScript에서 동적으로 생성됩니다 -->
-                </div>
+                <div class="cards-wrapper"></div>
                 <button class="arrow-button left">◀</button>
                 <button class="arrow-button right">▶</button>
+                <div class="page-buttons"></div>
             </div>
         </main>
     </div>
@@ -127,55 +126,27 @@
         </div>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const flagBtn = document.getElementById('flagBtn');
-
-            if (flagBtn) {
-                flagBtn.addEventListener('click', function () {
-                    const popup = document.getElementById('flagPopup');
-
-                    popup.style.display = 'flex';
-
-                    document.getElementById('cancelFlag').addEventListener('click', function () {
-                        popup.style.display = 'none';
+        // 푸터 토글 기능을 위한 즉시 실행 함수
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const footerToggle = document.querySelector('.footer-toggle');
+                const footer = document.querySelector('.footer');
+                
+                console.log('Footer toggle:', footerToggle); // 디버깅
+                console.log('Footer:', footer); // 디버깅
+                
+                if (footerToggle && footer) {
+                    footerToggle.addEventListener('click', function() {
+                        console.log('Footer toggle clicked'); // 디버깅
+                        footer.classList.toggle('show');
+                        footerToggle.classList.toggle('active');
                     });
-
-                    document.getElementById('createFlag').addEventListener('click', function () {
-                        const flagValue = document.getElementById('flagInput').value;
-
-                        if (!flagValue.trim()) {
-                            alert('플래그를 입력해주세요.');
-                            return;
-                        }
-
-                        fetch('assets/php/create_flag.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: `flag=${encodeURIComponent(flagValue)}`
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('플래그가 성공적으로 생성되었습니다.');
-                                    document.getElementById('flagPopup').style.display = 'none';
-                                    document.getElementById('flagInput').value = ''; // 입력창 초기화
-                                } else {
-                                    alert('플래그 생성 실패: ' + (data.error || '알 수 없는 오류'));
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('오류가 발생했습니다.');
-                            });
-                    });
-                });
-            }
-        });
+                }
+            });
+        })();
     </script>
 
-    <script src="assets/js/admin/admin.js"></script>
+    <script src="assets/js/admin/test.js"></script>
 </body>
 
 </html>
