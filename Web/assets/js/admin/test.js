@@ -115,48 +115,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 실시간 랭킹 업데이트 함수
-    function updateRanking() {
-        // 더미 데이터로 테스트 (실제 서버 연동 전까지 사용)
-        const dummyData = [
-            { nickname: "JINYEONG", score: 370 },
-            { nickname: "test", score: 30 },
-            { nickname: "mintest1", score: 30 },
-            { nickname: "mintest", score: 0 },
-            { nickname: "jaeho", score: 0 },
-            { nickname: "testmin", score: 0 },
-            { nickname: "test123", score: 0 },
-            { nickname: "test124", score: 0 },
-            { nickname: "test125", score: 0 }
-        ];
-
-        const rankingList = document.getElementById('rankingList');
-        if (!rankingList) {
-            console.error('Ranking list element not found');
-            return;
-        }
-        
-        rankingList.innerHTML = '';
-        
-        dummyData.forEach((player, index) => {
-            const li = document.createElement('li');
-            li.className = 'ranking-item';
+    async function updateRanking() {
+        try {
+            const response = await fetch('assets/php/ranking.php');
+            const data = await response.json();
             
-            // 메달 이미지 추가 (1-3등)
-            let rankDisplay = `${index + 1}`;
-            if (index < 3) {
-                const medals = ['🥇', '🥈', '🥉'];
-                rankDisplay = medals[index];
+            if (!data.success) {
+                console.error('Failed to fetch ranking data:', data.error);
+                return;
+            }
+
+            const rankingList = document.getElementById('rankingList');
+            if (!rankingList) {
+                console.error('Ranking list element not found');
+                return;
             }
             
-            li.innerHTML = `
-                <span class="rank">${rankDisplay}</span>
-                <div class="player-info">
-                    <span class="nickname">${player.nickname}</span>
-                    <span class="score">${player.score}pt</span>
-                </div>
-            `;
-            rankingList.appendChild(li);
-        });
+            rankingList.innerHTML = '';
+            
+            // 최대 8등까지만 표시
+            data.rankings.slice(0, 7).forEach((player, index) => {
+                const li = document.createElement('li');
+                li.className = 'ranking-item';
+                
+                // 순위 표시 (1-3등은 메달, 4-8등은 숫자)
+                let rankDisplay;
+                if (index < 3) {
+                    const medals = ['🥇', '🥈', '🥉'];
+                    rankDisplay = medals[index];
+                } else {
+                    rankDisplay = index + 1;
+                }
+                
+                li.innerHTML = `
+                    <span class="rank">${rankDisplay}</span>
+                    <div class="player-info">
+                        <span class="nickname">${player.nickname}</span>
+                        <span class="score">${player.score}pt</span>
+                    </div>
+                `;
+                rankingList.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error fetching ranking data:', error);
+        }
     }
 
     // 팝업 이벤트 설정
@@ -190,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 if (confirm('로그아웃 하시겠습니까?')) {
-                    window.location.href = 'assets/php/logout.php';
+                    window.location.href = 'login.html';
                 }
             });
         }

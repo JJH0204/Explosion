@@ -140,13 +140,11 @@ body {
     bottom: 0;
     width: var(--sidebar-width);
     background-color: rgba(0, 0, 0, 0.7);
-    color: var(--text-color);
     padding: 20px;
     overflow-y: auto;
     z-index: var(--z-sidebar);
     -ms-overflow-style: none;
     scrollbar-width: none;
-    /* backdrop-filter: blur(5px); */
 }
 
 /* 캐릭터 프로필 */
@@ -166,7 +164,7 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 3px;
+    margin-bottom: 1px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -176,16 +174,18 @@ body {
     margin: 1px 0;
 }
 
+/* 캐릭터 이미지 컨테이너 수정 */
 .character-image-container {
     width: 144px;
     height: 144px;
-    margin: 0 auto 10px;
+    margin: 0 auto 15px;
     border-radius: 50%;
     overflow: visible !important;
     position: relative;
     z-index: 1;
 }
 
+/* 캐릭터 이미지 스타일 */
 .character-image {
     width: 100%;
     height: 100%;
@@ -197,20 +197,74 @@ body {
     z-index: 2;
 }
 
-/* 랭킹별 테두리 */
+/* 1등 랭크 메달 효과 */
 .character-image.rank-1 {
-    border-color: #FFD700;
-    box-shadow: 0 0 20px 5px #FFD700;
+    border: 4px solid transparent;
+    background: 
+        linear-gradient(135deg, #FFE45C, #FFD700);  /* 더 밝은 금색 그라데이션 */
+    box-shadow: 
+        0 0 10px 3px rgba(255, 215, 0, 0.8),  /* 기본 발광 */
+        inset -2px -2px 6px rgba(0, 0, 0, 0.2),  /* 내부 그림자 */
+        8px 2px 15px -5px rgba(255, 215, 0, 0.9),  /* 오른쪽 강조 */
+        0 0 20px rgba(255, 255, 0, 0.5);  /* 추가 발광 효과 */
 }
 
+/* 메달 효과를 위한 가상 요소 */
+.character-image.rank-1::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, 
+        rgba(255, 236, 92, 0.9) 0%,
+        rgba(255, 215, 0, 0.4) 50%,
+        rgba(255, 192, 0, 0.9) 100%
+    );
+    z-index: -1;
+    pointer-events: none;
+    filter: brightness(1.2);
+}
+
+/* 추가 광택 효과 */
+.character-image.rank-1::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: linear-gradient(45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.4) 45%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0.4) 55%,
+        transparent 60%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 2등과 3등도 비슷한 스타일로 적용 */
 .character-image.rank-2 {
-    border-color: #C0C0C0;
-    box-shadow: 0 0 20px 5px #C0C0C0;
+    border: 4px solid transparent;
+    background: linear-gradient(135deg, #E8E8E8, #C0C0C0);
+    box-shadow: 
+        0 0 10px 3px rgba(192, 192, 192, 0.8),
+        inset -2px -2px 6px rgba(0, 0, 0, 0.2),
+        8px 2px 15px -5px rgba(192, 192, 192, 0.9);
 }
 
 .character-image.rank-3 {
-    border-color: #CD7F32;
-    box-shadow: 0 0 20px 5px #CD7F32;
+    border: 4px solid transparent;
+    background: linear-gradient(135deg, #DAA520, #CD7F32);
+    box-shadow: 
+        0 0 10px 3px rgba(205, 127, 50, 0.8),
+        inset -2px -2px 6px rgba(0, 0, 0, 0.2),
+        8px 2px 15px -5px rgba(205, 127, 50, 0.9);
 }
 
 /* 진행 상황 섹션 */
@@ -303,27 +357,43 @@ body {
     padding: clamp(10px, 2vw, 30px);
 }
 
-/* 푸터 토글 버튼 */
+/* 푸터 토글 버튼 스타일 */
 .footer-toggle {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
-    cursor: pointer;
-    z-index: 1002;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease;
+    position: fixed !important;  /* 우선순위를 높이기 위해 !important 사용 */
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    background: #2c2c2c !important;  /* 회색 배경 */
+    border: 2px solid #000000 !important;  /* 검은색 테두리 */
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1001 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* 호버 효과 */
 .footer-toggle:hover {
-    transform: scale(1.1);
-    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1) !important;  /* 약간 커지는 효과 */
+    background: #3c3c3c !important;  /* 호버 시 약간 밝은 회색 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 활성화 상태 */
+.footer-toggle.active {
+    transform: rotate(180deg) !important;
+    background: #3c3c3c !important;
+}
+
+/* 아이콘 스타일 */
+.footer-toggle img {
+    width: 24px !important;
+    height: 24px !important;
+    opacity: 0.8 !important;
 }
 
 /* 푸터 영역 */
@@ -469,12 +539,11 @@ body {
     border-radius: 10px;
     padding: 15px;
     margin-top: 20px;
-    backdrop-filter: blur(5px);
 }
 
 .ranking-board h3 {
-    color: var(--primary-color);
-    text-align: center;
+    color: #fff;
+    text-align: left;
     margin-bottom: 15px;
     font-size: 1.2em;
 }
@@ -489,20 +558,61 @@ body {
     display: flex;
     align-items: center;
     padding: 8px 12px;
-    margin: 5px 0;
-    background: rgba(255, 255, 255, 0.1);
+    margin: 8px 0;
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 8px;
-    transition: background-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
-.ranking-item:hover {
-    background: rgba(255, 255, 255, 0.2);
+/* 1-3등 특별 스타일 */
+.ranking-item:nth-child(1) {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.ranking-item:nth-child(2) {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #C0C0C0;
+    box-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+}
+
+.ranking-item:nth-child(3) {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #CD7F32;
+    box-shadow: 0 0 10px rgba(205, 127, 50, 0.3);
 }
 
 .ranking-item .rank {
-    width: 30px;
-    text-align: center;
+    width: 25px;
     font-size: 1.2em;
+    display: flex;
+    align-items: center;
+}
+
+/* 메달 이모지용 특별 스타일 */
+.ranking-item:nth-child(-n+3) .rank {
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ranking-item:nth-child(1) .rank {
+    color: #FFD700;
+}
+
+.ranking-item:nth-child(2) .rank {
+    color: #C0C0C0;
+}
+
+.ranking-item:nth-child(3) .rank {
+    color: #CD7F32;
+}
+
+.ranking-item:nth-child(n+4) .rank {
+    color: #ffffff;
 }
 
 .ranking-item .player-info {
@@ -519,21 +629,14 @@ body {
 }
 
 .ranking-item .score {
-    color: var(--primary-color);
-    font-weight: bold;
+    color: #FFD700;
+    font-weight: 500;
 }
 
-/* 상위 3위 스타일 */
-.ranking-item:nth-child(1) {
-    background: rgba(255, 215, 0, 0.2);
-}
-
-.ranking-item:nth-child(2) {
-    background: rgba(192, 192, 192, 0.2);
-}
-
-.ranking-item:nth-child(3) {
-    background: rgba(205, 127, 50, 0.2);
+/* 호버 효과 */
+.ranking-item:hover {
+    transform: translateX(5px);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 /* 추가: 배경 이미지 컨테이너 스타일 */

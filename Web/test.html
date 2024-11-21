@@ -11,12 +11,6 @@
         .character-image-container {
             position: relative;
         }
-
-        .sidebar .character-profile img.character-image {
-            border: 4px solid #FFD700 !important;
-            box-shadow: 0 0 20px 5px #FFD700 !important;
-            z-index: 3 !important;
-        }
     </style>
 </head>
 
@@ -41,7 +35,7 @@
         <aside class="sidebar">
             <div class="character-profile">
                 <div class="character-image-container">
-                    <img src="assets/images/custom/character.png" alt="Character" class="character-image" id="character-image">
+                    <img src="assets/images/custom/character.png" alt="Character" class="character-image rank-1" id="character-image">
                 </div>
                 <div class="character-info">
                     <div class="character-name">
@@ -63,19 +57,16 @@
                     <div class="progress-text">40 / 40</div>
                 </div>
             </div>
-            <div class="scoreboard">
-            </div>
-            <div id="rankingBoard" class="ranking-board" style="margin-top: 10px;">
-                <h3>실시간 랭킹</h3>
-                <ul id="rankingList"></ul>
-            </div>
+
+            <h3 class="ranking-title">실시간 랭킹</h3>
+            <ul id="rankingList"></ul>
         </aside>
 
         <main class="main-content">
             <div class="cards-container">
                 <div class="cards-wrapper"></div>
-                <button class="arrow-button left">◀</button>
-                <button class="arrow-button right">▶</button>
+                <button class="arrow-button left"></button>
+                <button class="arrow-button right"></button>
                 <div class="page-buttons"></div>
             </div>
         </main>

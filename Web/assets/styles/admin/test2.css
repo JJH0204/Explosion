@@ -109,52 +109,55 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    z-index: 100;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    z-index: 100;
 }
 
-.arrow-button img {
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) invert(1);
-    transition: all 0.3s ease, transform 0.3s ease;
-    will-change: transform;
-}
-
-.arrow-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-50%) scale(1.1);
-}
-
-.arrow-button:hover img {
-    filter: invert(88%) sepia(19%) saturate(463%) hue-rotate(8deg) brightness(106%) contrast(93%);
-    transform: scale(1.2);
-}
-
-.arrow-button.left {
-    left: 0;
-    border-radius: 0 8px 8px 0;
-}
-
+/* 오른쪽 버튼 위치 */
 .arrow-button.right {
     right: 0;
     border-radius: 8px 0 0 8px;
 }
 
-/* 비활성화된 버튼 스타일 */
-.arrow-button[style*="opacity: 0.5"] {
-    cursor: not-allowed;
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-50%) scale(1) !important;
+/* 왼쪽 버튼 위치 */
+.arrow-button.left {
+    left: 0;
+    border-radius: 0 8px 8px 0;
 }
 
-.arrow-button[style*="opacity: 0.5"] img {
-    opacity: 0.3;
-    transform: scale(1) !important;
-    filter: brightness(0) invert(1) !important;
+.arrow-button::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background-image: url('../../images/icons/arrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.3s ease;
+    filter: brightness(0) invert(1);
+}
+
+/* 호버 효과 - 화살표 색상만 변경 */
+.arrow-button:hover::before {
+    filter: invert(83%) sepia(19%) saturate(638%) hue-rotate(358deg) brightness(95%);
+    transform: scale(1.2);
+}
+
+/* 왼쪽 화살표 특별 처리 */
+.arrow-button.left::before {
+    transform: rotate(180deg);
+}
+
+.arrow-button.left:hover::before {
+    transform: rotate(180deg) scale(1.2);
+}
+
+/* 비활성화된 버튼 스타일 */
+.arrow-button[style*="opacity: 0.5"]::before {
+    opacity: 0.5;
 }
 
 /* 버튼 클릭 효과 */
@@ -162,7 +165,7 @@
     transform: translateY(-50%) scale(0.95);
 }
 
-.arrow-button:active img {
+.arrow-button:active::before {
     transform: scale(0.9);
 }
 
