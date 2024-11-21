@@ -16,27 +16,44 @@ document.addEventListener('DOMContentLoaded', function() {
             
             cardsWrapper.innerHTML = '';
 
-            for (let page = 0; page < this.totalPages; page++) {
-                const grid = document.createElement('div');
-                grid.className = 'cards-grid';
-                
-                const startCard = page * this.cardsPerPage + 1;
-                const endCard = Math.min((page + 1) * this.cardsPerPage, this.totalCards);
-                
-                for (let i = startCard; i <= endCard; i++) {
-                    const card = document.createElement('div');
-                    card.className = 'challenge-card';
+            // 클리어한 스테이지 정보를 가져옵니다
+            fetch('assets/php/get_cleared_stages.php')
+                .then(response => response.json())
+                .then(response => {
+                    if (!response.success) {
+                        throw new Error(response.error);
+                    }
                     
-                    const img = document.createElement('img');
-                    img.src = `assets/images/monsters/monster_image${i}.png`;
-                    img.alt = `Monster ${i}`;
+                    const clearedStages = response.data;
                     
-                    card.appendChild(img);
-                    grid.appendChild(card);
-                }
-                
-                cardsWrapper.appendChild(grid);
-            }
+                    for (let page = 0; page < this.totalPages; page++) {
+                        const grid = document.createElement('div');
+                        grid.className = 'cards-grid';
+                        
+                        const startCard = page * this.cardsPerPage + 1;
+                        const endCard = Math.min((page + 1) * this.cardsPerPage, this.totalCards);
+                        
+                        for (let i = startCard; i <= endCard; i++) {
+                            const card = document.createElement('div');
+                            card.className = 'challenge-card';
+                            
+                            const img = document.createElement('img');
+                            if (clearedStages.includes(i)) {
+                                img.src = `assets/images/monsters/monster_image${i}.png`;
+                                img.alt = `Monster ${i}`;
+                            } else {
+                                img.src = 'assets/images/card_back.jpg';
+                                img.alt = 'Card Back';
+                            }
+                            
+                            card.appendChild(img);
+                            grid.appendChild(card);
+                        }
+                        
+                        cardsWrapper.appendChild(grid);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
 
         setupArrowButtons() {
@@ -114,49 +131,79 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 실시간 랭킹 업데이트 함수
-    function updateRanking() {
-        // 더미 데이터로 테스트 (실제 서버 연동 전까지 사용)
-        const dummyData = [
-            { nickname: "JINYEONG", score: 370 },
-            { nickname: "test", score: 30 },
-            { nickname: "mintest1", score: 30 },
-            { nickname: "mintest", score: 0 },
-            { nickname: "jaeho", score: 0 },
-            { nickname: "testmin", score: 0 },
-            { nickname: "test123", score: 0 },
-            { nickname: "test124", score: 0 },
-            { nickname: "test125", score: 0 }
-        ];
-
-        const rankingList = document.getElementById('rankingList');
-        if (!rankingList) {
-            console.error('Ranking list element not found');
-            return;
-        }
-        
-        rankingList.innerHTML = '';
-        
-        dummyData.forEach((player, index) => {
-            const li = document.createElement('li');
-            li.className = 'ranking-item';
+    async function updateRanking() {
+        try {
+            const response = await fetch('assets/php/ranking.php');
+            const data = await response.json();
             
-            // 메달 이미지 추가 (1-3등)
-            let rankDisplay = `${index + 1}`;
-            if (index < 3) {
-                const medals = ['🥇', '🥈', '🥉'];
-                rankDisplay = medals[index];
+            if (!data.success) {
+                console.error('Failed to fetch ranking data:', data.error);
+                return;
+            }
+
+            const rankingList = document.getElementById('rankingList');
+            if (!rankingList) {
+                console.error('Ranking list element not found');
+                return;
             }
             
-            li.innerHTML = `
-                <span class="rank">${rankDisplay}</span>
-                <div class="player-info">
-                    <span class="nickname">${player.nickname}</span>
-                    <span class="score">${player.score}pt</span>
-                </div>
-            `;
-            rankingList.appendChild(li);
-        });
+            rankingList.innerHTML = '';
+            
+            data.rankings.slice(0, 7).forEach((player, index) => {
+                const li = document.createElement('li');
+                li.className = 'ranking-item';
+                
+                let rankDisplay;
+                if (index < 3) {
+                    const medals = ['🥇', '🥈', '🥉'];
+                    rankDisplay = medals[index];
+                } else {
+                    rankDisplay = index + 1;
+                }
+                
+                li.innerHTML = `
+                    <span class="rank">${rankDisplay}</span>
+                    <div class="player-info">
+                        <span class="nickname">${player.nickname}</span>
+                        <span class="score">${player.score}pt</span>
+                    </div>
+                `;
+                rankingList.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error fetching ranking data:', error);
+        }
+    }
+
+    async function updateUserInfo() {
+        try {
+            const response = await fetch('assets/php/user_info.php');
+            const data = await response.json();
+            
+            if (!data.success) {
+                console.error('Failed to fetch user info:', data.error);
+                return;
+            }
+
+            // Update sidebar elements with user info
+            document.getElementById('player-nickname').textContent = data.data.nickname;
+            document.getElementById('current-level').textContent = data.data.rank;
+            document.getElementById('player-score').textContent = data.data.score;
+            
+            // Update progress bar
+            const progress = document.getElementById('progress');
+            const completed = data.data.stage;
+            const total = 40; // 총 스테이지 수
+            
+            progress.style.setProperty('--completed', completed);
+            progress.style.setProperty('--total', total);
+            
+            document.getElementById('completed-challenges').textContent = completed;
+            document.getElementById('total-challenges').textContent = total;
+
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
     }
 
     // 팝업 이벤트 설정
@@ -190,15 +237,61 @@ document.addEventListener('DOMContentLoaded', function() {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 if (confirm('로그아웃 하시겠습니까?')) {
-                    window.location.href = 'assets/php/logout.php';
+                    window.location.href = 'login.html';
                 }
             });
         }
     }
 
+    // 진행 상황 업데이트 예시
+    function updateProgress(stage) {
+        const progressFill = document.querySelector('.progress-fill');
+        if (!progressFill) {
+            console.error('Progress fill element not found');
+            return;
+        }
+
+        const completedElement = document.getElementById('completed-challenges');
+        if (!completedElement) {
+            console.error('Completed challenges element not found');
+            return;
+        }
+
+        // stage가 유효한 숫자인지 확인
+        const validStage = (!isNaN(stage) && stage !== null && stage !== '') ? parseInt(stage) : 0;
+        
+        const totalStages = 40;
+        completedElement.textContent = validStage || '-';  // 유효한 값이 없으면 '-' 표시
+        progressFill.style.width = `${(validStage / totalStages) * 100}%`;  // 유효하지 않으면 0%
+    }
+
+    // DOM이 로드된 후 실행되도록 보장
+    document.addEventListener('DOMContentLoaded', () => {
+        // 초기 진행상황 업데이트
+        updateProgress(0); // 또는 현재 스테이지 값
+    });
+
     // 초기화
     const adminCardManager = new AdminCardManager();
     setupPopups();
+    updateUserInfo();
     updateRanking();
     setInterval(updateRanking, 180000);
+
+    // user_info.php에서 데이터를 가져와서 진행 상황 업데이트
+    fetch('assets/php/user_info.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const stage = parseInt(data.data.stage);
+                const progressFill = document.querySelector('.progress-fill');
+                const completedElement = document.getElementById('completed-challenges');
+                
+                if (progressFill && completedElement) {
+                    completedElement.textContent = stage;
+                    progressFill.style.width = `${(stage / 40) * 100}%`;
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
 }); 
