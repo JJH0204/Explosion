@@ -8,8 +8,34 @@
     <link rel="stylesheet" href="assets/styles/admin/test1.css">
     <link rel="stylesheet" href="assets/styles/admin/test2.css">
     <style>
-        .character-image-container {
-            position: relative;
+        #challengePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 9999 !important;
+            width: 100%;
+            height: 100%;
+        }
+
+        #challengePopup .challenge-popup-content {
+            background-color: #1a1a1a !important;
+            max-width: 700px !important;
+            max-height: 85vh !important;
+            width: 90% !important;
+            padding: 20px !important;
+            margin: 20px auto !important;
+            border-radius: 10px !important;
+            position: relative !important;
+        }
+
+        #challengePopup .flag-input-container {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin: 10px 0 !important;
+        }
+
+        #challengePopup .flag-input {
+            height: 32px !important;
         }
     </style>
 </head>
@@ -88,6 +114,8 @@
         </div>
     </div>
 
+    <div id="challengePopup" class="challenge-popup"></div>
+
     <button class="footer-toggle">
         <img src="assets/images/icons/qna.png" alt="QnA" style="width: 24px; height: 24px;">
     </button>
@@ -127,6 +155,16 @@
         })();
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // marked 옵션 설정
+        marked.setOptions({
+            breaks: true,        // 줄바꿈 허용
+            gfm: true,          // GitHub Flavored Markdown 활성화
+            headerIds: true,    // 헤더에 ID 추가
+            mangle: false,      // 헤더 ID 난독화 비활성화
+        });
+    </script>
     <script src="assets/js/admin/test.js"></script>
 </body>
 

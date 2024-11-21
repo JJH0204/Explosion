@@ -632,8 +632,3 @@
 #eventPopup .flag-popup-button:hover {
     background-color: #DFC766;
 }
-
-.challenge-card.cleared {
-    pointer-events: none; /* 클릭 이벤트 완전히 비활성화 */
-    cursor: default;
-}

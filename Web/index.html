@@ -4,35 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self';">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>Flame</title>
-    <link rel="stylesheet" href="assets/styles/main/bundle.min.css">
-    <link rel="stylesheet" href="assets/styles/main/sidebar.css">
-    <link rel="preload" href="assets/images/background.jpg" as="image">
-    <link rel="preload" href="assets/images/icons/Flame_logo2.png" as="image">
-    <link rel="stylesheet" href="assets/styles/main/cards.css">
-    <link rel="stylesheet" href="assets/styles/main/layout.css">
-    <link rel="stylesheet" href="assets/styles/main/footer.css">
-    <link rel="stylesheet" href="assets/styles/main/popup.css">
-
-
-    <script>
-        // 페이지 진입 시 즉시 세션 체크
-        if (sessionStorage.getItem('loggedIn') !== 'true') {
-            window.location.href = 'login.html';
+    <link rel="stylesheet" href="assets/styles/admin/test1.css">
+    <link rel="stylesheet" href="assets/styles/admin/test2.css">
+    <style>
+        #challengePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 9999 !important;
+            width: 100%;
+            height: 100%;
         }
 
-        // 뒤로가기 방지
-        window.history.pushState(null, null, window.location.href);
-        window.onpopstate = function () {
-            window.history.pushState(null, null, window.location.href);
-        };
-    </script>
+        #challengePopup .challenge-popup-content {
+            background-color: #1a1a1a !important;
+            max-width: 700px !important;
+            max-height: 85vh !important;
+            width: 90% !important;
+            padding: 20px !important;
+            margin: 20px auto !important;
+            border-radius: 10px !important;
+            position: relative !important;
+        }
+
+        #challengePopup .flag-input-container {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin: 10px 0 !important;
+        }
+
+        #challengePopup .flag-input {
+            height: 32px !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -50,70 +55,117 @@
             <button class="menu-button" id="logoutBtn">로그아웃</button>
         </div>
     </header>
-    <aside class="sidebar">
-        <div class="character-profile">
-            <div class="character-image-container">
-                <img src="assets/images/custom/character.png" alt="Character" class="character-image"
-                    id="character-image">
-            </div>
-            <div class="character-info">
-                <div class="character-name">
-                    <p id="player-nickname">로딩중...</p>
-                </div>
-                <div class="rank-info">
-                    <p>랭킹: <span id="current-level">-</span> 위</p>
-                </div>
-                <div class="score-info">
-                    <p>점수: <span id="player-score">-</span> pt</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="progress-info">
-            <h3>진행 상황</h3>
-            <div id="progress">
-                <span id="completed-challenges">0</span> /
-                <span id="total-challenges">40</span>
-            </div>
-        </div>
-        <div class="scoreboard">
-        </div>
-        <div id="rankingBoard" class="ranking-board">
-            <h3>실시간 랭킹</h3>
-            <ul id="rankingList"></ul>
-        </div>
-    </aside>
     <div class="main-container">
+        <aside class="sidebar">
+            <div class="character-profile">
+                <div class="character-image-container">
+                    <img src="assets/images/custom/character.png" alt="Character" class="character-image rank-1" id="character-image">
+                </div>
+                <div class="character-info">
+                    <div class="character-name">
+                        <p id="player-nickname" style="font-size: 1.2rem;">로딩중...</p>
+                    </div>
+                    <div class="rank-info">
+                        <p>랭킹: <span id="current-level">-</span> 위</p>
+                        <p>점수: <span id="player-score">-</span> pt</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-info">
+                <h3>진행 상황</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                    <div class="progress-text">
+                        <span id="completed-challenges">-</span>
+                        <span id="total-challenges">/ 40</span>
+                    </div>
+                </div>
+            </div>                    
+                    
+            <h3 class="ranking-title">실시간 랭킹</h3>
+            <ul id="rankingList"></ul>
+        </aside>
+
         <main class="main-content">
             <div class="cards-container">
-                <div id="challengeGrid"></div>
+                <div class="cards-wrapper"></div>
+                <button class="arrow-button left"></button>
+                <button class="arrow-button right"></button>
+                <div class="page-buttons"></div>
             </div>
         </main>
     </div>
+    
+    <div id="gamePopup" class="solution-popup">
+        <div class="solution-popup-content">
+            <div id="gameContent" class="solution-content"></div>
+        </div>
+    </div>
 
-    <div class="popup-overlay">
-        <div class="popup-content">
-            <button class="popup-close">×</button>
-            <div class="popup-header"></div>
-            <div class="challenge-info"></div>
-            <div class="markdown-content"></div>
-            <div class="challenge-actions">
-                <div class="flag-input-container">
-                    <input type="text" class="flag-input" placeholder="플래그를 입력하세요">
-                    <button class="submit-btn">제출</button>
-                </div>
-                <button class="goto-challenge-btn">문제 페이지로 이동</button>
+    <div id="eventPopup" class="flag-popup">
+        <div class="flag-popup-content">
+            <h2 class="event-title">FLAME EVENT!</h2>
+            <p class="event-message">현재 진행 중인 이벤트가 없습니다.</p>
+            <div class="flag-popup-buttons">
+                <button id="closeEvent" class="flag-popup-button">CLOSE</button>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-    <script type="module" src="assets/js/main/sidebar/ranking.js"></script>
-    <script type="module" src="assets/js/main/sidebar/userinfo.js"></script>
-    <script type="module" src="assets/js/main/Manager/MainContent.js"></script>
-    <script type="module" src="assets/js/main/init.js"></script>
-    <script type="module" src="assets/js/main/footer.js"></script>
-    <!-- TODO: 사용자 계정 이미지 바꾸는 문제 다시 출제 -->
-    <!-- TODO: 로컬 스토리지 활용 문제 다시 출제 -->
+
+    <div id="challengePopup" class="challenge-popup"></div>
+
+    <button class="footer-toggle">
+        <img src="assets/images/icons/qna.png" alt="QnA" style="width: 24px; height: 24px;">
+    </button>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Flame War Game</h4>
+                <p>&copy; 2024 Team FireWall. All rights reserved.</p>
+                <p>개발: Flame War Game 개발팀</p>
+            </div>
+            <div class="footer-section">
+                <h4>문의하기</h4>
+                <p>버 신고: <a href="mailto:bug-report@flamewargame.com">bug-report@flamewargame.com</a></p>
+                <p>취약점 신고: <a href="mailto:security@flamewargame.com">security@flamewargame.com</a></p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // 푸터 토글 기능을 위한 즉시 실행 함수
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const footerToggle = document.querySelector('.footer-toggle');
+                const footer = document.querySelector('.footer');
+                
+                console.log('Footer toggle:', footerToggle); // 디버깅
+                console.log('Footer:', footer); // 디버깅
+                
+                if (footerToggle && footer) {
+                    footerToggle.addEventListener('click', function() {
+                        console.log('Footer toggle clicked'); // 디버깅
+                        footer.classList.toggle('show');
+                        footerToggle.classList.toggle('active');
+                    });
+                }
+            });
+        })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // marked 옵션 설정
+        marked.setOptions({
+            breaks: true,        // 줄바꿈 허용
+            gfm: true,          // GitHub Flavored Markdown 활성화
+            headerIds: true,    // 헤더에 ID 추가
+            mangle: false,      // 헤더 ID 난독화 비활성화
+        });
+    </script>
+    <script src="assets/js/admin/test.js"></script>
 </body>
 
 </html>
