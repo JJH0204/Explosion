@@ -17,7 +17,7 @@ try {
         $nickname = $_SESSION['nickname'];
 
         // 먼저 전체 랭킹을 가져옴 (실시간 랭킹과 동일한 정렬 기준 사용)
-        $rankQuery = "SELECT NICKNAME, SCORE, RECOREDE_DATE 
+        $rankQuery = "SELECT NICKNAME, SCORE, STAGE, RECOREDE_DATE 
                      FROM USER_info 
                      ORDER BY SCORE DESC, RECOREDE_DATE ASC";
         
@@ -25,12 +25,14 @@ try {
         $rank = 1;
         $userRank = 0;
         $userScore = 0;
+        $userStage = 0;
 
         // 유저의 순위 찾기
         while($row = $rankResult->fetch_assoc()) {
             if($row['NICKNAME'] === $nickname) {
                 $userRank = $rank;
                 $userScore = $row['SCORE'];
+                $userStage = $row['STAGE'];
                 break;
             }
             $rank++;
@@ -41,7 +43,8 @@ try {
             'data' => [
                 'nickname' => $nickname,
                 'rank' => $userRank,
-                'score' => $userScore
+                'score' => $userScore,
+                'stage' => $userStage
             ]
         ]);
     } else {

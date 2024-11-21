@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flame</title>
-    <link rel="stylesheet" href="assets/styles/admin/test1.css">
-    <link rel="stylesheet" href="assets/styles/admin/test2.css">
+    <link rel="stylesheet" href="assets/styles/admin/admin1.css">
+    <link rel="stylesheet" href="assets/styles/admin/admin2.css">
     <style>
         .character-image-container {
             position: relative;
@@ -25,6 +25,7 @@
             <span class="logo-text">Flame War Game</span>
         </div>
         <div class="header-menu">
+            <button class="menu-button" id="flagBtn">플래그 생성</button>
             <button class="menu-button" id="EventBtn">이벤트</button>
             <button class="menu-button" id="logoutBtn">로그아웃</button>
         </div>
@@ -38,11 +39,13 @@
                 </div>
                 <div class="character-info">
                     <div class="character-name">
-                        <p id="player-nickname" style="font-size: 1.2rem;">로딩중...</p>
+                        Admin
                     </div>
                     <div class="rank-info">
-                        <p>랭킹: <span id="current-level">-</span> 위</p>
-                        <p>점수: <span id="player-score">-</span> pt</p>
+                        직위: 관리자
+                    </div>
+                    <div class="score-info">
+                        점수: 9999 pt
                     </div>
                 </div>
             </div>
@@ -50,14 +53,11 @@
             <div class="progress-info">
                 <h3>진행 상황</h3>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 100%"></div>
-                    <div class="progress-text">
-                        <span id="completed-challenges">-</span>
-                        <span id="total-challenges">/ 40</span>
-                    </div>
+                    <div class="progress-fill"></div>
+                    <div class="progress-text">40 / 40</div>
                 </div>
-            </div>                    
-                    
+            </div>
+
             <h3 class="ranking-title">실시간 랭킹</h3>
             <ul id="rankingList"></ul>
         </aside>
@@ -70,6 +70,16 @@
                 <div class="page-buttons"></div>
             </div>
         </main>
+    </div>
+
+    <div id="flagPopup" class="flag-popup">
+        <div class="flag-popup-content">
+            <input type="text" id="flagInput" class="flag-input" placeholder="플래그를 입력하세요">
+            <div class="flag-popup-buttons">
+                <button id="createFlag" class="flag-popup-button">CREATE</button>
+                <button id="cancelFlag" class="flag-popup-button">CANCEL</button>
+            </div>
+        </div>
     </div>
     
     <div id="gamePopup" class="solution-popup">
@@ -107,18 +117,14 @@
         </div>
     </footer>
     <script>
-        // 푸터 토글 기능을 위한 즉시 실행 함수
         (function() {
             document.addEventListener('DOMContentLoaded', function() {
                 const footerToggle = document.querySelector('.footer-toggle');
                 const footer = document.querySelector('.footer');
                 
-                console.log('Footer toggle:', footerToggle); // 디버깅
-                console.log('Footer:', footer); // 디버깅
-                
                 if (footerToggle && footer) {
                     footerToggle.addEventListener('click', function() {
-                        console.log('Footer toggle clicked'); // 디버깅
+                        console.log('Footer toggle clicked');
                         footer.classList.toggle('show');
                         footerToggle.classList.toggle('active');
                     });
@@ -127,7 +133,7 @@
         })();
     </script>
 
-    <script src="assets/js/admin/test.js"></script>
+    <script src="assets/js/admin/admin.js"></script>
 </body>
 
 </html>

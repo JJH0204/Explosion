@@ -16,44 +16,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             cardsWrapper.innerHTML = '';
 
-            // 클리어한 스테이지 정보를 가져옵니다
-            fetch('assets/php/get_cleared_stages.php')
-                .then(response => response.json())
-                .then(response => {
-                    if (!response.success) {
-                        throw new Error(response.error);
-                    }
+            for (let page = 0; page < this.totalPages; page++) {
+                const grid = document.createElement('div');
+                grid.className = 'cards-grid';
+                
+                const startCard = page * this.cardsPerPage + 1;
+                const endCard = Math.min((page + 1) * this.cardsPerPage, this.totalCards);
+                
+                for (let i = startCard; i <= endCard; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'challenge-card';
                     
-                    const clearedStages = response.data;
+                    const img = document.createElement('img');
+                    img.src = `assets/images/monsters/monster_image${i}.png`;
+                    img.alt = `Monster ${i}`;
                     
-                    for (let page = 0; page < this.totalPages; page++) {
-                        const grid = document.createElement('div');
-                        grid.className = 'cards-grid';
-                        
-                        const startCard = page * this.cardsPerPage + 1;
-                        const endCard = Math.min((page + 1) * this.cardsPerPage, this.totalCards);
-                        
-                        for (let i = startCard; i <= endCard; i++) {
-                            const card = document.createElement('div');
-                            card.className = 'challenge-card';
-                            
-                            const img = document.createElement('img');
-                            if (clearedStages.includes(i)) {
-                                img.src = `assets/images/monsters/monster_image${i}.png`;
-                                img.alt = `Monster ${i}`;
-                            } else {
-                                img.src = 'assets/images/card_back.jpg';
-                                img.alt = 'Card Back';
-                            }
-                            
-                            card.appendChild(img);
-                            grid.appendChild(card);
-                        }
-                        
-                        cardsWrapper.appendChild(grid);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                    card.appendChild(img);
+                    grid.appendChild(card);
+                }
+                
+                cardsWrapper.appendChild(grid);
+            }
         }
 
         setupArrowButtons() {
@@ -175,37 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    async function updateUserInfo() {
-        try {
-            const response = await fetch('assets/php/user_info.php');
-            const data = await response.json();
-            
-            if (!data.success) {
-                console.error('Failed to fetch user info:', data.error);
-                return;
-            }
-
-            // Update sidebar elements with user info
-            document.getElementById('player-nickname').textContent = data.data.nickname;
-            document.getElementById('current-level').textContent = data.data.rank;
-            document.getElementById('player-score').textContent = data.data.score;
-            
-            // Update progress bar
-            const progress = document.getElementById('progress');
-            const completed = data.data.stage;
-            const total = 40; // 총 스테이지 수
-            
-            progress.style.setProperty('--completed', completed);
-            progress.style.setProperty('--total', total);
-            
-            document.getElementById('completed-challenges').textContent = completed;
-            document.getElementById('total-challenges').textContent = total;
-
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
-    }
-
     // 팝업 이벤트 설정
     function setupPopups() {
         // 플래그 버튼
@@ -243,55 +195,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 진행 상황 업데이트 예시
-    function updateProgress(stage) {
-        const progressFill = document.querySelector('.progress-fill');
-        if (!progressFill) {
-            console.error('Progress fill element not found');
-            return;
-        }
-
-        const completedElement = document.getElementById('completed-challenges');
-        if (!completedElement) {
-            console.error('Completed challenges element not found');
-            return;
-        }
-
-        // stage가 유효한 숫자인지 확인
-        const validStage = (!isNaN(stage) && stage !== null && stage !== '') ? parseInt(stage) : 0;
-        
-        const totalStages = 40;
-        completedElement.textContent = validStage || '-';  // 유효한 값이 없으면 '-' 표시
-        progressFill.style.width = `${(validStage / totalStages) * 100}%`;  // 유효하지 않으면 0%
-    }
-
-    // DOM이 로드된 후 실행되도록 보장
-    document.addEventListener('DOMContentLoaded', () => {
-        // 초기 진행상황 업데이트
-        updateProgress(0); // 또는 현재 스테이지 값
-    });
-
     // 초기화
     const adminCardManager = new AdminCardManager();
     setupPopups();
-    updateUserInfo();
     updateRanking();
     setInterval(updateRanking, 180000);
-
-    // user_info.php에서 데이터를 가져와서 진행 상황 업데이트
-    fetch('assets/php/user_info.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const stage = parseInt(data.data.stage);
-                const progressFill = document.querySelector('.progress-fill');
-                const completedElement = document.getElementById('completed-challenges');
-                
-                if (progressFill && completedElement) {
-                    completedElement.textContent = stage;
-                    progressFill.style.width = `${(stage / 40) * 100}%`;
-                }
-            }
-        })
-        .catch(error => console.error('Error:', error));
 }); 
