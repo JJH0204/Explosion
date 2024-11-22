@@ -73,10 +73,24 @@
             bottom: -100%;
             left: 0;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 0.6rem;
             color: white;
             transition: bottom 0.3s ease-in-out;
+        }
+
+        .video-hint {
+            margin-top: 0.2rem;
+            font-size: 0.8rem;
+            color: var(--primary-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.2rem;
+        }
+
+        .video-hint i {
+            font-size: 1rem;
         }
 
         .champion-card:hover .champion-info {
@@ -320,11 +334,11 @@
         }
 
         .champion-info h3 {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: #fff;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .timeline-item h3 {
@@ -333,6 +347,53 @@
             margin-bottom: 0.5rem;
             font-weight: 700;
             letter-spacing: 1px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 960px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .close {
+            color: #fff;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .champion-card {
+            cursor: pointer;
+        }
+
+        .champion-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            color: #ccc;
+        }
+
+        .champion-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin: 0.3rem 0;
         }
     </style>
 </head>
@@ -367,7 +428,7 @@
         <section class="signature-champions">
             <h2>시그니처 챔피언</h2>
             <div class="champion-grid">
-                <div class="champion-card fade-in">
+                <div class="champion-card fade-in" data-video-id="gNDsKy4H8lQ">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Azir_0.jpg" alt="Azir">
                     </div>
@@ -378,9 +439,12 @@
                             <span>승률 65%</span>
                             <span>60회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
-                <div class="champion-card slide-in">
+                <div class="champion-card slide-in" data-video-id="wu-MfqLBLts">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Orianna_0.jpg" alt="Orianna">
                     </div>
@@ -391,6 +455,9 @@
                             <span>승률 65%</span>
                             <span>60회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card fade-in">
@@ -404,6 +471,9 @@
                             <span>승률 63.6%</span>
                             <span>55회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card slide-in">
@@ -417,6 +487,9 @@
                             <span>승률 73.1%</span>
                             <span>52회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card fade-in">
@@ -424,12 +497,15 @@
                         <img src="../image/home/LOL_char/Syndra_0.jpg" alt="Syndra">
                     </div>
                     <div class="champion-info">
-                        <h3>신드라</h3>
+                        <h3>드라</h3>
                         <p class="champion-title">어둠의 여제</p>
                         <div class="champion-stats">
                             <span>승률 68%</span>
                             <span>50회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card slide-in">
@@ -443,6 +519,9 @@
                             <span>승률 68.9%</span>
                             <span>45회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card fade-in">
@@ -456,6 +535,9 @@
                             <span>승률 70%</span>
                             <span>40회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card slide-in">
@@ -469,6 +551,9 @@
                             <span>승률 71.4%</span>
                             <span>35회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card fade-in">
@@ -482,6 +567,9 @@
                             <span>승률 81.8%</span>
                             <span>33회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
                 <div class="champion-card slide-in">
@@ -490,11 +578,14 @@
                     </div>
                     <div class="champion-info">
                         <h3>아칼리</h3>
-                        <p class="champion-title">그림자의 권</p>
+                        <p class="champion-title">그자의 권</p>
                         <div class="champion-stats">
                             <span>승률 70%</span>
                             <span>30회 플레이</span>
                         </div>
+                        <p class="video-hint">
+                            하이라이트 보기
+                        </p>
                     </div>
                 </div>
             </div>
@@ -672,7 +763,57 @@
 
         // 페이지 로드 시 이미지 드
         document.addEventListener('DOMContentLoaded', loadImages);
+
+        // 모달 열기
+        document.querySelectorAll('.champion-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const videoId = this.dataset.videoId;
+                if (videoId) {
+                    const modal = document.getElementById('videoModal');
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                    modal.style.display = 'block';
+                }
+            });
+        });
+
+        // 닫기 버튼으로 모달 닫기
+        const closeBtn = document.querySelector('.close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+
+        // 모달 외부 클릭으로 닫기
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 모달 닫기 함수
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (modal && videoPlayer) {
+                videoPlayer.src = '';
+                modal.style.display = 'none';
+            }
+        }
     </script>>
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="videoPlayer" width="960" height="540" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
 </body>
 
 </html>

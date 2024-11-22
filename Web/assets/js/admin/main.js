@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 0; i < this.state.totalPages; i++) {
                 const button = document.createElement('button');
                 button.className = 'page-button' + (i === this.state.currentPage ? ' active' : '');
-                button.textContent = i + 1;
+                // button.textContent = i + 1;
                 
                 button.addEventListener('click', () => {
                     this.state.currentPage = i;
@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 if (confirm('로그아웃 하시겠습니까?')) {
-                    window.location.href = 'login.html';
+                    window.location.href = 'index.html';
                 }
             });
         }
