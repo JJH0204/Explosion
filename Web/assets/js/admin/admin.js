@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 로고 버튼 클릭 이벤트 추가
+    const logoButton = document.querySelector('.logo-button');
+    if (logoButton) {
+        logoButton.addEventListener('click', () => {
+            window.location.reload();
+        });
+    }
+
     class AdminCardManager {
         constructor() {
             this.currentPage = 0;

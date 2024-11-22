@@ -41,17 +41,4 @@ GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
 GRANT CREATE USER ON *.* TO 'admin'@'localhost';
 GRANT GRANT OPTION ON *.* TO 'admin'@'localhost';
 
-CREATE DATABASE IF NOT EXISTS fakerDB;
-USE fakerDB;
-CREATE TABLE IF NOT EXISTS USER_info (
-	`id` INT AUTO_INCREMENT PRIMARY KEY,
-	`username` VARCHAR(50) NOT NULL,
-	`password` VARCHAR(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO USER_info (id, username, password) VALUES (1, 'fakergoat', 'F4k3r1996!');
-
-CREATE USER `faker`@`localhost` identified by 'F4k3r_1s_H4rd_T0_Gu3ss';
-GRANT ALL PRIVILEGES ON fakerDB.* TO 'faker'@'localhost';
-
 FLUSH PRIVILEGES;

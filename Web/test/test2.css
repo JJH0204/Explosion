@@ -1,0 +1,556 @@
+/* 전역 색상 변수 수정 - 파스텔톤으로 변경 */
+:root {
+    --primary-blue: #7CC6FE;    /* 더 부드러운 하늘색 */
+    --secondary-blue: #5AB6FE;  /* 약간 진한 파스텔 블루 */
+    --dark-blue: #4A90E2;       /* 차분한 파스텔 네이비 */
+    --light-blue: #B4E0FE;      /* 매우 연한 파스텔 블루 */
+    --text-blue: #F0F8FF;       /* 거의 흰색에 가까운 연한 블루 */
+    --blue-shadow: rgba(124, 198, 254, 0.5); /* 부드러운 그림자 색상 */
+}
+
+/* 다른 스타일들은 모두 제거하고 아래 스타일만 유지 */
+#challengePopup {
+    display: none;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+#challengePopup .challenge-popup-content {
+    background-color: #1a1a1a !important;
+    padding: 20px !important;
+    border-radius: 10px;
+    max-width: 1000px !important;
+    width: 90%;
+    max-height: 90vh !important;
+    overflow-y: auto;
+    position: relative;
+    color: white;
+    border: 2px solid var(--primary-blue);
+    box-shadow: 0 0 20px var(--blue-shadow);
+}
+
+/* 닫기 버튼 수정 */
+#challengePopup .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    color: var(--primary-blue);
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+#challengePopup .close-button:hover {
+    transform: rotate(90deg) scale(1.1);
+    color: var(--light-blue);
+}
+
+/* 제목 */
+#challengePopup .challenge-title {
+    color: var(--primary-blue);
+    font-size: 20px !important;
+    text-align: center;
+    margin-bottom: 10px !important;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+/* 태그 컨테이너 */
+#challengePopup .tags-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px !important;
+    align-items: center;
+}
+
+/* 태그 공통 스타일 */
+#challengePopup .tag {
+    padding: 6px 16px !important;
+    border-radius: 6px;
+    font-size: 16px !important;
+    background-color: var(--light-blue);
+    color: var(--dark-blue);
+    font-weight: bold;
+}
+
+/* 포인트 태그 특별 스타일 */
+#challengePopup .points-tag {
+    background-color: transparent !important;
+    color: var(--primary-blue) !important;
+    font-weight: bold;
+    font-size: 18px !important;
+}
+
+/* 다이아몬드 이모지 크기 조정을 위한 특별 스타일 */
+#challengePopup .points-tag::before {
+    content: '💎';
+    font-size: 20px !important;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+/* 마크다운 콘텐츠 */
+#challengePopup .markdown-content {
+    background-color: #2a2a2a;
+    padding: 12px !important;
+    border-radius: 6px;
+    margin: 10px 0 !important;
+    line-height: 1.5;
+    max-height: 50vh !important;
+    overflow-y: auto;
+    font-size: 14px !important;
+}
+
+/* 입력 컨테이너 */
+#challengePopup .flag-input-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 10px 0 !important;
+}
+
+/* 입력 필드 */
+#challengePopup .flag-input {
+    flex: 1;
+    height: 32px !important;
+    padding: 0 10px !important;
+    font-size: 14px !important;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+}
+
+/* action button 스타일 수정 */
+#challengePopup .action-button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#challengePopup .action-button.submit {
+    height: 32px !important;
+    padding: 0 15px !important;
+    font-size: 14px !important;
+    border-radius: 4px;
+    background-color: var(--primary-blue);
+    color: #2a2a2a;
+    line-height: 32px !important;
+    white-space: nowrap;
+    min-width: 60px !important;
+}
+
+#challengePopup .action-button.submit:hover {
+    background-color: var(--secondary-blue);
+}
+
+#challengePopup .action-button.challenge {
+    width: auto;
+    margin: 15px auto 5px;
+    padding: 0;
+    display: block;
+    background: none;
+    color: var(--primary-blue);
+    border: none;
+    box-shadow: none;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+#challengePopup .action-button.challenge:hover {
+    color: var(--light-blue);
+}
+
+#challengeTitle {
+    color: var(--primary-blue);
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 168, 255, 0.3);
+}
+
+.markdown-content {
+    background-color: #2a2a2a;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    line-height: 1.6;
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-blue) #2a2a2a;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: var(--primary-blue);
+}
+
+.markdown-content p {
+    margin-bottom: 15px;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.markdown-content pre {
+    background-color: #1a1a1a;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.markdown-content code {
+    font-family: monospace;
+    background-color: #1a1a1a;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.markdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.markdown-content::-webkit-scrollbar-track {
+    background: #2a2a2a;
+}
+
+.markdown-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary-blue);
+    border-radius: 3px;
+}
+
+/* 카드 컨테이너 관련 스타일만 수정 */
+.cards-container {
+    width: calc(100% - 80px);
+    height: calc(100vh - var(--header-height) - 100px);
+    margin: 20px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    padding: 20px 0 80px 0;
+}
+
+.cards-wrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cards-grid {
+    min-width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 100px 30px;
+    padding: 40px;
+}
+
+.challenge-card {
+    width: 100%;
+    height: 140%;
+    aspect-ratio: 2/3;
+    max-width: 200px;
+    max-height: 380px;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 4px solid var(--primary-blue);
+    box-shadow: 0 0 20px var(--blue-shadow);
+    transition: all 0.3s ease;
+    margin: 0 auto;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0px); }
+}
+
+.challenge-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.challenge-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 0 30px var(--blue-shadow);
+    border-color: var(--light-blue);
+    z-index: 1;
+}
+
+/* 각 카드마다 다른 애니메이션 시작 시간 적용 */
+.challenge-card:nth-child(2n) { animation-delay: 0.7s; }
+.challenge-card:nth-child(3n) { animation-delay: 0.9s; }
+.challenge-card:nth-child(4n) { animation-delay: 1.2s; }
+.challenge-card:nth-child(5n) { animation-delay: 1.0s; }
+
+/* 화살표 버튼 스타일 수정 */
+.arrow-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 80px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+/* 오른쪽 버튼 위치 */
+.arrow-button.right {
+    right: 0;
+    border-radius: 8px 0 0 8px;
+}
+
+/* 왼쪽 버튼 위치 */
+.arrow-button.left {
+    left: 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.arrow-button::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background-image: url('/assets/images/icons/arrow.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.3s ease;
+    filter: brightness(0) invert(1);
+}
+
+/* 호버 효과 - 화살표 색상만 변경 */
+.arrow-button:hover::before {
+    filter: invert(67%) sepia(72%) saturate(1752%) hue-rotate(182deg) brightness(102%) contrast(101%);
+    transform: scale(1.2);
+}
+
+/* 왼쪽 화살표 특별 처리 */
+.arrow-button.left::before {
+    transform: rotate(180deg);
+}
+
+.arrow-button.left:hover::before {
+    transform: rotate(180deg) scale(1.2);
+}
+
+/* 비활성화된 버튼 스타일 수정 */
+.arrow-button[style*="opacity: 0.5"]::before {
+    opacity: 0.5;
+    transform: rotate(180deg);
+}
+
+/* 왼쪽 화살표 비활성화 시 원래 방향으로 회전 */
+.arrow-button.left[style*="opacity: 0.5"]::before {
+    transform: rotate(0deg);
+}
+
+/* 버튼 클릭 효과 */
+.arrow-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.arrow-button:active::before {
+    transform: scale(0.9);
+}
+
+/* 페이지 버튼 컨테이너 스타일 수정 */
+.page-buttons {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(124, 198, 254, 0.15);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    z-index: 100;
+}
+
+.page-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(124, 198, 254, 0.15);
+    color: var(--text-blue);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    will-change: transform;
+}
+
+.page-button:hover {
+    background: rgba(124, 198, 254, 0.25);
+    color: var(--primary-blue);
+    transform: translateY(-2px) scale(1.1);
+}
+
+.page-button:active {
+    transform: translateY(-1px) scale(0.95);
+}
+
+.page-button.active {
+    background: var(--primary-blue);
+    color: #2a2a2a;
+    font-weight: bold;
+    border: none;
+    box-shadow: 0 0 15px var(--blue-shadow);
+    transform: none;
+    pointer-events: none;
+}
+
+.page-button[disabled] {
+    cursor: not-allowed;
+    background: rgba(124, 198, 254, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    transform: none !important;
+}
+
+/* 여기서부터 이벤트 팝업 스타일 추가 */
+#eventPopup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+#eventPopup .flag-popup-content {
+    background-color: #1a1a1a;
+    max-width: 400px;
+    width: 90%;
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid var(--primary-blue);
+    box-shadow: 0 0 20px var(--blue-shadow);
+    text-align: center;
+}
+
+#eventPopup .event-title {
+    color: var(--primary-blue);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#eventPopup .event-message {
+    color: white;
+    margin-bottom: 30px;
+}
+
+#eventPopup .flag-popup-button {
+    background-color: var(--primary-blue);
+    color: #2a2a2a;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#eventPopup .flag-popup-button:hover {
+    background-color: var(--light-blue);
+}
+
+/* 메뉴 버튼(이벤트, 로그아웃) 스타일 변경 */
+.menu-button {
+    background-color: var(--primary-blue);
+    color: #2a2a2a);
+    border: 2px solid var(--primary-blue);
+    box-shadow: 0 0 10px var(--blue-shadow);
+}
+
+.menu-button:hover {
+    background-color: var(--light-blue);
+    border-color: var(--light-blue);
+    transform: translateY(-2px);
+}
+
+/* EventBtn 특별 스타일 */
+#EventBtn {
+    border-color: var(--primary-blue);
+}
+
+/* logoutBtn 특별 스타일 */
+#logoutBtn {
+    background-color: var(--secondary-blue);
+    border-color: var(--secondary-blue);
+}
+
+/* 카드 컨테이너 페이지 버튼 컨테이너 스타일 */
+.page-buttons {
+    background: rgba(124, 198, 254, 0.15);
+    backdrop-filter: blur(5px);
+}
+
+/* 비활성화된 페이지 버튼 */
+.page-button[disabled] {
+    background: rgba(124, 198, 254, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+}
+

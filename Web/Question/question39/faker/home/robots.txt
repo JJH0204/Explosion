@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /flag
+Disallow: /admin
+Hint: Try to find the file that contains the flag. It is not in the root directory.
+

@@ -342,7 +342,7 @@
             "link": "./Question/question29/question29.html",
             "answer": "flag{questionChallenges29flag}",
             "category": "sql",
-            "difficulty": "beginner"
+            "difficulty": "flag{4368616c6c656e6765666c6167}"
         },
         {
             "id": 30,

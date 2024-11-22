@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flame</title>
+    <link rel="stylesheet" href="test1.css">
+    <link rel="stylesheet" href="test2.css">
+    <style>
+        #challengePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 9999 !important;
+            width: 100%;
+            height: 100%;
+        }
+
+        #challengePopup .challenge-popup-content {
+            background-color: #1a1a1a !important;
+            max-width: 700px !important;
+            max-height: 85vh !important;
+            width: 90% !important;
+            padding: 20px !important;
+            margin: 20px auto !important;
+            border-radius: 10px !important;
+            position: relative !important;
+        }
+
+        #challengePopup .flag-input-container {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin: 10px 0 !important;
+        }
+
+        #challengePopup .flag-input {
+            height: 32px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-container">
+        <img src="/assets/images/background.jpg" alt="Background">
+    </div>
+
+    <header class="header">
+        <div class="logo-container">
+            <button class="logo-button">
+                <img src="/assets/images/icons/Flame_logo2.png" alt="Logo" class="logo">
+            </button>
+            <span class="logo-text">Flame War Game Test Workspace</span>
+        </div>
+        <div class="header-menu">
+            <button class="menu-button" id="EventBtn">이벤트</button>
+            <button class="menu-button" id="logoutBtn">로그아웃</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="character-profile">
+                <div class="character-image-container">
+                    <img src="/assets/images/custom/character.png" alt="Character" class="character-image" id="character-image">
+                </div>
+                <div class="character-info">
+                    <div class="character-name">
+                        <p id="player-nickname" style="font-size: 1.2rem;">로딩중...</p>
+                    </div>
+                    <div class="rank-info">
+                        <p>랭킹: <span id="current-level">-</span> 위</p>
+                        <p>점수: <span id="player-score">-</span> pt</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-info">
+                <h3>진행 상황</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                    <div class="progress-text">
+                        <span id="completed-challenges">-</span>
+                        <span id="total-challenges">/ 40</span>
+                    </div>
+                </div>
+            </div>                    
+                    
+            <h3 class="ranking-title">실시간 랭킹</h3>
+            <ul id="rankingList"></ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="cards-container">
+                <div class="cards-wrapper"></div>
+                <button class="arrow-button left"></button>
+                <button class="arrow-button right"></button>
+                <div class="page-buttons"></div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="gamePopup" class="solution-popup">
+        <div class="solution-popup-content">
+            <div id="gameContent" class="solution-content"></div>
+        </div>
+    </div>
+
+    <div id="eventPopup" class="flag-popup">
+        <div class="flag-popup-content">
+            <h2 class="event-title">FLAME EVENT!</h2>
+            <p class="event-message">현재 진행 중인 이벤트가 없습니다.</p>
+            <div class="flag-popup-buttons">
+                <button id="closeEvent" class="flag-popup-button">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="challengePopup" class="challenge-popup"></div>
+
+    <button class="footer-toggle">
+        <img src="/assets/images/icons/qna.png" alt="QnA" style="width: 24px; height: 24px;">
+    </button>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Flame War Game</h4>
+                <p>&copy; 2024 Team FireWall. All rights reserved.</p>
+                <p>개발: Flame War Game 개발팀</p>
+            </div>
+            <div class="footer-section">
+                <h4>문의하기</h4>
+                <p>버그 신고: <a href="mailto:bug-report@flamewargame.com">bug-report@flamewargame.com</a></p>
+                <p>취약점 신고: <a href="mailto:security@flamewargame.com">security@flamewargame.com</a></p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const footerToggle = document.querySelector('.footer-toggle');
+                const footer = document.querySelector('.footer');
+                
+                if (footerToggle && footer) {
+                    footerToggle.addEventListener('click', function() {
+                        footer.classList.toggle('show');
+                        footerToggle.classList.toggle('active');
+                    });
+                }
+            });
+        })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        marked.setOptions({
+            breaks: true,     
+            gfm: true,        
+            headerIds: true,   
+            mangle: false,
+        });
+    </script>
+    <script src="test.js"></script>
+
+    <script>
+        function checkImage(img) {
+            const defaultImagePath = '/assets/images/custom/character.png';
+            const nickname = document.getElementById('player-nickname').textContent;
+
+            if (img.src === window.location.origin + defaultImagePath) return;
+
+            if (img.src.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                fetch('/assets/php/save-image.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `imageUrl=${encodeURIComponent(img.src)}&nickname=${encodeURIComponent(nickname)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        loadCustomImage();
+                        alert('축하합니다! 플래그를 찾았습니다: ' + data.flag);
+                    }
+                })
+                .catch(error => {});
+            }
+        }
+
+        function loadCustomImage() {
+            const nickname = document.getElementById('player-nickname').textContent;
+            if (nickname === '로딩중...') return;
+
+            const extensions = ['.jpg', '.jpeg', '.png', '.gif'];
+            const defaultImagePath = '/assets/images/custom/character.png';
+
+            const tryLoadImage = async () => {
+                for (const ext of extensions) {
+                    const customImagePath = `/assets/images/custom/${nickname}${ext}`;
+                    try {
+                        const response = await fetch(customImagePath);
+                        if (response.ok) {
+                            const characterImage = document.querySelector('.character-image');
+                            if (characterImage) {
+                                characterImage.src = customImagePath + '?t=' + new Date().getTime();
+                            }
+                            return;
+                        }
+                    } catch (error) {}
+                }
+                // 모든 확장자 시도 실패 시 기본 이미지 사용
+                const characterImage = document.querySelector('.character-image');
+                if (characterImage) {
+                    characterImage.src = defaultImagePath;
+                }
+            };
+
+            tryLoadImage();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const nicknameElement = document.getElementById('player-nickname');
+            
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList' &&
+                        nicknameElement.textContent !== '로딩중...') {
+                        loadCustomImage();
+                    }
+                });
+            });
+
+            observer.observe(nicknameElement, {
+                childList: true
+            });
+
+            if (nicknameElement.textContent !== '로딩중...') {
+                loadCustomImage();
+            }
+
+            const characterImage = document.querySelector('.character-image');
+            if (characterImage) {
+                const imageObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                            checkImage(characterImage);
+                        }
+                    });
+                });
+
+                imageObserver.observe(characterImage, {
+                    attributes: true,
+                    attributeFilter: ['src']
+                });
+            }
+
+            // updateUserInfo 함수 추가
+            async function updateUserInfo() {
+                try {
+                    const response = await fetch('/assets/php/user_info.php');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const nicknameElement = document.getElementById('player-nickname');
+                        const levelElement = document.getElementById('current-level');
+                        const scoreElement = document.getElementById('player-score');
+                        
+                        if (nicknameElement) nicknameElement.textContent = data.data.nickname;
+                        if (levelElement) levelElement.textContent = data.data.rank;
+                        if (scoreElement) scoreElement.textContent = data.data.score;
+
+                        // 프로필 이미지 테두리 업데이트
+                        const characterImage = document.querySelector('.character-image');
+                        if (characterImage) {
+                            // 기존 랭크 클래스 모두 제거
+                            characterImage.classList.remove('rank-1', 'rank-2', 'rank-3');
+                            
+                            // 현재 랭킹에 따라 적절한 클래스 추가
+                            const rank = parseInt(data.data.rank);
+                            if (rank === 1) {
+                                characterImage.classList.add('rank-1');
+                            } else if (rank === 2) {
+                                characterImage.classList.add('rank-2');
+                            } else if (rank === 3) {
+                                characterImage.classList.add('rank-3');
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating user info:', error);
+                }
+            }
+
+            // 초기 실행
+            updateUserInfo();
+        });
+    </script>
+    
+</body>
+
+</html>

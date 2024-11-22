@@ -32,19 +32,22 @@ header {
     padding: 0;
     position: relative;
     display: inline-block;
+    width: 300px;
 }
 
 .logo-button img,
 .signup-logo {
-    height: 80px;
+    height: 200px;
     width: auto;
+    max-height: none;
+    max-width: none;
     object-fit: contain;
-    filter: drop-shadow(0 0 10px rgba(0, 195, 255, 0.3));
+    filter: drop-shadow(0 0 10px rgba(124, 198, 254, 0.3));
     transition: all 0.3s ease;
 }
 
 .logo-button:hover img {
-    filter: drop-shadow(0 0 15px rgba(0, 195, 255, 0.5));
+    filter: drop-shadow(0 0 15px rgba(124, 198, 254, 0.5));
     transform: scale(1.05);
 }
 
@@ -54,9 +57,9 @@ header {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(0, 195, 255, 0.1) 0%, transparent 70%);
+    width: 320px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(124, 198, 254, 0.1) 0%, transparent 70%);
     border-radius: 50%;
     z-index: -1;
 }
@@ -132,39 +135,40 @@ h2 {
 }
 
 .signin-button {
-    background: #ff6b6b;
-    color: white;
+    background: var(--primary-blue, #7CC6FE);
+    color: #2a2a2a;
 }
 
 .login-signup-button {
     background: transparent;
     color: #fff;
-    border: 2px solid #ff6b6b;
+    border: 2px solid var(--primary-blue, #7CC6FE);
 }
 
 .signup-button {
-    background: #4CAF50;
-    color: white;
-    width: auto;
-    min-width: 100px;
+    background: var(--primary-blue, #7CC6FE);
+    color: #2a2a2a;
 }
 
 .cancel-button {
-    background: #f44336;
-    color: white;
-    width: auto;
-    min-width: 100px;
+    background: var(--secondary-blue, #5AB6FE);
+    color: #2a2a2a;
 }
 
 .signin-button:hover,
-.signup-button:hover,
+.signup-button:hover {
+    background: var(--light-blue, #B4E0FE);
+    transform: translateY(-2px);
+}
+
 .cancel-button:hover {
+    background: var(--secondary-blue, #5AB6FE);
     transform: translateY(-2px);
     filter: brightness(110%);
 }
 
 .login-signup-button:hover {
-    background: rgba(255, 107, 107, 0.1);
+    background: rgba(124, 198, 254, 0.1);
     transform: translateY(-2px);
 }
 
@@ -219,8 +223,8 @@ h2 {
 /* 에러 메시지 스타일 */
 #error-message, 
 #signup-error-message {
-    background: rgba(255, 0, 0, 0.1);
-    color: #ff6b6b;
+    background: rgba(124, 198, 254, 0.1);
+    color: var(--primary-blue, #7CC6FE);
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 15px;
