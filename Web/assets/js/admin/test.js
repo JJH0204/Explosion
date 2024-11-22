@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         async loadClearedStages() {
-            const response = await fetch('assets/php/get_cleared_stages.php');
+            const response = await fetch('/assets/php/get_cleared_stages.php');
             const result = await response.json();
             if (!result.success) {
                 throw new Error(result.error);
@@ -351,8 +351,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // 페이지 버튼 업데이트
                 this.updatePageButtons();
-                
-                console.log('페이지 변경:', pageNumber); // 디버깅용
             }
         }
     }

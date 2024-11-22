@@ -241,7 +241,7 @@
             "markdownFile": "mk_19.md",
             "description": "This is the nineteenth challenge.",
             "link": "./Question/question19/question19.html",
-            "answer": "FLAG{SUBNETTING_SUCCESS}",
+            "answer": "FLAG{this_is_easy}",
             "category": "sql",
             "difficulty": "beginner"
         },{
@@ -250,7 +250,7 @@
             "markdownFile": "mk_20.md",
             "description": "This is the twentieth challenge.",
             "link": "./Question/question20/question20.html",
-            "answer": "FLAG{SUBNETTING_SUCCESS}",
+            "answer": "FLAG{ASCIIcode}",
             "category": "sql",
             "difficulty": "beginner"
         },
@@ -330,7 +330,7 @@
             "markdownFile": "mk_28.md",
             "description": "This is the twenty-eighth challenge.",
             "link": "./Question/question28/question28.html",
-            "answer": "flag{questionChallenges28flag}",
+            "answer": "flag{6763634368616c6c656e6765733238666c6167}",
             "category": "sql",
             "difficulty": "beginner"
         },
@@ -439,7 +439,7 @@
             "title": "Challenge 39",
             "markdownFile": "mk_39.md",
             "description": "This is the thirty-ninth challenge.",
-            "link": "./Question/question39/question39.html",
+            "link": "./Question/question39/",
             "answer": "flag{questionChallenges39flag}",
             "category": "sql",
             "difficulty": "beginner"

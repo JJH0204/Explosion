@@ -466,7 +466,7 @@
     content: '';
     width: 24px;
     height: 24px;
-    background-image: url('../../images/icons/arrow.png');
+    background-image: url('/assets/images/icons/arrow.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

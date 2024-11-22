@@ -32,6 +32,16 @@
             resize: none;
         }
 
+        input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+
         button {
             background-color: #00ff00;
             color: #000;
@@ -119,15 +129,15 @@
         <input type="text" id="userInput" placeholder=" 플래그 입력">
     <div class="button-group">
         <button onclick="checkFlag()">제출</button>
-        <button id="submitButton" onclick="location.href='/Flame_WarGame/Web/index.html'" style="display: none;">정답 제출하기</button>
+       
     </div>
     <p id="result"></p>
 
     <div class="ssh-info" style="text-align: left; margin-top: 20px; font-family: 'Courier New', monospace;">
         <h3 style="color: #00ff00;">SSH 정보</h3>
         <p>호스트: <span style="color: #00ff00;">ip.firewall-flame.kro.kr</span></p>
-        <p>사용자: <span style="color: #00ff00;">question27</span></p>
-        <p>비밀번호: <span style="color: #00ff00;">question27pass</span></p>
+        <p>사용자: <span style="color: #00ff00;">question28</span></p>
+        <p>비밀번호: <span style="color: #00ff00;">question28pass</span></p>
         <p>포트: <span style="color: #00ff00;">2226</span></p>
     </div>
 
@@ -137,7 +147,7 @@
         try {
             const response = await fetch('/data/config.json');
             const data = await response.json();
-            const challenge27 = data.challenges.find(challenge => challenge.id === 27);
+            const challenge27 = data.challenges.find(challenge => challenge.id === 28);
             return challenge27.answer;
         } catch (error) {
             console.error('Error loading config:', error);
