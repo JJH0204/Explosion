@@ -11,7 +11,7 @@
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
                 url('../image/home/faker/main_banner_img2.jpg');
             background-size: cover;
-            background-position: center;
+            background-position: top center;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -217,6 +217,8 @@
             padding: 2rem;
             text-align: center;
             position: relative;
+            clear: both;
+            z-index: 10;
         }
 
         .admin-link {
@@ -395,6 +397,102 @@
             font-size: 0.8rem;
             margin: 0.3rem 0;
         }
+
+        .quotes {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 2rem;
+            background-color: #000;
+        }
+
+        .quote-container {
+            width: 45%;
+            margin-right: 5%;
+            margin-left: auto;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            z-index: 2;
+        }
+
+        .quote-slide {
+            opacity: 0;
+            position: relative;
+            width: 100%;
+            text-align: left;
+            font-size: 1.6rem;
+            line-height: 1.5;
+            transition: opacity 1s ease-in-out;
+            color: #fff;
+        }
+
+        .quote-slide.active {
+            opacity: 1;
+        }
+
+        .quote-background {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            width: 45%;
+            height: 70vh;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        .quote-background.active {
+            opacity: 1;
+        }
+
+        .quotes h2 {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary-red);
+            z-index: 3;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .quotes {
+                flex-direction: column;
+                padding: 4rem 1rem;
+            }
+
+            .quote-container {
+                max-width: 90%;
+                margin: 0 auto;
+                margin-top: 3rem;
+            }
+
+            .quote-background {
+                width: 80%;
+                height: 40%;
+                top: 20%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .quote-slide {
+                font-size: 1.2rem;
+                text-align: center;
+            }
+        }
+
+        .quote-background.bg1 { background-image: url('../image/home/faker/GbZsC9IaEAA8-Nx.jpg'); }
+        .quote-background.bg2 { background-image: url('../image/home/faker/Faker.jpg'); }
+        .quote-background.bg3 { background-image: url('../image/home/faker/Faker-Nominated-Best-Esports-Player-TGA-2024.jpg'); }
+        .quote-background.bg4 { background-image: url('../image/home/faker/dataimagewebpbase64UklGRpzKAwBXRUJQVlA4IJDKAwDQrgq-a912cf6c61ab272fc605ffb60d01121a.webp'); }
+        .quote-background.bg5 { background-image: url('../image/home/faker/The-Game-June-2024-Article-Banner-WIDE_Faker.jpg'); }
     </style>
 </head>
 
@@ -412,7 +510,7 @@
             <div class="achievement-grid">
                 <div class="achievement-card fade-in">
                     <h3>월드 챔피언십</h3>
-                    <p>4회 우승</p>
+                    <p>5회 우승</p>
                 </div>
                 <div class="achievement-card slide-in">
                     <h3>LCK</h3>
@@ -460,7 +558,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card fade-in">
+                <div class="champion-card fade-in" data-video-id="TkYuL0G6c4E">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Ryze_0.jpg" alt="Ryze">
                     </div>
@@ -476,7 +574,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card slide-in">
+                <div class="champion-card slide-in" data-video-id="GKo1t1p-Dc8">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Leblanc_0.jpg" alt="LeBlanc">
                     </div>
@@ -492,12 +590,12 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card fade-in">
+                <div class="champion-card fade-in" data-video-id="hnO7aTlGqHI">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Syndra_0.jpg" alt="Syndra">
                     </div>
                     <div class="champion-info">
-                        <h3>드라</h3>
+                        <h3>신드라</h3>
                         <p class="champion-title">어둠의 여제</p>
                         <div class="champion-stats">
                             <span>승률 68%</span>
@@ -508,7 +606,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card slide-in">
+                <div class="champion-card slide-in" data-video-id="C0fae8Q1l1U">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Galio_0.jpg" alt="Galio">
                     </div>
@@ -524,7 +622,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card fade-in">
+                <div class="champion-card fade-in" data-video-id="1xox9X7qDNA">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/TwistedFate_0.jpg" alt="Twisted Fate">
                     </div>
@@ -540,7 +638,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card slide-in">
+                <div class="champion-card slide-in" data-video-id="Wy3Tnjok48s">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Zed_0.jpg" alt="Zed">
                     </div>
@@ -556,7 +654,8 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card fade-in">
+                <!-- https://youtu.be/ccgPrCWIl4Y?si=BD5SXdwulTJzDsBD&t=110 -->
+                <div class="champion-card fade-in" data-video-id="ccgPrCWIl4Y">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Ahri_0.jpg" alt="Ahri">
                     </div>
@@ -572,7 +671,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="champion-card slide-in">
+                <div class="champion-card slide-in" data-video-id="mNGmQ6XCE0Y">
                     <div class="champion-image">
                         <img src="../image/home/LOL_char/Akali_0.jpg" alt="Akali">
                     </div>
@@ -601,35 +700,35 @@
                 <div class="timeline-item slide-in">
                     <h3>2013</h3>
                     <p>LCK 스프링: 데뷔(3위)<br>
-                       LCK 서머: 우승<br>
-                       월드 챔피언십: 우승</p>
+                        LCK 서머: 우승<br>
+                        월드 챔피언십: 우승</p>
                 </div>
                 <div class="timeline-item fade-in">
                     <h3>2014</h3>
                     <p>올 스타전: 우승<br>
-                       NLB 서머: 우승<br>
-                       SKT LTE-A LoL 마스터즈: 준우승</p>
+                        NLB 서머: 우승<br>
+                        SKT LTE-A LoL 마스터즈: 준우승</p>
                 </div>
                 <div class="timeline-item slide-in">
                     <h3>2015</h3>
                     <p>LCK 스프링: 우승<br>
-                       LCK 서머: 우승<br>
-                       MSI: 준우승<br>
-                       월드 챔피언십: 우승</p>
+                        LCK 서머: 우승<br>
+                        MSI: 준우승<br>
+                        월드 챔피언십: 우승</p>
                 </div>
                 <div class="timeline-item fade-in">
                     <h3>2016</h3>
                     <p>LCK 스프링: 우승<br>
-                       MSI: 우승<br>
-                       LCK 서머: 준우승<br>
-                       월드 챔피언십: 우승</p>
+                        MSI: 우승<br>
+                        LCK 서머: 준우승<br>
+                        월드 챔피언십: 우승</p>
                 </div>
                 <div class="timeline-item slide-in">
                     <h3>2017</h3>
                     <p>LCK 스프링: 우승<br>
-                       MSI: 우승<br>
-                       LCK 서머: 준우승<br>
-                       월드 챔피언십: 준우승</p>
+                        MSI: 우승<br>
+                        LCK 서머: 준우승<br>
+                        월드 챔피언십: 준우승</p>
                 </div>
                 <div class="timeline-item fade-in">
                     <h3>2018</h3>
@@ -638,9 +737,9 @@
                 <div class="timeline-item slide-in">
                     <h3>2019</h3>
                     <p>LCK 스프링: 우승<br>
-                       MSI: 4강<br>
-                       LCK 서머: 우승<br>
-                       월드 챔피언십: 4강</p>
+                        MSI: 4강<br>
+                        LCK 서머: 우<br>
+                        월드 챔피언십: 4강</p>
                 </div>
                 <div class="timeline-item fade-in">
                     <h3>2020</h3>
@@ -649,27 +748,27 @@
                 <div class="timeline-item slide-in">
                     <h3>2021</h3>
                     <p>LCK 서머: 준우승<br>
-                       월드 챔피언십: 4강</p>
+                        월드 챔피언십: 4강</p>
                 </div>
                 <div class="timeline-item fade-in">
                     <h3>2022</h3>
                     <p>LCK 스프링: 우승<br>
-                       MSI: 준우승<br>
-                       LCK 서머: 준우승<br>
-                       월드 챔피언십: 준우승<br>
-                       아시안 게임: 금메달</p>
+                        MSI: 준우승<br>
+                        LCK 서머: 준우승<br>
+                        월드 챔피언십: 준우승<br>
+                        아시안 게임: 금메달</p>
                 </div>
                 <div class="timeline-item slide-in">
                     <h3>2023</h3>
                     <p>LCK 스프링: 준우승<br>
-                       MSI: 준우승<br>
-                       LCK 서머: 준우승<br>
-                       월드 챔피언십: 우승</p>
+                        MSI: 준우승<br>
+                        LCK 서머: 준우승<br>
+                        월드 챔피언십: 우승</p>
                 </div>
                 <div class="timeline-item fade-in">
                     <h3>2024</h3>
                     <p>LCK 스프링: 준우승<br>
-                       월드 챔피언십: 우승</p>
+                        월드 챔피언십: 우승</p>
                 </div>
             </div>
         </section>
@@ -688,10 +787,27 @@
         <section class="quotes">
             <h2>명언</h2>
             <div class="quote-container">
-                <blockquote class="fade-in">
-                    "항상 더 나은 선수가 되기 위해 노력합니다."
-                </blockquote>
+                <div class="quote-slide">
+                    <blockquote>"내가 책임질게, 이거 끝나."</blockquote>
+                </div>
+                <div class="quote-slide">
+                    <blockquote>"스포츠는 공정한 경쟁을 하고 한계에 도전하며 그 과정을 통해 사람들에게 영감을 주는 것이다."</blockquote>
+                </div>
+                <div class="quote-slide">
+                    <blockquote>"가끔 저에 대한 비판이 많아질 때가 있는데, 전 사실인 비판들은 다 수용하니까 많이 해주셨으면 좋겠습니다."</blockquote>
+                </div>
+                <div class="quote-slide">
+                    <blockquote>"다른 선수들이 나를 앞질러 가기 시작했다는 세간의 평이 맞을 수도 있겠다는 생각을 했었다. 하지만 이젠 아니다."</blockquote>
+                </div>
+                <div class="quote-slide">
+                    <blockquote>"감사합니다 여러분. 기부도 좋지만 맛있는 거 사 먹으세요. 기부는 저처럼 돈 많은 사람들이 하면 됩니다."</blockquote>
+                </div>
             </div>
+            <div class="quote-background bg1"></div>
+            <div class="quote-background bg2"></div>
+            <div class="quote-background bg3"></div>
+            <div class="quote-background bg4"></div>
+            <div class="quote-background bg5"></div>
         </section>
     </main>
 
@@ -761,38 +877,41 @@
             });
         }
 
-        // 페이지 로드 시 이미지 드
-        document.addEventListener('DOMContentLoaded', loadImages);
+        // 모달 관련 코드를 DOMContentLoaded 이벤트 핸들러 안으로 이동
+        document.addEventListener('DOMContentLoaded', function () {
+            // 이미지 로드 함수 호출
+            loadImages();
 
-        // 모달 열기
-        document.querySelectorAll('.champion-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const videoId = this.dataset.videoId;
-                if (videoId) {
-                    const modal = document.getElementById('videoModal');
-                    const videoPlayer = document.getElementById('videoPlayer');
-                    videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                    modal.style.display = 'block';
+            // 모달 열기
+            document.querySelectorAll('.champion-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const videoId = this.dataset.videoId;
+                    if (videoId) {
+                        const modal = document.getElementById('videoModal');
+                        const videoPlayer = document.getElementById('videoPlayer');
+                        videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                        modal.style.display = 'block';
+                    }
+                });
+            });
+
+            // 닫기 버튼으로 모달 닫기
+            const closeBtn = document.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeModal);
+            }
+
+            // 모달 외부 클릭으로 닫기
+            window.addEventListener('click', function (event) {
+                const modal = document.getElementById('videoModal');
+                if (event.target === modal) {
+                    closeModal();
                 }
             });
         });
 
-        // 닫기 버튼으로 모달 닫기
-        const closeBtn = document.querySelector('.close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeModal);
-        }
-
-        // 모달 외부 클릭으로 닫기
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('videoModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-
         // ESC 키로 모달 닫기
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 closeModal();
             }
@@ -807,6 +926,26 @@
                 modal.style.display = 'none';
             }
         }
+
+        function rotateQuotes() {
+            const quotes = document.querySelectorAll('.quote-slide');
+            const backgrounds = document.querySelectorAll('.quote-background');
+            let currentQuote = 0;
+            
+            // 초기 상태 설정
+            quotes[0].classList.add('active');
+            backgrounds[0].classList.add('active');
+            
+            setInterval(() => {
+                quotes[currentQuote].classList.remove('active');
+                backgrounds[currentQuote].classList.remove('active');
+                currentQuote = (currentQuote + 1) % quotes.length;
+                quotes[currentQuote].classList.add('active');
+                backgrounds[currentQuote].classList.add('active');
+            }, 5000);
+        }
+
+        document.addEventListener('DOMContentLoaded', rotateQuotes);
     </script>>
     <div id="videoModal" class="modal">
         <div class="modal-content">
