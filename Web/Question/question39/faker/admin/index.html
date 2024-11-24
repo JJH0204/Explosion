@@ -125,12 +125,31 @@
             color: var(--primary-red);
             font-style: italic;
         }
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .admin-btn {
+            background-color: var(--dark-gray);
+            color: white;
+            border: 1px solid var(--primary-red);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .admin-btn:hover {
+            background-color: var(--primary-red);
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>관리자 대시보드</h1>
-        <button class="logout-btn" onclick="logout()">로그아웃</button>
+        <div class="header-buttons">
+            <button class="admin-btn" onclick="window.location.href='image-manager.html'">이미지 관리</button>
+            <button class="admin-btn logout-btn" onclick="logout()">로그아웃</button>
+        </div>
     </div>
 
     <div class="dashboard">
@@ -203,22 +222,49 @@
 
         // 초기 세션 체크
         async function checkSession() {
+            console.log('세션 체크 시작...');
+            
             try {
-                const response = await fetch('../api/login/check_session.php', {
+                console.log('세션 체크 API 호출 중...');
+                const response = await fetch('../api/auth/check_session.php', {
                     method: 'GET',
                     credentials: 'include'
                 });
                 
+                console.log('서버 응답 상태:', response.status);
+                console.log('응답 헤더:', Object.fromEntries(response.headers.entries()));
+                
                 if (!response.ok) {
+                    console.error('세션 체크 실패 - HTTP 상태:', response.status);
                     throw new Error('Session check failed');
                 }
 
-                const data = await response.json();
+                const responseText = await response.text();
+                console.log('서버 응답 원본:', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                    console.log('파싱된 세션 데이터:', data);
+                } catch (parseError) {
+                    console.error('JSON 파싱 에러:', parseError);
+                    throw new Error('서버 응답을 처리할 수 없습니다: ' + responseText);
+                }
+
                 if (!data.success || !data.isAdmin) {
+                    console.log('관리자 권한 없음:', data);
+                    await new Promise(resolve => setTimeout(resolve, 2000)); // 2초 대기
                     window.location.replace('login.html');
+                } else {
+                    console.log('세션 체크 성공: 관리자 확인됨');
                 }
             } catch (error) {
-                console.error('Session check failed:', error);
+                console.error('세션 체크 에러 상세:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                await new Promise(resolve => setTimeout(resolve, 2000)); // 2초 대기
                 window.location.replace('login.html');
             }
         }
@@ -226,7 +272,7 @@
         // 로그아웃
         async function logout() {
             try {
-                await fetch('../api/login/logout.php', {
+                await fetch('../api/auth/logout.php', {
                     method: 'POST',
                     credentials: 'include'
                 });

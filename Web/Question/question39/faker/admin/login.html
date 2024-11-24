@@ -31,8 +31,11 @@
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
             
+            console.log('로그인 시도:', { username });
+            
             try {
-                const response = await fetch('../api/login/login_process.php', {
+                console.log('API 요청 시작...');
+                const response = await fetch('../api/auth/login.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -44,17 +47,37 @@
                     })
                 });
 
-                const data = await response.json();
+                console.log('서버 응답 상태:', response.status);
+                console.log('응답 헤더:', Object.fromEntries(response.headers.entries()));
+
+                // 응답 텍스트 먼저 확인
+                const responseText = await response.text();
+                console.log('서버 응답 원본:', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                    console.log('파싱된 응답 데이터:', data);
+                } catch (parseError) {
+                    console.error('JSON 파싱 에러:', parseError);
+                    throw new Error('서버 응답을 처리할 수 없습니다: ' + responseText);
+                }
                 
                 if (data.success) {
+                    console.log('로그인 성공, 리다이렉트 시작...');
                     window.location.href = 'index.html';
                 } else {
-                    errorMessage.textContent = data.message;
+                    console.error('로그인 실패:', data.message);
+                    errorMessage.textContent = data.message || '로그인에 실패했습니다.';
                     errorMessage.style.display = 'block';
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                errorMessage.textContent = '서버 오류가 발생했습니다.';
+                console.error('로그인 에러 상세:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                errorMessage.textContent = '서버 오류가 발생했습니다: ' + error.message;
                 errorMessage.style.display = 'block';
             }
         });
