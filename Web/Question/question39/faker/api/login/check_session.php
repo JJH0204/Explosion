@@ -17,7 +17,8 @@ function isValidAdminSession() {
     }
 
     try {
-        $conn = connectDB();
+        global $conn;
+        
         if (!$conn) {
             error_log("Database connection failed in isValidAdminSession");
             return false;

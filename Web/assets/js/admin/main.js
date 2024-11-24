@@ -581,9 +581,30 @@ document.addEventListener('DOMContentLoaded', function() {
         // 로그아웃 버튼
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
+            logoutBtn.addEventListener('click', async () => {
                 if (confirm('로그아웃 하시겠습니까?')) {
-                    window.location.href = 'index.html';
+                    try {
+                        // 로그아웃 PHP 호출
+                        const response = await fetch('/assets/php/logout.php');
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            // 모든 스토리지 초기화
+                            sessionStorage.clear();
+                            localStorage.clear();
+                            
+                            // 캐시된 페이지 방지를 위한 리다이렉트
+                            window.location.replace('index.html');
+                        } else {
+                            console.error('Logout failed:', result.error);
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        // 에러 발생시에도 로그아웃 처리
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        window.location.replace('index.html');
+                    }
                 }
             });
         }

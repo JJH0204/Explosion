@@ -34,6 +34,23 @@
     color: white;
     border: 2px solid var(--primary-blue);
     box-shadow: 0 0 20px var(--blue-shadow);
+
+    /* 애니메이션 추가 */
+    opacity: 0;
+    transform: scale(0.7);
+    animation: popupShow 0.3s ease forwards;
+}
+
+/* 팝업 나타나는 애니메이션 */
+@keyframes popupShow {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* 닫기 버튼 수정 */
@@ -266,6 +283,23 @@
     backdrop-filter: blur(2px);
     overflow: hidden;
     padding: 20px 0 80px 0;
+
+    /* 애니메이션 초기 상태 */
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+    animation: containerAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 컨테이너 나타나는 애니메이션 */
+@keyframes containerAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .cards-wrapper {
@@ -438,7 +472,12 @@
     transition: all 0.3s ease;
     padding: 0; 
     margin: 0;
-    box-shadow: 0 0 2px rgba(255, 255, 255, 0.2); 
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+    
+    /* 애니메이션 초기 상태 */
+    opacity: 0;
+    transform: scale(0) translateY(20px);
+    animation: pageButtonAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .page-button:hover {
@@ -549,3 +588,22 @@
     background-color: var(--secondary-blue);
     border-color: var(--secondary-blue);
 }
+
+/* 페이지 버튼 애니메이션 */
+@keyframes pageButtonAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* 각 페이지 버튼 순차 애니메이션 */
+.page-button:nth-child(1) { animation-delay: 0.1s; }
+.page-button:nth-child(2) { animation-delay: 0.2s; }
+.page-button:nth-child(3) { animation-delay: 0.3s; }
+.page-button:nth-child(4) { animation-delay: 0.4s; }
+.page-button:nth-child(5) { animation-delay: 0.5s; }

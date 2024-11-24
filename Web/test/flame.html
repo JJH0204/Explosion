@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flame War Game</title>
+    <title>Flame test Workspace</title>
     <link rel="stylesheet" href="main1.css">
     <link rel="stylesheet" href="main2.css">
     <style>
@@ -298,6 +298,31 @@
         });
     </script>
     
+    <script>
+        // 페이지 로드 시 로그인 상태 확인
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('/assets/php/checkSession.php');
+                const data = await response.json();
+                
+                if (!data.success) {
+                    // 로그인되지 않은 상태면 index.html로 리다이렉트
+                    window.location.replace('index.html');
+                    return;
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
+                window.location.replace('index.html');
+                return;
+            }
+
+            // 뒤로가기 방지
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function() {
+                window.history.go(1);
+            };
+        });
+    </script>
 </body>
 
 </html>
