@@ -486,7 +486,7 @@ body {
     opacity: 0;
     transform: scale(1.0)  !important;
     animation: footerButtonAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 1.0s; 
+    animation-delay: 0.3s; 
 }
 
 /* 푸터 버튼 나타나는 애니메이션 */
@@ -680,19 +680,36 @@ body {
 
 .ranking-item {
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 10px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
-    transition: all 0.3s ease;
+    padding: 8px 12px;
+    margin: 7px 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease-in-out;
     cursor: pointer;
 
-    /* 애니메이션 초기 상태 */
-    opacity: 0;
-    transform: translateY(30px);
-    animation: rankingSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    /* 초기 상태에서는 opacity를 1로 설정 */
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+    transition: all 0.3s ease-in-out;
+    
+    /* 애니메이션은 별도의 클래스로 분리 */
+    &.animate-in {
+        opacity: 0;
+        transform: translateY(30px) translateX(0);
+        animation: rankingSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+}
+
+.ranking-item:hover {
+    transform: translateY(0) translateX(5px) !important;
+    background: rgba(0, 0, 0, 0.7);
 }
 
 /* 각 랭킹 아이템 순차 애니메이션 */
@@ -703,16 +720,18 @@ body {
 .ranking-item:nth-child(5) { animation-delay: 0.5s; }
 .ranking-item:nth-child(6) { animation-delay: 0.6s; }
 .ranking-item:nth-child(7) { animation-delay: 0.7s; }
+.ranking-item:nth-child(8) { animation-delay: 0.8s; }
+.ranking-item:nth-child(9) { animation-delay: 0.9s; }
 
 /* 랭킹 슬라이드 업 애니메이션 */
 @keyframes rankingSlideUp {
     0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(30px) translateX(0);
     }
     100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) translateX(0);
     }
 }
 
@@ -786,9 +805,8 @@ body {
 
 /* 호버 효과 */
 .ranking-item:hover {
-    transform: translateX(5px);
+    transform: translateY(0) translateX(5px) !important;
     background: rgba(0, 0, 0, 0.7);
-    transition: all 0.3s ease;
 }
 
 /* 추가: 배경 이미지 컨테이너 스타일 */

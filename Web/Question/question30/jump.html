@@ -24,32 +24,51 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// 상수 정의
+const WORLD_HEIGHT = 2000;
+
+// player 초기 위치 수정
 const player = {
     x: 50,
-    y: canvas.height - 50,
+    y: WORLD_HEIGHT - 100,  // 맵 바닥 근처에서 시작
     width: 40,
     height: 40,
+    velocityX: 0,
+    velocityY: 0,
     speed: 5,
     jumpForce: 0,
     maxJumpForce: 15,
     chargeRate: 0.5,
     gravity: 0.5,
-    velocityY: 0,
-    velocityX: 0,
     isJumping: false,
     isCharging: false,
     direction: 1,
-    color: '#FFB6C1',  // 연한 분홍색
-    eyeColor: 'white',
-    pupilColor: 'black',
-    mouthColor: '#FF69B4'
+    image: new Image(),
+    bounceForce: 0.5,    // 벽에서 튕기는 힘
+    friction: 0.7        // 마찰력 (튕김 감소)
 };
+player.image.src = './images/pepe.png';
 
+// 배경 이미지 추가
+const backgroundImage = new Image();
+backgroundImage.src = './images/snowy_background.png';  // 눈 내리는 배경 이미지
+
+// 플랫폼 위치 수정
 const platforms = [
-    { x: 300, y: 300, width: 100, height: 20 },
-    { x: 500, y: 200, width: 100, height: 20 },
-    { x: 700, y: 250, width: 100, height: 20 }
+    { x: 50, y: WORLD_HEIGHT - 50, width: 200, height: 20, type: 'start' },     // 시작 지점
+    { x: 200, y: WORLD_HEIGHT - 200, width: 100, height: 20, type: 'clue' },    // 첫 번째 단서
+    { x: 50, y: WORLD_HEIGHT - 350, width: 100, height: 20, type: 'clue' },     // 두 번째 단서
+    { x: 250, y: WORLD_HEIGHT - 500, width: 100, height: 20, type: 'clue' },    // 세 번째 단서
+    { x: 100, y: WORLD_HEIGHT - 650, width: 100, height: 20, type: 'photo' },   // 사진 조각
+    { x: 200, y: WORLD_HEIGHT - 800, width: 100, height: 20, type: 'museum' }   // 박물관 입구
 ];
+
+// 단서 텍스트 추가
+const clues = {
+    'clue1': "희미한 글씨: '오래된 시계탑 근처...'",
+    'clue2': "찢어진 사진 조각: '눈 내리는 거리의...'",
+    'clue3': "흐릿한 메모: '붉은 벽돌 건물...'"
+};
 
 let keys = {
     right: false,
@@ -94,6 +113,11 @@ function checkCollision(rect1, rect2) {
            rect1.y + rect1.height > rect2.y;
 }
 
+// 카메라 객체
+const camera = {
+    y: WORLD_HEIGHT - canvas.height  // 처음에 바닥이 보이도록 설정
+};
+
 function update() {
     if (player.isCharging && player.jumpForce < player.maxJumpForce) {
         player.jumpForce += player.chargeRate;
@@ -101,6 +125,13 @@ function update() {
 
     player.velocityY += player.gravity;
     player.y += player.velocityY;
+
+    if (player.y + player.height > WORLD_HEIGHT) {
+        player.y = WORLD_HEIGHT - player.height;
+        player.velocityY = 0;
+        player.isJumping = false;
+        player.velocityX *= player.friction; // 착지 시 수평 속도 감소
+    }
 
     if (!player.isJumping && !player.isCharging) {
         if (keys.right) player.x += player.speed;
@@ -110,121 +141,117 @@ function update() {
         player.velocityX *= 0.98;
     }
 
+    // 양 옆 벽 충돌 체크 및 튕김 효과
     if (player.x < 0) {
         player.x = 0;
-        player.velocityX = 0;
+        if (player.isJumping) {
+            player.velocityX = Math.abs(player.velocityX) * player.bounceForce;
+            player.velocityY *= player.friction;
+        } else {
+            player.velocityX = 0;
+        }
     }
     if (player.x + player.width > canvas.width) {
         player.x = canvas.width - player.width;
-        player.velocityX = 0;
+        if (player.isJumping) {
+            player.velocityX = -Math.abs(player.velocityX) * player.bounceForce;
+            player.velocityY *= player.friction;
+        } else {
+            player.velocityX = 0;
+        }
     }
 
-    if (player.y + player.height > canvas.height) {
-        player.y = canvas.height - player.height;
-        player.velocityY = 0;
-        player.velocityX = 0;
-        player.isJumping = false;
-    }
-
+    // 플랫폼 충돌 체크
     platforms.forEach(platform => {
         if (checkCollision(player, platform)) {
             if (player.velocityY > 0 && 
                 player.y + player.height - player.velocityY <= platform.y) {
                 player.y = platform.y - player.height;
                 player.velocityY = 0;
-                player.velocityX = 0;
+                player.velocityX *= player.friction;
                 player.isJumping = false;
             }
         }
     });
+
+    // 카메라 업데이트
+    const targetCameraY = player.y - (canvas.height / 2);
+    camera.y += (targetCameraY - camera.y) * 0.1;
+    camera.y = Math.max(0, Math.min(camera.y, WORLD_HEIGHT - canvas.height));
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.save();
+    ctx.translate(0, -camera.y);
 
-    // 플랫폼 그리기
-    ctx.fillStyle = 'green';
+    // 배경 그리기
+    if (backgroundImage.complete) {
+        // 배경 이미지를 타일처럼 반복해서 그리기
+        const bgWidth = canvas.width;
+        const bgHeight = canvas.height;
+        
+        // 현재 카메라 위치를 기반으로 필요한 배경 타일 계산
+        const startY = Math.floor(camera.y / bgHeight) * bgHeight;
+        const endY = Math.ceil((camera.y + canvas.height) / bgHeight) * bgHeight;
+        
+        // 보이는 영역에 배경 타일 그리기
+        for (let y = startY; y < endY; y += bgHeight) {
+            ctx.drawImage(backgroundImage, 0, y, bgWidth, bgHeight);
+        }
+    }
+
+    // 플랫폼 그리기 - 각 타입별로 다른 모양/색상
     platforms.forEach(platform => {
+        switch(platform.type) {
+            case 'start':
+                ctx.fillStyle = '#8B4513';  // 갈색 시작점
+                break;
+            case 'clue':
+                ctx.fillStyle = '#DEB887';  // 책장같은 베이지색
+                break;
+            case 'photo':
+                ctx.fillStyle = '#DAA520';  // 금색 사진 조각
+                break;
+            case 'museum':
+                ctx.fillStyle = '#8B0000';  // 붉은색 박물관 입구
+                break;
+        }
         ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
     });
 
-    // 캐릭터 그리기
-    drawCharacter();
+    // 페페 그리기
+    if (player.image.complete) {
+        if (player.direction === -1) {
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(player.image, -player.x - player.width, player.y, player.width, player.height);
+            ctx.restore();
+        } else {
+            ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
+        }
+    }
+
+    // 단서에 가까이 갔을 때 텍스트 표시
+    platforms.forEach((platform, index) => {
+        if (platform.type === 'clue' && 
+            Math.abs(player.x - platform.x) < 50 && 
+            Math.abs(player.y - platform.y) < 50) {
+            ctx.fillStyle = 'white';
+            ctx.font = '14px Arial';
+            ctx.fillText(clues[`clue${index}`], platform.x, platform.y - 20);
+        }
+    });
+
+    ctx.restore();
 
     // 게이지 그리기
     if (player.isCharging) {
         const gaugeWidth = (player.jumpForce / player.maxJumpForce) * 50;
         ctx.fillStyle = 'yellow';
-        ctx.fillRect(player.x, player.y - 15, gaugeWidth, 5);
+        ctx.fillRect(player.x, player.y - camera.y - 15, gaugeWidth, 5);
     }
-}
-
-function drawCharacter() {
-    // 몸체 (원형)
-    ctx.beginPath();
-    ctx.fillStyle = player.isCharging ? '#87CEEB' : player.color;
-    ctx.arc(player.x + player.width/2, player.y + player.height/2, 
-            player.width/2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 눈 (왼쪽)
-    ctx.beginPath();
-    ctx.fillStyle = player.eyeColor;
-    ctx.arc(player.x + player.width/2 - 8, player.y + player.height/2 - 5, 
-            5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 눈 (오른쪽)
-    ctx.beginPath();
-    ctx.fillStyle = player.eyeColor;
-    ctx.arc(player.x + player.width/2 + 8, player.y + player.height/2 - 5, 
-            5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 눈동자 (방향에 따라 이동)
-    const pupilOffset = player.direction === 1 ? 2 : -2;
-    
-    // 왼쪽 눈동자
-    ctx.beginPath();
-    ctx.fillStyle = player.pupilColor;
-    ctx.arc(player.x + player.width/2 - 8 + pupilOffset, 
-            player.y + player.height/2 - 5, 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 오른쪽 눈동자
-    ctx.beginPath();
-    ctx.fillStyle = player.pupilColor;
-    ctx.arc(player.x + player.width/2 + 8 + pupilOffset, 
-            player.y + player.height/2 - 5, 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 입 (점프/차징 상태에 따라 변화)
-    ctx.beginPath();
-    ctx.strokeStyle = player.mouthColor;
-    ctx.lineWidth = 2;
-    if (player.isCharging) {
-        // 'O' 모양 입
-        ctx.arc(player.x + player.width/2, player.y + player.height/2 + 8, 
-                3, 0, Math.PI * 2);
-    } else if (player.isJumping) {
-        // 'D' 모양 입
-        ctx.arc(player.x + player.width/2, player.y + player.height/2 + 5, 
-                5, 0, Math.PI);
-    } else {
-        // 일반 미소
-        ctx.arc(player.x + player.width/2, player.y + player.height/2 + 5, 
-                5, 0, Math.PI, false);
-    }
-    ctx.stroke();
-
-    // 볼터치
-    ctx.beginPath();
-    ctx.fillStyle = '#FFB6C1';
-    ctx.arc(player.x + player.width/2 - 12, player.y + player.height/2 + 2, 
-            3, 0, Math.PI * 2);
-    ctx.arc(player.x + player.width/2 + 12, player.y + player.height/2 + 2, 
-            3, 0, Math.PI * 2);
-    ctx.fill();
 }
 
 function gameLoop() {

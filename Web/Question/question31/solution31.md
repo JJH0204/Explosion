@@ -45,7 +45,7 @@ cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
 
 출력 결과:
 ```
-FLAG{ASCIIcode}
+FLAG{cron_job_solved}
 ```
 
 ### 5. 사용된 기술

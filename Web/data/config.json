@@ -380,7 +380,7 @@
             "markdownFile": "mk_33.md",
             "description": "This is the thirty-third challenge.",
             "link": "./Question/question33/question33.html",
-            "answer": "flag{questionChallenges33flag}",
+            "answer": "FLAG{ACL_CONFIGURATION_CORRECT}",
             "category": "sql",
             "difficulty": "beginner"
         },

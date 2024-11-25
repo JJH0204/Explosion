@@ -129,7 +129,8 @@
         <input type="text" id="userInput" placeholder=" 플래그 입력">
     <div class="button-group">
         <button onclick="checkFlag()">제출</button>
-        <button onclick="downloadImage()">힌트 이미지 다운로드</button>
+        <button onclick="downloadImage()">이미지 다운로드</button>
+        <button onclick="pcap()">pcap 다운로드</button>
     </div>
     <p id="result"></p>
 
@@ -191,8 +192,16 @@
 
     function downloadImage() {
         const link = document.createElement('a');
-        link.href = './ch2.png';  // 이미지 경로를 실제 경로로 수정하세요
-        link.download = 'ch2.png';
+        link.href = './images/question30.png';  // 이미지 경로를 실제 경로로 수정하세요
+        link.download = './images/question30.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    function pcap() {
+        const link = document.createElement('a');
+        link.href = './xmas2011.pcap';  // 이미지 경로를 실제 경로로 수정하세요
+        link.download = './xmas2011.pcap';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

@@ -7,8 +7,8 @@ SSH를 통해 question29 계정으로 접속한 후, command injection 취약점
 1. SSH 접속
    - 호스트: ip.firewall-flame.kro.kr
    - 포트: 2226
-   - 계정: question29
-   - 비밀번호: question29pass
+   - 계정: question30
+   - 비밀번호: question30pass
 
 2. 코드 분석
    - question29 파일을 분석하면 다음과 같은 취약점을 발견할 수 있습니다:

@@ -1,6 +1,6 @@
 <?php
 // 올바른 플래그 값
-$correct_flag = "FLAG{ASCIIcode}";
+$correct_flag = "FLAG{cron_job_solved}";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // POST 데이터 가져오기

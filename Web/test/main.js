@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             data.rankings.slice(0, 7).forEach((player, index) => {
                 const li = document.createElement('li');
-                li.className = 'ranking-item';
+                li.className = 'ranking-item animate-in';
                 
                 let rankDisplay;
                 if (index < 3) {
@@ -657,4 +657,13 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.reload();
         });
     }
+
+    // 랭킹 아이템 애니메이션 완료 후 처리
+    const rankingItems = document.querySelectorAll('.ranking-item');
+    rankingItems.forEach(item => {
+        item.classList.add('animate');
+        item.addEventListener('animationend', function() {
+            this.classList.remove('animate');
+        });
+    });
 }); 
