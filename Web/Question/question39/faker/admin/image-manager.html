@@ -329,9 +329,79 @@
                 }
             } catch (error) {
                 console.error('로그아웃 중 에러:', error);
-                alert('로그아웃 중 오류가 발생했습니다.');
+                alert('로그아웃 중 오가 발생했습니다.');
             }
         }
+
+        // 이미지 업로드 폼 제출 처리 부분 수정
+        document.getElementById('imageUploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileInput = document.getElementById('imageInput');
+            const files = fileInput.files;
+            
+            if (files.length === 0) {
+                alert('업로드할 이미지를 선택해주세요.');
+                return;
+            }
+
+            // 파일 추가
+            formData.append('images[]', files[0]);
+
+            try {
+                const response = await fetch('../api/admin/upload_image.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const responseText = await response.text();
+                
+                // HTML 태그가 포함된 응답인지 확인
+                if (responseText.includes('<')) {
+                    console.error('서버 응답에 HTML이 포함되어 있습니다:', responseText);
+                    throw new Error('서버 응답이 올바르지 않습니다. 세션이 만료되었을 수 있습니다.');
+                }
+
+                const result = JSON.parse(responseText);
+                
+                if (result.success) {
+                    alert('이미지 업로드 성공');
+                    // 이미지 목록 새로고침
+                    loadImages();
+                    // 입력 필드 초기화
+                    fileInput.value = '';
+                    // 미리보기 초기화
+                    document.getElementById('uploadPreview').innerHTML = '';
+                } else {
+                    throw new Error(result.message || '업로드 실패');
+                }
+            } catch (error) {
+                console.error('업로드 에러:', error);
+                alert('이미지 업로드 중 오류가 발생했습니다: ' + error.message);
+            }
+        });
+
+        // 이미지 미리보기 기능
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const preview = document.getElementById('uploadPreview');
+            preview.innerHTML = '';
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '200px';
+                    img.style.maxHeight = '200px';
+                    preview.appendChild(img);
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
     </script>
 </body>
 </html> 

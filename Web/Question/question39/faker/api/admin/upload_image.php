@@ -1,59 +1,48 @@
 <?php
+ob_start();
 session_start();
-require_once '../auth/check_admin.php';
 
-header('Content-Type: application/json');
+// 이전 출력 버퍼 제거
+ob_clean();
 
+// 헤더 설정
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-cache, must-revalidate');
+
+// 업로드 디렉토리 설정
 $uploadDir = '../../image/share/';
+
+// 응답 초기화
 $response = ['success' => false, 'message' => ''];
 
-try {
-    // 업로드 디렉토리가 없으면 생성
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
-    if (!isset($_FILES['images'])) {
-        throw new Exception('업로드된 파일이 없습니다.');
-    }
-
-    $files = $_FILES['images'];
-    $uploadedFiles = [];
-
-    // 다중 파일 업로드 처리
-    foreach ($files['name'] as $key => $name) {
-        $tmpName = $files['tmp_name'][$key];
-        $error = $files['error'][$key];
-
-        if ($error === UPLOAD_ERR_OK) {
-            $fileInfo = pathinfo($name);
-            $extension = strtolower($fileInfo['extension']);
-            
-            // 이미지 파일 검증
-            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                throw new Exception('허용되지 않는 파일 형식입니다.');
-            }
-
-            // 고유한 파일명 생성
-            $newFileName = uniqid() . '.' . $extension;
-            $destination = $uploadDir . $newFileName;
-
-            if (move_uploaded_file($tmpName, $destination)) {
-                $uploadedFiles[] = $newFileName;
-            } else {
-                throw new Exception('파일 업로드에 실패했습니다.');
-            }
+// 파일 업로드 처리
+if (isset($_FILES['images'])) {
+    $file = $_FILES['images'];
+    
+    // 파일 확장자 확인
+    $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+    $fileType = $file['type'][0];
+    
+    if (!in_array($fileType, $allowedTypes)) {
+        $response['message'] = '허용되지 않는 파일 형식입니다.';
+    } else {
+        // 파일 이름 생성 및 저장
+        $fileName = $file['name'][0];
+        $targetPath = $uploadDir . $fileName;
+        
+        if (move_uploaded_file($file['tmp_name'][0], $targetPath)) {
+            $response['success'] = true;
+            $response['message'] = '업로드 성공';
+            $response['fileName'] = $fileName;
         } else {
-            throw new Exception('파일 업로드 중 오류가 발생했습니다.');
+            $response['message'] = '파일 업로드 실패';
         }
     }
-
-    $response['success'] = true;
-    $response['message'] = '파일이 성공적으로 업로드되었습니다.';
-    $response['files'] = $uploadedFiles;
-
-} catch (Exception $e) {
-    $response['message'] = $e->getMessage();
+} else {
+    $response['message'] = '업로드된 파일이 없습니다.';
 }
 
-echo json_encode($response); 
+// JSON 응답 출력
+echo json_encode($response, JSON_UNESCAPED_UNICODE);
+exit();
+?> 

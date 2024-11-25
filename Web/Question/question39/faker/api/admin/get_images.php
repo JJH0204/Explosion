@@ -37,7 +37,7 @@ try {
             $fileInfo = pathinfo($file);
             $extension = strtolower($fileInfo['extension'] ?? '');
             
-            if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+            if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                 $images[] = [
                     'name' => $file,
                     'url' => '../image/share/' . $file
