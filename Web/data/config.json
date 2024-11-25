@@ -370,7 +370,7 @@
             "markdownFile": "mk_32.md",
             "description": "This is the thirty-second challenge.",
             "link": "./Question/question32/question32.html",
-            "answer": "flag{questionChallenges32flag}",
+            "answer": "FLAG{COMPILE_DATE_CORRECT}",
             "category": "sql",
             "difficulty": "beginner"
         },
@@ -439,7 +439,7 @@
             "title": "Challenge 39",
             "markdownFile": "mk_39.md",
             "description": "This is the thirty-ninth challenge.",
-            "link": "./Question/question39/",
+            "link": "./Question/question39/question39.html",
             "answer": "flag{questionChallenges39flag}",
             "category": "sql",
             "difficulty": "beginner"
