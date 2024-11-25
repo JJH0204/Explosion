@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이미지 관리 - Faker Fan Page</title>
+    <title>관리자 페이지 - Faker Fan Page</title>
     <link rel="stylesheet" href="../styles/admin_styles.css">
     <style>
         .header {
@@ -112,15 +112,52 @@
         .category-filter {
             margin-bottom: 1rem;
         }
+
+        .admin-tabs {
+            background-color: var(--dark-gray);
+            border-top: 1px solid var(--primary-red);
+            padding: 0 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .tab-item {
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab-item:hover {
+            color: var(--primary-red);
+        }
+
+        .tab-item.active {
+            color: var(--primary-red);
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-red);
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>이미지 관리</h1>
-        <div class="header-buttons">
-            <button class="admin-btn" onclick="location.href='index.html'">대시보드</button>
-            <button class="logout-btn" onclick="logout()">로그아웃</button>
-        </div>
+        <h1>관리자 페이지</h1>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+    
+    <div class="admin-tabs">
+        <a href="index.html" class="tab-item">대시보드</a>
+        <a href="image-manager.html" class="tab-item active">이미지 관리</a>
+        <a href="db-manager.html" class="tab-item">DB 관리</a>
     </div>
 
     <div class="image-manager">

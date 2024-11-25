@@ -340,9 +340,9 @@
             "markdownFile": "mk_29.md",
             "description": "This is the twenty-ninth challenge.",
             "link": "./Question/question29/question29.html",
-            "answer": "flag{questionChallenges29flag}",
+            "answer": "flag{4368616c6c656e6765666c6167}",
             "category": "sql",
-            "difficulty": "flag{4368616c6c656e6765666c6167}"
+            "difficulty": "beginner"
         },
         {
             "id": 30,
@@ -360,7 +360,7 @@
             "markdownFile": "mk_31.md",
             "description": "This is the thirty-first challenge.",
             "link": "./Question/question31/question31.html",
-            "answer": "flag{questionChallenges31flag}",
+            "answer": "FLAG{cron_job_solved}",
             "category": "sql",
             "difficulty": "beginner"
         },

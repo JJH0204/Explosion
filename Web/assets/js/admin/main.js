@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('storage', this.checkStorageModification.bind(this));
             // 초기 로드 시에도 체크
             this.checkStorageModification();
+
+            // 진행 상태 업데이트는 한 번만 실행되도록 수정
+            this.progressInitialized = false;
         }
 
         checkStorageModification() {
@@ -66,7 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.renderCards();
                 this.setupArrowButtons();
                 this.createPageButtons();
-                this.updateProgress();
+                
+                // 진행 상태 초기화는 한 번만 실행
+                if (!this.progressInitialized) {
+                    await this.initializeProgress();
+                    this.progressInitialized = true;
+                }
                 
                 // 저장된 페이지로 즉시 이동
                 const savedPage = parseInt(localStorage.getItem('currentCardPage')) || 0;
@@ -358,24 +366,33 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        updateProgress() {
+        updateProgress(stage) {
             const progressFill = document.querySelector('.progress-fill');
-            if (!progressFill) {
-                console.error('Progress fill element not found');
-                return;
-            }
-
+            const progressText = document.querySelector('.progress-text');
             const completedElement = document.getElementById('completed-challenges');
-            if (!completedElement) {
-                console.error('Completed challenges element not found');
+            
+            if (!progressFill || !progressText || !completedElement) {
+                console.error('Progress elements not found');
                 return;
             }
 
-            const validStage = (!isNaN(this.state.currentPage) && this.state.currentPage !== null && this.state.currentPage !== '') ? parseInt(this.state.currentPage) : 0;
+            // 진행 바 초기화
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            progressText.classList.remove('show');
             
-            const totalStages = 40;
-            completedElement.textContent = validStage || '-';  // 유효한 값이 없으면 '-' 표시
-            progressFill.style.width = `${(validStage / totalStages) * 100}%`;  // 유효하지 않으면 0%
+            // 강제 리플로우
+            progressFill.offsetHeight;
+            
+            // 애니메이션 재설정 및 시작
+            progressFill.style.transition = 'width 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+                const percentage = (stage / 40) * 100;
+                progressFill.style.width = `${percentage}%`;
+                completedElement.textContent = stage || '-';
+                progressText.classList.add('show');
+            }, 50);
         }
 
         updateCardImage(cardNumber) {
@@ -471,6 +488,21 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) {
                 console.error('Error updating cleared stages:', error);
                 alert('올바른 형식으로 입력해주세요.');
+            }
+        }
+
+        // 새로운 메소드: 진행 상태 초기화
+        async initializeProgress() {
+            try {
+                const response = await fetch('/assets/php/user_info.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stage = parseInt(data.data.stage);
+                    this.updateProgress(stage);
+                }
+            } catch (error) {
+                console.error('Error initializing progress:', error);
             }
         }
     }
@@ -617,23 +649,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateUserInfo();
     updateRanking();
     setInterval(updateRanking, 180000);
-
-    // user_info.php에서 데이터를 가져와서 진행 상태 업데이트
-    fetch('/assets/php/user_info.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const stage = parseInt(data.data.stage);
-                const progressFill = document.querySelector('.progress-fill');
-                const completedElement = document.getElementById('completed-challenges');
-                
-                if (progressFill && completedElement) {
-                    completedElement.textContent = stage;
-                    progressFill.style.width = `${(stage / 40) * 100}%`;
-                }
-            }
-        })
-        .catch(error => console.error('Error:', error));
 
     // 로고 버튼 클릭 이벤트 추가
     const logoButton = document.querySelector('.logo-button');

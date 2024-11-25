@@ -129,7 +129,7 @@
         <input type="text" id="userInput" placeholder=" 플래그 입력">
     <div class="button-group">
         <button onclick="checkFlag()">제출</button>
-       
+        <button onclick="downloadImage()">힌트 이미지 다운로드</button>
     </div>
     <p id="result"></p>
 
@@ -187,6 +187,15 @@
         } else {
             sshInfo.style.display = 'none';
         }
+    }
+
+    function downloadImage() {
+        const link = document.createElement('a');
+        link.href = './ch2.png';  // 이미지 경로를 실제 경로로 수정하세요
+        link.download = 'ch2.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
     </script>
 </body>
