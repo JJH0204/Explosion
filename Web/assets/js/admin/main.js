@@ -173,7 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             <h2 class="challenge-title">Challenge ${cardNumber}</h2>
                             
                             <div class="tags-container">
-                                <span class="tag category-tag">${config.categories[challengeInfo.category].name}</span>
+                                ${Array.isArray(challengeInfo.category) 
+                                    ? challengeInfo.category.slice(0, 3).map(cat => 
+                                        `<span class="tag category-tag">${config.categories[cat].name}</span>`
+                                    ).join('')
+                                    : `<span class="tag category-tag">${config.categories[challengeInfo.category].name}</span>`
+                                }
                                 <span class="tag difficulty-tag">${config.difficulty[challengeInfo.difficulty].name}</span>
                                 <span class="tag points-tag">${config.difficulty[challengeInfo.difficulty].points}pt</span>
                             </div>
