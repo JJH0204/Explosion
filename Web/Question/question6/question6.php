@@ -1,38 +1,45 @@
 <?php
 header('Content-Type: application/json');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
 
-// 사용자 데이터와 플래그는 서버에서만 접근 가능
-$users = [
-    ['id' => 1, 'username' => 'admin', 'password' => 'admin123', 'isAdmin' => true],
-    ['id' => 2, 'username' => 'user1', 'password' => 'password123', 'isAdmin' => false],
-    ['id' => 3, 'username' => 'user2', 'password' => 'password456', 'isAdmin' => false]
-];
+try {
+    // POST 데이터 받기
+    $input = file_get_contents("php://input");
+    $data = json_decode($input, true);
 
-$FLAG = "flag{sql_injection_success}";
+    if (!$data || !isset($data['score'])) {
+        throw new Exception('잘못된 입력입니다.');
+    }
 
-// POST 데이터 받기
-$input = file_get_contents("php://input");
-$data = json_decode($input, true);
-
-$username = $data['username'] ?? '';
-$password = $data['password'] ?? '';
-
-// SQL Injection 시뮬레이션
-function simulateSQL($username, $password) {
-    global $users, $FLAG;
+    $score = intval($data['score']);
     
-    // SQL Injection 취약점 시뮬레이션 로직
-    // (기존 로직을 PHP로 변환)
-    
-    // 여기에 기존 검사 로직을 PHP로 구현
-    // ...
+    // 점수 유효성 검사
+    if ($score < 0 || $score > 10000) {
+        throw new Exception('유효하지 않은 점수입니다.');
+    }
 
-    return [
-        'success' => false,
-        'message' => '로그인 실패'
+    // 여기에 점수 저장 로직을 추가할 수 있습니다
+    // 예: 데이터베이스에 저장
+
+    $response = [
+        'success' => true,
+        'message' => '점수가 저장되었습니다.',
+        'score' => $score
     ];
-}
 
-$result = simulateSQL($username, $password);
-echo json_encode($result);
-?> 
+    // 100ms 미만일 경우 flag 추가
+    if ($score < 100) {
+        $response['flag'] = "FLAG{F4st_R3fl3x_M4st3r}";
+    }
+
+    echo json_encode($response);
+} catch (Exception $e) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
+}
+?>

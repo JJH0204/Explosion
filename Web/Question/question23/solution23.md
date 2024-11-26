@@ -7,11 +7,16 @@ File - Insecure storage 1
 ## 풀이 과정
 주어진 파일을 다운로드 받아 압축을 풀고 파일을 열어보면 사용자의 패스워드를 찾을 수 있습니다.
 
+방법 2가지
+
+1. PC 에서 sql 프로그램 깔아서  압축파일 안에 있는 signons.sqlite 파일 열어서 moz_logins 테이블을 찾아보면 암호화된 사용자의 패스워드를 찾을 수 있습니다.
 https://download.sqlitebrowser.org/DB.Browser.for.SQLite-v3.13.1-win64.msi
 
 프로그렘 실행후 signons.sqlite 파일을 열어 moz_logins 테이블을 찾아보면 암호화된 사용자의 패스워드를 찾을 수 있습니다.
 
-wget https://github.com/unode/firefox_decrypt 에서 firefox_decrypt.py 를 실행하여 signons.sqlite를 보면 바로 패스워드 찾을수 있음
+
+2. 리눅스 시스템 
+wget https://github.com/unode/firefox_decrypt 에서 firefox_decrypt.py 를 실행하면 패스워드 출력 
 
 
 ### 플래그 추출

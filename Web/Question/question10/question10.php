@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-$CORRECT_IP = "221.166.254.49";
+$CORRECT_IP = "211.229.100.142";
 $FLAG = "flag{answer10}";
 
 $input = file_get_contents("php://input");

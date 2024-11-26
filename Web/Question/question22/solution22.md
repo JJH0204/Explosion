@@ -26,10 +26,8 @@ with open('/usr/share/wordlists/rockyou.txt', 'r') as wordlist:
             break
 ```
 
-
-
 ### 플래그 추출
-weak
+shadow
 
 ## 힌트
 주어진 문자열 8f6b1ecc7d7c0377c707ec6913cbbc3d는 해시값입니다. 이 값이 어떤 해시 알고리즘(MD5, SHA-1, SHA-256 등)으로 생성된 것인지 식별하고, 이를 크래킹하여 원래의 값을 알아내야 합니다.

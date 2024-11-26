@@ -1,211 +1,339 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSH Challenge</title>
+    <title>2D 점프킹</title>
     <style>
+        canvas {
+            border: 2px solid black;
+            background: #f0f0f0;
+        }
         body {
-            background-color: #121212;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #e0e0e0;
         }
-
-        .container {
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 600px;
-            background-color: #1e1e1e;
-            border: 1px solid #00ff00;
-            border-radius: 5px;
-        }
-
-        textarea {
-            background-color: #2a2a2a;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 10px;
-            width: 80%;
-            margin-bottom: 10px;
-            resize: none;
-        }
-
-        input {
-            background-color: #2a2a2a;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 10px;
-            width: 80%;
-            margin-bottom: 10px;
-            border-radius: 3px;
-        }
-
-        button {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #33ff99;
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-
-        .hint {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #aaaaaa;
-            background-color: #2a2a2a;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .ssh-info {
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #1e1e1e;
-        border: 1px solid #00ff00;
-        border-radius: 5px;
-        max-width: 600px;
-    }
-
-    .putty-info {
-        margin-top: 20px;
-        text-align: left;
-        padding: 15px;
-        background-color: #2a2a2a;
-        border-radius: 5px;
-    }
-
-    .putty-info ol {
-        margin-left: 20px;
-        padding-left: 20px;
-    }
-
-    .putty-info li {
-        margin: 5px 0;
-    }
-
-    button {
-        background-color: #0f0;
-        color: #000;
-        border: none;
-        padding: 10px 20px;
-        margin: 10px 0;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-    button:hover {
-        background-color: #33ff99;
-    }
-
-    .command {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 10px 0;
-    }
-
-    code {
-        background-color: #2a2a2a;
-        padding: 5px 10px;
-        border-radius: 3px;
-    }
     </style>
 </head>
 <body>
-    <h1>권한상승 Challenge</h1>
-    <div class="container">
-        <p>SSH 접속 후 올바른 플래그를 찾아 제출하세요.</p>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
 
-        <input type="text" id="userInput" placeholder=" 플래그 입력">
-    <div class="button-group">
-        <button onclick="checkFlag()">제출</button>
-        <button onclick="downloadImage()">이미지 다운로드</button>
-        <button onclick="pcap()">pcap 다운로드</button>
-    </div>
-    <p id="result"></p>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-    <div class="ssh-info" style="text-align: left; margin-top: 20px; font-family: 'Courier New', monospace;">
-        <h3 style="color: #00ff00;">SSH 정보</h3>
-        <p>호스트: <span style="color: #00ff00;">ip.firewall-flame.kro.kr</span></p>
-        <p>사용자: <span style="color: #00ff00;">question30</span></p>
-        <p>비밀번호: <span style="color: #00ff00;">question30pass</span></p>
-        <p>포트: <span style="color: #00ff00;">2226</span></p>
-    </div>
+// 상수 정의
+const WORLD_HEIGHT = 2000;
 
-    <script>
+// player 초기 위치 수정
+const player = {
+    x: 50,
+    y: WORLD_HEIGHT - 100,  // 맵 바닥 근처에서 시작
+    width: 40,
+    height: 40,
+    velocityX: 0,
+    velocityY: 0,
+    speed: 5,
+    jumpForce: 0,
+    maxJumpForce: 15,
+    chargeRate: 0.5,
+    gravity: 0.5,
+    isJumping: false,
+    isCharging: false,
+    direction: 1,
+    image: new Image(),
+    bounceForce: 0.5,    // 벽에서 튕기는 힘
+    friction: 0.7        // 마찰력 (튕김 감소)
+};
+player.image.src = './images/pepe.png';
 
-    async function getCorrectFlag() {
-        try {
-            const response = await fetch('/data/config.json');
-            const data = await response.json();
-            const challenge27 = data.challenges.find(challenge => challenge.id === 30);
-            return challenge27.answer;
-        } catch (error) {
-            console.error('Error loading config:', error);
-            return null;
+// 배경 이미지 추가
+const backgroundImage = new Image();
+backgroundImage.src = './images/snowy_background.png';  // 눈 내리는 배경 이미지
+
+// 플랫폼 위치 수정
+const platforms = [
+    { x: 50, y: WORLD_HEIGHT - 50, width: 200, height: 20, type: 'start' },     // 시작 지점
+    { x: 200, y: WORLD_HEIGHT - 200, width: 100, height: 20, type: 'clue' },    // 첫 번째 단서
+    { x: 50, y: WORLD_HEIGHT - 350, width: 100, height: 20, type: 'clue' },     // 두 번째 단서
+    { x: 250, y: WORLD_HEIGHT - 500, width: 100, height: 20, type: 'clue' },    // 세 번째 단서
+    { x: 100, y: WORLD_HEIGHT - 650, width: 100, height: 20, type: 'photo' },   // 사진 조각
+    { x: 200, y: WORLD_HEIGHT - 800, width: 100, height: 20, type: 'museum' }   // 박물관 입구
+];
+
+// 단서 텍스트 추가
+const clues = {
+    'clue1': "희미한 글씨: '오래된 시계탑 근처...'",
+    'clue2': "찢어진 사진 조각: '눈 내리는 거리의...'",
+    'clue3': "흐릿한 메모: '붉은 벽돌 건물...'"
+};
+
+let keys = {
+    right: false,
+    left: false,
+    space: false
+};
+
+let isCommandMode = false;
+let commandInput = '';
+
+// 커맨드 입력 UI 생성
+const commandUI = document.createElement('div');
+commandUI.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    color: white;
+    display: none;
+    z-index: 1000;
+`;
+commandUI.innerHTML = `
+    <input type="text" id="commandInput" style="
+        background: black;
+        color: lime;
+        border: 1px solid lime;
+        padding: 5px;
+        outline: none;
+    ">
+`;
+document.body.appendChild(commandUI);
+
+// commandInput 이벤트 리스너 추가
+document.getElementById('commandInput').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+        const command = e.target.value.toLowerCase();
+        if (command === 'qeqe') {
+            // 버튼 생성
+            const button = document.createElement('button');
+            button.textContent = 'Go to Question 30';
+            button.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 10px;
+                background: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                z-index: 1000;
+            `;
+            button.onclick = () => {
+                window.location.href = 'hidden.html';
+            };
+            document.body.appendChild(button);
+        }
+        // 커맨드 입력 후 UI 숨기기
+        commandUI.style.display = 'none';
+        isCommandMode = false;
+    } else if (e.key === 'Escape') {
+        // ESC 키로 커맨드 모드 취소
+        commandUI.style.display = 'none';
+        isCommandMode = false;
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (!player.isJumping && !player.isCharging) {
+        if (e.key === 'ArrowRight') {
+            keys.right = true;
+            player.direction = 1;
+        }
+        if (e.key === 'ArrowLeft') {
+            keys.left = true;
+            player.direction = -1;
+        }
+    }
+    if (e.key === ' ' && !player.isJumping && !keys.space) {
+        keys.space = true;
+        player.isCharging = true;
+        player.jumpForce = 0;
+    }
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'q') {
+        isCommandMode = true;
+        commandUI.style.display = 'block';
+        const commandInput = document.getElementById('commandInput');
+        commandInput.value = '';
+        commandInput.focus();
+        e.preventDefault();
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowRight') keys.right = false;
+    if (e.key === 'ArrowLeft') keys.left = false;
+    if (e.key === ' ' && player.isCharging) {
+        keys.space = false;
+        player.isCharging = false;
+        player.isJumping = true;
+        player.velocityY = -player.jumpForce;
+        player.velocityX = player.direction * (player.jumpForce * 0.5);
+    }
+});
+
+function checkCollision(rect1, rect2) {
+    return rect1.x < rect2.x + rect2.width &&
+           rect1.x + rect1.width > rect2.x &&
+           rect1.y < rect2.y + rect2.height &&
+           rect1.y + rect1.height > rect2.y;
+}
+
+// 카메라 객체
+const camera = {
+    y: WORLD_HEIGHT - canvas.height  // 처음에 바닥이 보이도록 설정
+};
+
+function update() {
+    if (isCommandMode) return;  // 커맨드 모드일 때는 게임 업데이트 중지
+    
+    if (player.isCharging && player.jumpForce < player.maxJumpForce) {
+        player.jumpForce += player.chargeRate;
+    }
+
+    player.velocityY += player.gravity;
+    player.y += player.velocityY;
+
+    if (player.y + player.height > WORLD_HEIGHT) {
+        player.y = WORLD_HEIGHT - player.height;
+        player.velocityY = 0;
+        player.isJumping = false;
+        player.velocityX *= player.friction; // 착지 시 수평 속도 감소
+    }
+
+    if (!player.isJumping && !player.isCharging) {
+        if (keys.right) player.x += player.speed;
+        if (keys.left) player.x -= player.speed;
+    } else if (player.isJumping) {
+        player.x += player.velocityX;
+        player.velocityX *= 0.98;
+    }
+
+    // 양 옆 벽 충돌 체크 및 튕김 효과
+    if (player.x < 0) {
+        player.x = 0;
+        if (player.isJumping) {
+            player.velocityX = Math.abs(player.velocityX) * player.bounceForce;
+            player.velocityY *= player.friction;
+        } else {
+            player.velocityX = 0;
+        }
+    }
+    if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
+        if (player.isJumping) {
+            player.velocityX = -Math.abs(player.velocityX) * player.bounceForce;
+            player.velocityY *= player.friction;
+        } else {
+            player.velocityX = 0;
         }
     }
 
+    // 플랫폼 충돌 체크
+    platforms.forEach(platform => {
+        if (checkCollision(player, platform)) {
+            if (player.velocityY > 0 && 
+                player.y + player.height - player.velocityY <= platform.y) {
+                player.y = platform.y - player.height;
+                player.velocityY = 0;
+                player.velocityX *= player.friction;
+                player.isJumping = false;
+            }
+        }
+    });
 
-    async function checkFlag() {
-        const userFlag = document.getElementById('userInput').value.trim();
-        const resultElement = document.getElementById('result');
-        const submitButton = document.getElementById('submitButton');
+    // 카메라 업데이트
+    const targetCameraY = player.y - (canvas.height / 2);
+    camera.y += (targetCameraY - camera.y) * 0.1;
+    camera.y = Math.max(0, Math.min(camera.y, WORLD_HEIGHT - canvas.height));
+}
 
-        const correctFlag = await getCorrectFlag();
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.save();
+    ctx.translate(0, -camera.y);
+
+    // 배경 그리기
+    if (backgroundImage.complete) {
+        // 배경 이미지를 타일처럼 반복해서 그리기
+        const bgWidth = canvas.width;
+        const bgHeight = canvas.height;
         
-        if (!correctFlag) {
-            resultElement.style.color = '#ff4d4d';
-            resultElement.textContent = '설정을 불러오는데 실패했습니다.';
-            return;
+        // 현재 카메라 위치를 기반으로 필요한 배경 타일 계산
+        const startY = Math.floor(camera.y / bgHeight) * bgHeight;
+        const endY = Math.ceil((camera.y + canvas.height) / bgHeight) * bgHeight;
+        
+        // 보이는 영역에 배경 타일 그리기
+        for (let y = startY; y < endY; y += bgHeight) {
+            ctx.drawImage(backgroundImage, 0, y, bgWidth, bgHeight);
         }
+    }
 
-        if (userFlag === correctFlag) {
-            resultElement.style.color = '#00ff7f';
-            resultElement.textContent = '정답입니다!';
-            submitButton.style.display = 'inline-block'; 
+    // 플랫폼 그리기 - 각 타입별로 다른 모양/색상
+    platforms.forEach(platform => {
+        switch(platform.type) {
+            case 'start':
+                ctx.fillStyle = '#8B4513';  // 갈색 시작점
+                break;
+            case 'clue':
+                ctx.fillStyle = '#DEB887';  // 책장같은 베이지색
+                break;
+            case 'photo':
+                ctx.fillStyle = '#DAA520';  // 금색 사진 조각
+                break;
+            case 'museum':
+                ctx.fillStyle = '#8B0000';  // 붉은색 박물관 입구
+                break;
+        }
+        ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+    });
+
+    // 페페 그리기
+    if (player.image.complete) {
+        if (player.direction === -1) {
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(player.image, -player.x - player.width, player.y, player.width, player.height);
+            ctx.restore();
         } else {
-            resultElement.style.color = '#ff4d4d';
-            resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-            submitButton.style.display = 'none'; 
+            ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
         }
     }
 
-    function toggleSSHInfo() {
-        const sshInfo = document.getElementById('sshInfo');
-        if (sshInfo.style.display === 'none') {
-            sshInfo.style.display = 'block';
-        } else {
-            sshInfo.style.display = 'none';
+    // 단서에 가까이 갔을 때 텍스트 표시
+    platforms.forEach((platform, index) => {
+        if (platform.type === 'clue' && 
+            Math.abs(player.x - platform.x) < 50 && 
+            Math.abs(player.y - platform.y) < 50) {
+            ctx.fillStyle = 'white';
+            ctx.font = '14px Arial';
+            ctx.fillText(clues[`clue${index}`], platform.x, platform.y - 20);
         }
-    }
+    });
 
-    function downloadImage() {
-        const link = document.createElement('a');
-        link.href = './images/question30.png';  // 이미지 경로를 실제 경로로 수정하세요
-        link.download = './images/question30.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    ctx.restore();
+
+    // 게이지 그리기
+    if (player.isCharging) {
+        const gaugeWidth = (player.jumpForce / player.maxJumpForce) * 50;
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(player.x, player.y - camera.y - 15, gaugeWidth, 5);
     }
-    function pcap() {
-        const link = document.createElement('a');
-        link.href = './xmas2011.pcap';  // 이미지 경로를 실제 경로로 수정하세요
-        link.download = './xmas2011.pcap';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-    </script>
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
 </body>
 </html>

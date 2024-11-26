@@ -44,6 +44,15 @@
             background-color: #33ff99;
         }
 
+        input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+
         #result {
             margin-top: 20px;
             font-size: 1.2em;
@@ -62,48 +71,45 @@
 <body>
     <h1>Decoder Challenge</h1>
     <div class="container">
-        <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
+        <p>암호화된 메시지를 해독하고 제출하여 플래그를 획득하세요.</p>
         <textarea id="cipherText" readonly>
 U1RBVEVfT0ZfQ09ERTpKcG5sMTIzJEtlY2hfU2VjcmV0
         </textarea>
-        <p>해독된 플래그를 입력하세요:</p>
-        <input type="text" id="userInput" placeholder="해독된 플래그 입력">
+        <p>해독된 메시지를 입력하세요:</p>
+        <input type="text" id="userInput" placeholder="해독된 메시지 입력">
         <button onclick="checkFlag()">제출</button>
         <p id="result"></p>
     </div>
 
     <div class="hint">
         <p>힌트 1: Base64 디코딩을 사용하세요.</p>
-        <p>힌트 2: 해독된 텍스트에서 콜론(`:`) 뒤의 값이 플래그입니다.</p>
+        <p>힌트 2: 해독된 텍스트에서 콜론(`:`) 뒤의 값을 제출해야합니다.</p>
     </div>
 
     <script>
+        // 플래그 확인 함수
         function checkFlag() {
             const userFlag = document.getElementById('userInput').value.trim();
-            const resultElement = document.getElementById('result');
+            const correctFlag = decodeFlag();
 
-            fetch('check_flag.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'flag=' + encodeURIComponent(userFlag)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    resultElement.style.color = '#00ff7f';
-                    resultElement.textContent = `정답입니다! 플래그: ${data.flag}`;
-                } else {
-                    resultElement.style.color = '#ff4d4d';
-                    resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+            const resultElement = document.getElementById('result');
+            const finalFlag = "FLAG{decoder_challenge_success}";
+
+            if (userFlag === correctFlag) {
+                resultElement.style.color = '#00ff7f';
+                resultElement.textContent = `정답입니다! 플래그: ${finalFlag}`;
+            } else {
                 resultElement.style.color = '#ff4d4d';
-                resultElement.textContent = '오류가 발생했습니다.';
-            });
+                resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+            }
+        }
+
+        // 암호화된 메시지를 해독하는 함수
+        function decodeFlag() {
+            // Base64 디코딩
+            const base64Decoded = atob("U1RBVEVfT0ZfQ09ERTpKcG5sMTIzJEtlY2hfU2VjcmV0");
+            // 디코딩 후 플래그 규칙 적용 (여기선 콜론 뒤의 값만 사용)
+            return base64Decoded.split(':')[1];
         }
     </script>
 </body>

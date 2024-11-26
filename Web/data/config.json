@@ -15,6 +15,10 @@
         "gridRows": 2
     },
     "categories": {
+        "game": {
+            "name": "게임",
+            "description": "기타 웹 게임"
+        },
         "sql": {
             "name": "SQL 인젝션",
             "description": "데이터베이스 관련 취약점"
@@ -38,9 +42,17 @@
         "cryptology": {
             "name": "암호학",
             "description": "암호학 관련 취약점"
+        },
+        "reversing": {
+            "name": "리버싱",
+            "description": "리버싱 관련 취약점"
         }
     },
     "difficulty": {
+        "basic": {
+            "name": "기본",
+            "points": 50
+        },
         "beginner": {
             "name": "초급",
             "points": 100
@@ -111,9 +123,9 @@
             "markdownFile": "mk_6.md",
             "description": "This is the sixth challenge.",
             "link": "./Question/question6/question6.html",
-            "answer": "flag{sql_injection_success}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "answer": "FLAG{F4st_R3fl3x_M4st3r}",
+            "category": "game",
+            "difficulty": "basic"
         },
         {
             "id": 7,
@@ -121,7 +133,7 @@
             "markdownFile": "mk_7.md",
             "description": "This is the seventh challenge.",
             "link": "./Question/question7/question7.html",
-            "answer": "FLAG_mem{hack}",
+            "answer": "FLAG{o_game_success}",
             "category": "sql",
             "difficulty": "beginner"
         },
@@ -171,7 +183,7 @@
             "markdownFile": "mk_12.md",
             "description": "This is the twelfth challenge.",
             "link": "./Question/question12/question12.html",
-            "answer": "Jpnl123$Kech_Secret",
+            "answer": "FLAG{decoder_challenge_success}",
             "category": "sql",
             "difficulty": "beginner"
         },
@@ -290,7 +302,7 @@
             "markdownFile": "mk_24.md",
             "description": "This is the twenty-fourth challenge.",
             "link": "./Question/question24/question24.html",
-            "answer": "flag{24Challengesflag}",
+            "answer": "FLAG{UU24encode_challenge}",
             "category": "sql",
             "difficulty": "beginner"
         },   
@@ -350,7 +362,7 @@
             "markdownFile": "mk_30.md",
             "description": "This is the thirtyth challenge.",
             "link": "./Question/question30/question30.html",
-            "answer": "flag{questionChallenges30flag}",
+            "answer": "flag{a8b42ddb120d7a9c291323857118bff4}",
             "category": "sql",
             "difficulty": "beginner"
         },

@@ -1,0 +1,152 @@
+body {
+    background-color: #121212;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #1e1e1e;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+}
+
+textarea {
+    background-color: #2a2a2a;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+input {
+    background-color: #2a2a2a;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+button {
+    background-color: #0f0;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #33ff99;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+.ssh-info {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+.story {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    text-align: left;
+    line-height: 1.6;
+}
+
+.story p {
+    margin-bottom: 15px;
+    color: #00ff00;
+}
+
+.hint-button {
+    background-color: #2a2a2a;
+    color: #33ff99;
+    border: 1px solid #33ff99;
+    padding: 8px 15px;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.hint-button:hover {
+    background-color: #33ff99;
+    color: #2a2a2a;
+}
+
+.hint {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #33ff99;
+    border-radius: 5px;
+    display: none;
+}
+
+.hint p {
+    color: #33ff99;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.comment-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.comment-section textarea {
+    width: 90%;
+    height: 80px;
+    background-color: #2a2a2a;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+#flag-result {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+}
+
+#flag-result p {
+    color: #00ff00;
+    margin: 0;
+    font-family: 'Courier New', monospace;
+}
+
+.question-text {
+    color: #00ff00;
+    font-size: 1.2em;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+} 

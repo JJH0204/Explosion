@@ -1,55 +1,48 @@
-# 문제 29 - Command Injection 기반 권한상승 Challenge Solution
+# 문제 30 - 스테가노그래피/패킷분석 Challenge Solution
 
 ## 문제 설명
-SSH를 통해 question29 계정으로 접속한 후, command injection 취약점을 이용하여 권한을 상승시키고 플래그를 찾는 문제입니다.
+페페가 크리스마스의 숨겨진 이야기를 밝히기 위한 3단계 문제입니다. 스테가노그래피와 패킷 분석을 통해 진실을 밝혀내야 합니다.
 
 ## 풀이 과정
-1. SSH 접속
-   - 호스트: ip.firewall-flame.kro.kr
-   - 포트: 2226
-   - 계정: question30
-   - 비밀번호: question30pass
 
-2. 코드 분석
-   - question29 파일을 분석하면 다음과 같은 취약점을 발견할 수 있습니다:
-   ```c
-   sprintf(command, "touch %d", pid);
-   system(command);
-   ```
-   - system() 함수가 'touch' 명령어를 실행할 때 PATH를 검색하는 취약점이 있습니다
+### 1단계 - 스테가노그래피
+1. 게임에서 Ctrl+Shift+Q를 눌러 'qeqe' 명령어 입력
+2. 문제 페이지로 이동 후 이미지 다운로드
+3. 스테가노그래피 도구를 사용하여 이미지 분석
+4. 숨겨진 메시지에서 "국립대구박물관" 발견
+5. 첫 번째 플래그로 "국립대구박물관" 제출
 
-3. 권한 상승 실행
-   ```bash
-   # PATH 인젝션을 위한 디렉토리 생성
-   mkdir /tmp/ax
-   
-   # 가짜 touch 명령어 생성
-   echo "cat /home/Challenge29/question29flag/flag.txt" > /tmp/ax/touch
-   
-   # 실행 권한 부여
-   chmod 777 /tmp/ax/touch
-   
-   # PATH 환경변수 수정하여 실행
-   PATH=/tmp/ax:$PATH ./question29
-   ```
+### 2단계 - 패킷 분석
+1. pcap 파일 다운로드
+2. Wireshark로 TCP 스트림 분석 > SMTP 프로토콜 확인
+ -> wireshark > Conversations > Follow Stream > SMTP 프로토콜 확인
+3. 이메일 데이터 발견
+4. [encryptomatic viewer](https://www.encryptomatic.com/viewer/)로 이메일 내용 확인
+5. 두 번째 플래그로 할머니 가 보낸 파일중 doc 파일의 내용중 굵은 글자 제출
 
-4. 취약점 설명
-   - 프로그램이 절대 경로 없이 'touch' 명령어를 실행함
-   - PATH 환경변수를 조작하여 악성 touch 명령어를 실행할 수 있음
-   - 프로그램의 SUID 권한으로 인해 flag 파일을 읽을 수 있음
+### 3단계 - 범인 찾기
+1. 이메일 내용을 통해 진짜 범인이 할머니임을 파악
+2. 댓글란에 "grandma" 또는 "할머니" 입력
+3. 최종 플래그 획득: flag{a8b42ddb120d7a9c291323857118bff4}
 
 ## 사용된 기술
-- PATH 환경변수 조작
-- Command Injection
-- SUID 권한을 이용한 권한 상승
-- 시스템 함수 취약점 이용
+- 스테가노그래피 분석
+- 패킷 캡처 파일 분석
+- TCP 스트림 분석
+- 이메일 데이터 추출
+- 논리적 추론
+
+## 문제 해결 도구
+1. 스테가노그래피 도구
+2. Wireshark
+3. Encryptomatic Email Viewer
 
 ## 보안 교훈
-1. system() 함수 사용 시 명령어의 전체 경로를 지정해야 합니다
-2. 환경변수 조작 가능성을 고려해야 합니다
-3. SUID 프로그램 작성 시 특별한 주의가 필요합니다
-4. 외부 명령어 실행 시 안전한 방법을 사용해야 합니다
+1. 이미지 파일에 숨겨진 정보의 중요성
+2. 네트워크 트래픽 분석의 필요성
+3. 디지털 포렌식의 기본 원리 이해
+4. 증거 기반 추론의 중요성
 
 ## 최종 플래그
 ```
-flag{4368616c6c656e6765666c6167}
+flag{a8b42ddb120d7a9c291323857118bff4}

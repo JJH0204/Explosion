@@ -3,250 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Scanner v1.0</title>
+    <title>O 찾기 게임</title>
     <style>
         body {
-            background-color: #001100;
+            background-color: #121212;
             color: #00ff00;
             font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            flex: 1;
-        }
-        .memory-view, .control-panel {
-            background-color: #002200;
-            border: 1px solid #00ff00;
-            padding: 15px;
-            overflow: auto;
-        }
-        .memory-cell {
-            display: inline-block;
-            width: 30px;
-            height: 20px;
-            margin: 2px;
-            font-size: 12px;
             text-align: center;
-            border: 1px solid #004400;
+            padding: 20px;
         }
-        .memory-cell.modified {
-            background-color: #004400;
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 700px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
         }
-        .memory-cell.selected {
-            border-color: #00ff00;
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(20, 30px);
+            gap: 5px;
+            justify-content: center;
+            margin: 20px 0;
+            max-width: 700px;
+            overflow: hidden;
         }
-        button {
-            background-color: #004400;
+
+        .character {
+            background-color: #2a2a2a;
             color: #00ff00;
             border: 1px solid #00ff00;
-            padding: 5px 10px;
-            margin: 5px;
+            font-size: 1em;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
+            border-radius: 5px;
         }
+
+        .character:hover {
+            background-color: #33ff99;
+        }
+
+        .correct {
+            background-color: #007bff !important;
+            color: #ffffff;
+        }
+
+        .hint {
+            background-color: #ffff00 !important;
+            color: #000 !important;
+        }
+
+        .wrong {
+            background-color: #ff0000 !important;
+            color: #ffffff;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
         button:hover {
-            background-color: #006600;
+            background-color: #33ff99;
         }
-        .status {
-            color: #00aa00;
-            margin-top: 10px;
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
         }
-        #protocol-view {
-            font-size: 12px;
+
+        #timer {
+            font-size: 1.2em;
             margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Memory Scanner v1.0</h1>
+    <h1>O 찾기 게임</h1>
     <div class="container">
-        <div class="memory-view" id="memory-display"></div>
-        <div class="control-panel">
-            <button onclick="scanner.scan()">메모리 스캔</button>
-            <button onclick="scanner.analyze()">프로토콜 분석</button>
-            <button onclick="scanner.modify()">메모리 수정</button>
-            <button onclick="scanner.execute()">실행</button>
-            <div class="status" id="status"></div>
-            <div id="protocol-view"></div>
-        </div>
+        <p>아래 0들 사이에서 <b>O</b>를 찾으세요!</p>
+        <div id="timer">남은 시간: <span id="timeLeft">20</span>초</div>
+        <div class="character-grid" id="characterGrid"></div>
+        <button onclick="startGame()">게임 시작</button>
+        <p id="result"></p>
     </div>
 
     <script>
-        class MemoryScanner {
-            constructor() {
-                this.memory = new Array(256).fill(0);
-                this.protocolData = [];
-                this.selectedCells = new Set();
-                this.modifiedCells = new Set();
-                this.initializeMemory();
-                this.render();
+        const gridContainer = document.getElementById('characterGrid');
+        const resultElement = document.getElementById('result');
+        const timerElement = document.getElementById('timeLeft');
+
+        let timer;
+        let timeRemaining = 20;
+        let correctIndex = -1;
+        let isGameActive = false;
+
+        function startGame() {
+            gridContainer.innerHTML = '';
+            resultElement.textContent = '';
+            resultElement.style.color = '#00ff00';
+            timeRemaining = 20;
+            timerElement.textContent = timeRemaining;
+            isGameActive = true;
+
+            const characters = generateCharacters();
+            characters.forEach((char, index) => {
+                const charElement = document.createElement('div');
+                charElement.textContent = char;
+                charElement.className = 'character';
+                charElement.onclick = () => checkCharacter(char, index);
+                gridContainer.appendChild(charElement);
+            });
+
+            startTimer();
+        }
+
+        function generateCharacters() {
+            const characters = [];
+            const gridSize = 400;
+            correctIndex = Math.floor(Math.random() * gridSize);
+
+            for (let i = 0; i < gridSize; i++) {
+                characters.push(i === correctIndex ? 'O' : '0');
             }
 
-            initializeMemory() {
-                // 암호화된 초기 메모리 상태
-                const encoded = 'H4sIAAAAAAAAA2NgYPjPAAVMQMwMxCxAzArEbEDMDsQcQMwJxFxAzA3EPEDMy4AJAABqiGhXAAAA';
-                const decoded = atob(encoded);
-                for(let i = 0; i < decoded.length && i < this.memory.length; i++) {
-                    this.memory[i] = decoded.charCodeAt(i);
-                }
+            return characters;
+        }
 
-                // 숨겨진 프로토콜 데이터
-                this.protocolData = [
-                    { id: 0x01, type: 'INIT', data: [0x00, 0xFF, 0x00] },
-                    { id: 0x02, type: 'SCAN', data: [0x01, 0x02, 0x03] },
-                    { id: 0x03, type: 'EXEC', data: [0xFF, 0xFF, 0xFF] }
-                ];
-            }
+        function checkCharacter(selectedChar, index) {
+            if (!isGameActive) return;
 
-            render() {
-                const display = document.getElementById('memory-display');
-                display.innerHTML = '';
-                
-                for(let i = 0; i < this.memory.length; i++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'memory-cell';
-                    cell.textContent = this.memory[i].toString(16).padStart(2, '0');
-                    
-                    if(this.selectedCells.has(i)) cell.classList.add('selected');
-                    if(this.modifiedCells.has(i)) cell.classList.add('modified');
-                    
-                    cell.onclick = () => this.selectCell(i);
-                    display.appendChild(cell);
-                }
-            }
+            isGameActive = false;
 
-            selectCell(index) {
-                if(this.selectedCells.has(index)) {
-                    this.selectedCells.delete(index);
-                } else {
-                    this.selectedCells.add(index);
-                }
-                this.render();
-            }
-
-            updateStatus(message) {
-                document.getElementById('status').textContent = message;
-            }
-
-            scan() {
-                this.updateStatus('메모리 스캔 중...');
-                
-                // 메모리 패턴 분석
-                let patterns = [];
-                for(let i = 0; i < this.memory.length - 2; i++) {
-                    if(this.memory[i] === 0xFF && this.memory[i+1] === 0x00) {
-                        patterns.push(i);
-                    }
-                }
-
-                setTimeout(() => {
-                    this.updateStatus(`발견된 패턴: ${patterns.length}개`);
-                    console.log('힌트: 패턴 0xFF00을 찾아보세요.');
-                }, 1000);
-            }
-
-            analyze() {
-                this.updateStatus('프로토콜 분석 중...');
-                
-                const protocolView = document.getElementById('protocol-view');
-                protocolView.innerHTML = '';
-                
-                setTimeout(() => {
-                    this.protocolData.forEach(p => {
-                        const line = document.createElement('div');
-                        line.textContent = `ID: 0x${p.id.toString(16)} - Type: ${p.type}`;
-                        protocolView.appendChild(line);
+            if (selectedChar === 'O') {
+                fetch('flag.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        resultElement.style.color = '#00ff7f';
+                        resultElement.textContent = `정답입니다! 플래그: ${data.flag}`;
                     });
-                    
-                    console.log('힌트: EXEC 프로토콜의 데이터를 수정해보세요.');
-                }, 1500);
+            } else {
+                resultElement.style.color = '#ff4d4d';
+                resultElement.textContent = '틀렸습니다. 새로고침하여 다시 시작하세요.';
+                highlightCorrect(correctIndex, false);
+                lockGame();
             }
 
-            modify() {
-                if(this.selectedCells.size === 0) {
-                    this.updateStatus('수정할 셀을 선택하세요.');
-                    return;
-                }
+            clearTimeout(timer);
+        }
 
-                // 선택된 셀의 값을 수정
-                this.selectedCells.forEach(index => {
-                    this.memory[index] = 0xFF;
-                    this.modifiedCells.add(index);
-                });
+        function highlightCorrect(index, isCorrect) {
+            const cells = document.querySelectorAll('.character');
+            cells[index].classList.add(isCorrect ? 'correct' : 'wrong');
 
-                this.render();
-                this.updateStatus('메모리 수정 완료');
-            }
-
-            async execute() {
-                this.updateStatus('실행 중...');
-                
-                // 메모리 상태 검증
-                let execProtocol = this.protocolData.find(p => p.type === 'EXEC');
-                let validExec = true;
-                
-                for(let i = 0; i < execProtocol.data.length; i++) {
-                    if(this.memory[0x20 + i] !== execProtocol.data[i]) {
-                        validExec = false;
-                        break;
-                    }
-                }
-
-                setTimeout(async () => {
-                    if(validExec) {
-                        const flag = await this.decodeFlag();
-                        this.updateStatus(`성공! Flag: ${flag}`);
-                    } else {
-                        this.updateStatus('실행 실패. 메모리 상태가 올바르지 않습니다.');
-                    }
-                }, 1000);
-            }
-
-            async decodeFlag() {
-                try {
-                    const response = await fetch('question7.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ action: 'decode_flag' })
-                    });
-                    const data = await response.json();
-                    return data.flag;
-                } catch (error) {
-                    console.error('Error:', error);
-                    return 'Error decoding flag';
-                }
+            if (!isCorrect) {
+                cells[correctIndex].classList.add('correct');
             }
         }
 
-        // 스캐너 초기화
-        const scanner = new MemoryScanner();
+        function startTimer() {
+            timer = setInterval(() => {
+                timeRemaining--;
+                timerElement.textContent = timeRemaining;
 
-        // 안티 디버깅
-        setInterval(() => {
-            const start = performance.now();
-            debugger;
-            const end = performance.now();
-            if(end - start > 100) {
-                location.reload();
-            }
-        }, 1000);
+                if (timeRemaining <= 0) {
+                    clearTimeout(timer);
+                    if (isGameActive) {
+                        isGameActive = false;
+                        resultElement.style.color = '#ff4d4d';
+                        resultElement.textContent = '시간 초과! 새로고침하여 다시 시작하세요.';
+                        highlightCorrect(correctIndex, false);
+                        lockGame();
+                    }
+                }
+            }, 1000);
+        }
 
-        // 메모리 무결성 검사
-        setInterval(() => {
-            const checksum = scanner.memory.reduce((a, b) => a + b, 0);
-            if(checksum > 10000) {
-                scanner.initializeMemory();
-                scanner.render();
-            }
-        }, 2000);
+        function lockGame() {
+            const cells = document.querySelectorAll('.character');
+            cells.forEach(cell => {
+                cell.onclick = null;
+            });
+
+            const startButton = document.querySelector('button');
+            startButton.disabled = true;
+            startButton.style.backgroundColor = '#555';
+            startButton.style.cursor = 'not-allowed';
+        }
+
+        window.addEventListener('load', () => {
+            //console.log('게임에 오신 것을 환영합니다! 정답 힌트를 원하면 "hint"를 입력하세요.');
+            Object.defineProperty(window, 'hint', {
+                get: function () {
+                    if (isGameActive) {
+                        const cells = document.querySelectorAll('.character');
+                        cells[correctIndex].classList.add('hint');
+                        console.log('힌트: 정답 위치가 노란색으로 표시되었습니다.');
+                    } else {
+                        console.log('힌트를 제공할 수 없습니다. 게임이 비활성 상태입니다.');
+                    }
+                    return '힌트를 제공했습니다.';
+                }
+            });
+        });
     </script>
 </body>
 </html>

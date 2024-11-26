@@ -19,7 +19,7 @@ $correct_flag = "flag{24Challengesflag}";
 if ($submitted_flag === $correct_flag) {
     echo json_encode([
         'success' => true,
-        'flag' => $correct_flag
+        'flag' => "FLAG{UU24encode_challenge}"
     ]);
 } else {
     echo json_encode([
@@ -27,4 +27,4 @@ if ($submitted_flag === $correct_flag) {
         'message' => 'Invalid flag'
     ]);
 }
-?> 
+?>
