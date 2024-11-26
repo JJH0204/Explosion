@@ -607,3 +607,26 @@
 .page-button:nth-child(3) { animation-delay: 0.3s; }
 .page-button:nth-child(4) { animation-delay: 0.4s; }
 .page-button:nth-child(5) { animation-delay: 0.5s; }
+
+/* 사이드바 스크롤 제거 */
+.sidebar {
+    overflow-y: hidden;  /* 사이드바 전체 스크롤 제거 */
+}
+
+/* 랭킹 섹션 스타일 수정 */
+#rankingList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px;  /* 랭킹 리스트 최대 높이 설정 */
+    overflow-y: auto;   /* 랭킹 리스트만 스크롤 가능하도록 */
+    
+    /* 스크롤바 숨기기 */
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Webkit 브라우저용 스크롤바 숨기기 */
+#rankingList::-webkit-scrollbar {
+    display: none;
+}

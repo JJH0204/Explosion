@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             rankingList.innerHTML = '';
             
-            data.rankings.slice(0, 7).forEach((player, index) => {
+            data.rankings.slice(0, 10).forEach((player, index) => {
                 const li = document.createElement('li');
                 li.className = 'ranking-item animate-in';
                 

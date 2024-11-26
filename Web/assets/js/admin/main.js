@@ -173,12 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <h2 class="challenge-title">Challenge ${cardNumber}</h2>
                             
                             <div class="tags-container">
-                                ${Array.isArray(challengeInfo.category) 
-                                    ? challengeInfo.category.slice(0, 3).map(cat => 
-                                        `<span class="tag category-tag">${config.categories[cat].name}</span>`
-                                    ).join('')
-                                    : `<span class="tag category-tag">${config.categories[challengeInfo.category].name}</span>`
-                                }
+                                <span class="tag category-tag">${config.categories[challengeInfo.category].name}</span>
                                 <span class="tag difficulty-tag">${config.difficulty[challengeInfo.difficulty].name}</span>
                                 <span class="tag points-tag">${config.difficulty[challengeInfo.difficulty].points}pt</span>
                             </div>
@@ -216,66 +211,41 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (!flagInput) return;
 
                             try {
-                                if (cardNumber === 25) {
-                                    try {
-                                        const response = await fetch('/assets/php/verify_flag.php');
-                                        const result = await response.json();
-                                        
-                                        if (result.success) {
-                                            const correctFlag = result.flag;
-                                            
-                                            if (flagInput.value === correctFlag) {
-                                                const saveResponse = await fetch('/assets/php/saveClearedCard.php', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/x-www-form-urlencoded',
-                                                    },
-                                                    body: `cardId=${cardNumber}`
-                                                });
+                                // config.json에서 해당 문제의 정답 확인
+                                const challengeInfo = config.challenges.find(c => c.id === cardNumber);
+                                if (!challengeInfo) {
+                                    throw new Error('Challenge not found');
+                                }
 
-                                                const saveResult = await saveResponse.json();
-                                                if (saveResult.success) {
-                                                    alert('축하합니다! 문제를 해결했습니다!');
-                                                    location.reload();
-                                                } else {
-                                                    alert(saveResult.error || '오류가 발생했습니다.');
-                                                }
-                                            } else {
-                                                alert('틀린 답입니다. 다시 시도해주세요.');
-                                            }
-                                        } else {
-                                            throw new Error(result.error || '플래그 검증 중 오류가 발생했습니다.');
+                                // 입력된 플래그와 정답 비교
+                                if (flagInput.value === challengeInfo.answer) {
+                                    // 정답이 맞으면 saveClearedCard.php 호출
+                                    const response = await fetch('/assets/php/saveClearedCard.php', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                        },
+                                        body: `cardId=${cardNumber}`
+                                    });
+
+                                    const result = await response.json();
+                                    if (result.success) {
+                                        // DB에서 실제 클리어한 스테이지 목록을 가져와서 localStorage 초기화
+                                        const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                        const clearedResult = await clearedResponse.json();
+                                        
+                                        if (clearedResult.success) {
+                                            // DB의 실제 클리어 상태로 localStorage 초기화
+                                            localStorage.setItem('clearedStages', JSON.stringify(clearedResult.data));
                                         }
-                                    } catch (error) {
-                                        console.error('Error:', error);
-                                        alert('플래그 검증 중 오류가 발생했습니다.');
+                                        
+                                        alert('축하합니다! 문제를 해결했습니다!');
+                                        location.reload();
+                                    } else {
+                                        alert(result.error || '오류가 발생했습니다.');
                                     }
                                 } else {
-                                    // 기존 다른 문제들의 처리 로직
-                                    const challengeInfo = config.challenges.find(c => c.id === cardNumber);
-                                    if (!challengeInfo) {
-                                        throw new Error('Challenge not found');
-                                    }
-
-                                    if (flagInput.value === challengeInfo.answer) {
-                                        const saveResponse = await fetch('/assets/php/saveClearedCard.php', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/x-www-form-urlencoded',
-                                            },
-                                            body: `cardId=${cardNumber}`
-                                        });
-
-                                        const saveResult = await saveResponse.json();
-                                        if (saveResult.success) {
-                                            alert('축하합니다! 문제를 해결했습니다!');
-                                            location.reload();
-                                        } else {
-                                            alert(saveResult.error || '오류가 발생했습니다.');
-                                        }
-                                    } else {
-                                        alert('틀린 답입니다. 다시 시도해주세요.');
-                                    }
+                                    alert('틀린 답입니다. 다시 시도해주세요.');
                                 }
                             } catch (error) {
                                 console.error('Error submitting flag:', error);
@@ -555,9 +525,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             rankingList.innerHTML = '';
             
-            data.rankings.slice(0, 7).forEach((player, index) => {
+            data.rankings.slice(0, 10).forEach((player, index) => {
                 const li = document.createElement('li');
-                li.className = 'ranking-item';
+                li.className = 'ranking-item animate-in';
                 
                 let rankDisplay;
                 if (index < 3) {
@@ -687,4 +657,13 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.reload();
         });
     }
+
+    // 랭킹 아이템 애니메이션 완료 후 처리
+    const rankingItems = document.querySelectorAll('.ranking-item');
+    rankingItems.forEach(item => {
+        item.classList.add('animate');
+        item.addEventListener('animationend', function() {
+            this.classList.remove('animate');
+        });
+    });
 }); 
