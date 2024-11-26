@@ -192,73 +192,77 @@
         function loadHistory() {
             const savedHistory = getCookie('wordHistory');
             if (savedHistory) {
-                history = savedHistory;
-                displayHistory(history);
+                try {
+                    history = JSON.parse(savedHistory);
+                    displayHistory(history);
+                } catch (e) {
+                    history = [];
+                }
+            } else {
+                history = [];
             }
         }
 
         async function fetchGameData() {
             try {
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', 'get_data.php', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        gameData = JSON.parse(xhr.responseText);
-                        loadHistory();
-                    } else {
-                        console.error('데이터를 가져오는데 실패했습니다:', xhr.statusText);
-                    }
-                };
-                xhr.onerror = function() {
-                    console.error('데이터를 가져오는데 실패했습니다');
-                };
-                xhr.send();
+                const response = await fetch('get_data.php');
+                gameData = await response.json();
+                if (gameData.error) {
+                    console.error('Error:', gameData.error);
+                    return;
+                }
+                loadHistory();
             } catch (error) {
-                console.error('데이터를 가져오는데 실패했습니다:', error);
+                console.error('Error:', error);
             }
         }
 
-        function checkWord() {
+        async function checkWord() {
             if (!gameData) return;
             const input = document.getElementById('wordInput').value.trim();
             if (!input) return;
 
-            let result = null;
-            if (input === gameData.key) {
-                if (gameData.flag) {
-                    alert(gameData.flag);
-                }
-                result = { rank: 0, word: input, similarity: 1.0 };
-            } else {
-                const found = gameData.top_scores.find(item => item[1] === input);
-                if (found) {
-                    result = { rank: found[0], word: found[1], similarity: found[2] };
+            try {
+                const response = await fetch(`get_data.php?word=${encodeURIComponent(input)}`);
+                const newData = await response.json();
+                
+                let result = null;
+                if (input === gameData.key) {
+                    result = { rank: 0, word: input, similarity: 1.0 };
+                    if (newData.flag) {
+                        alert(newData.flag);
+                    }
                 } else {
-                    result = { rank: '순위 밖', word: input, similarity: '-' };
+                    if (gameData.top_scores && Array.isArray(gameData.top_scores)) {
+                        const found = gameData.top_scores.find(score => score[1] === input);
+                        if (found) {
+                            result = { rank: found[0], word: input, similarity: found[2] };
+                        } else {
+                            result = { rank: '순위 밖', word: input, similarity: '-' };
+                        }
+                    } else {
+                        result = { rank: '순위 밖', word: input, similarity: '-' };
+                    }
                 }
+
+                history.unshift(result);
+                setCookie('wordHistory', JSON.stringify(history));
+                displayHistory(history);
+                document.getElementById('wordInput').value = '';
+            } catch (error) {
+                console.error('Error:', error);
             }
-
-            history = history.filter(item => item.word !== input);
-            history.unshift(result);
-
-            const sortedHistory = [
-                history[0],
-                ...history.slice(1).sort((a, b) => {
-                    if (a.rank === '순위 밖') return 1;
-                    if (b.rank === '순위 밖') return -1;
-                    return a.rank - b.rank;
-                })
-            ];
-
-            setCookie('wordHistory', sortedHistory);
-            displayHistory(sortedHistory);
-            document.getElementById('wordInput').value = '';
         }
 
         function displayHistory(sortedHistory) {
             const historyDiv = document.getElementById('history');
             historyDiv.innerHTML = sortedHistory.map((item, index) => {
-                const similarityText = item.similarity === '-' ? '-' : item.similarity.toFixed(3);
+                let similarityText = '-';
+                if (item.similarity !== '-') {
+                    const similarityValue = typeof item.similarity === 'string' ? 
+                        parseFloat(item.similarity) : item.similarity;
+                    similarityText = similarityValue.toFixed(3);
+                }
                 return `<div class="history-item ${index === 0 ? 'recent' : ''}">${item.rank}: ${item.word} : ${similarityText}</div>`;
             }).join('');
         }

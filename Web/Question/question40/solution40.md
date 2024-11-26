@@ -6,7 +6,7 @@
 - 웹 페이지의 소스 코드를 확인하여 게임의 동작 방식을 파악
 - JavaScript 코드에서 정답 체크 로직이 클라이언트 측에서 이루어지는 것을 확인
 
-### 2. 클라이언트 스크립트 (checkWord()) 취약점 확인
+### 2. 클라이언트 스크립트 (전역 변수) 취약점 확인
 ```javascript
 if (input === gameData.key) {
     if (gameData.flag) {
@@ -16,8 +16,7 @@ if (input === gameData.key) {
     result = { rank: 0, word: input, similarity: 1.0 };
 }
 ```
-- 정답 확인이 클라이언트 측에서 이루어짐
-- gameData.key 변수가 전역 변수로 저장되어 있어 조작 가능
+- gameData.key 변수가 전역 변수로 저장되어 있다.
 
 ### 3. 브라우저 개발자 모드 활성화
 - F12 또는 브라우저 개발자 도구를 실행
@@ -26,11 +25,11 @@ if (input === gameData.key) {
 ### 4. gameData.key 값 변경
 - Console에서 다음 명령어 실행:
 ```javascript
-gameData.key = "test";  // 원하는 문자열로 변경
+gameData.key;  // 값 확인
 ```
 
 ### 5. 단어 입력
-- 입력창에 변경한 문자열("test") 입력
+- 입력창에 확인한 단어 입력
 - 제출 버튼 클릭
 
 ### 6. 플래그 획득

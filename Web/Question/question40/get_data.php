@@ -16,6 +16,8 @@ $daysPassed = $diff->invert ? $diff->days : -$diff->days;
 // 현재 문제 번호 계산
 $currentNumber = $baseNumber + $daysPassed;
 
+$FLAG = "FLAG{W0rd_V3ct0r_S3m4nt1c_M4st3r}";
+
 $url = 'https://semantle-ko.newsjel.ly/top_scores/' . $currentNumber;
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -27,24 +29,14 @@ if(curl_errno($ch)) {
     echo json_encode(['error' => curl_error($ch)]);
 } else {
     $data = json_decode($response, true);
-    $problem = $data['problem'];
-    $similarity = $data['similarity'];
-    $rank = $data['rank'];
-    $isAnswer = $data['isAnswer'];
-
-    $response = array(
-        'problem' => $problem,
-        'similarity' => $similarity,
-        'rank' => $rank,
-        'isAnswer' => $isAnswer
-    );
-
-    if ($isAnswer) {
-        $response['flag'] = 'FLAG{W0rd_V3ct0r_S3m4nt1c_M4st3r}';
+    if ($data) {
+        if (isset($_GET['word']) && $_GET['word'] === $data['key']) {
+            $data['flag'] = $FLAG;
+        }
+        echo json_encode($data);
+    } else {
+        echo json_encode(['error' => 'Invalid response']);
     }
-
-    header('Content-Type: application/json');
-    echo json_encode($response);
 }
 
 curl_close($ch);
