@@ -15,9 +15,13 @@
         "gridRows": 2
     },
     "categories": {
-        "game": {
-            "name": "게임",
-            "description": "기타 웹 게임"
+        "ETC": {
+            "name": "기타",
+            "description": "기타 취약점"
+        },
+        "network": {
+            "name": "네트워크",
+            "description": "네트워크 관련 취약점"
         },
         "sql": {
             "name": "SQL 인젝션",
@@ -46,6 +50,22 @@
         "reversing": {
             "name": "리버싱",
             "description": "리버싱 관련 취약점"
+        },
+        "CTF": {
+            "name": "CTF",
+            "description": "CTF"
+        },
+        "pwnable": {
+            "name": "시스템",
+            "description": "시스템 관련 취약점"
+        },
+        "linux": {
+            "name": "Linux",
+            "description": "Linux 관련 취약점"
+        },
+        "windows": {
+            "name": "Windows",
+            "description": "Windows 관련 취약점"
         }
     },
     "difficulty": {
@@ -75,7 +95,7 @@
             "link": "./Question/question1/question1.html",
             "answer": "flame1answer",
             "category": "cryptology",
-            "difficulty": "beginner"
+            "difficulty": "basic"
         },
         {
             "id": 2,
@@ -84,8 +104,8 @@
             "description": "This is the second challenge.",
             "link": "./Question/question2/question2.html",
             "answer": "FLAG{source_code_analysis}",
-            "category": "cryptology",
-            "difficulty": "beginner"
+            "category": ["cryptology","reversing"],
+            "difficulty": "basic"
         },
         {
             "id": 3,
@@ -94,8 +114,8 @@
             "description": "This is the third challenge.",
             "link": "./Question/question3/question3.html",
             "answer": "FLAG{base64_decode_success}",
-            "category": "cryptology",
-            "difficulty": "beginner"
+            "category": ["cryptology","reversing"],
+            "difficulty": "basic"
         },
         {
             "id": 4,
@@ -104,8 +124,8 @@
             "description": "This is the fourth challenge.",
             "link": "./Question/question4/question4.html",
             "answer": "FLAG{proxy_role_manipulation_success}",
-            "category": "cryptology",
-            "difficulty": "beginner"
+            "category": "csrf",
+            "difficulty": "basic"
         },
         {
             "id": 5,
@@ -114,7 +134,7 @@
             "description": "This is the fifth challenge.",
             "link": "./Question/question5/question5.html",
             "answer": "Salted__~2024+secret+key+to+decrypt+flag",
-            "category": "cryptology",
+            "category": "upload",
             "difficulty": "beginner"
         },
         {
@@ -124,7 +144,7 @@
             "description": "This is the sixth challenge.",
             "link": "./Question/question6/question6.html",
             "answer": "FLAG{F4st_R3fl3x_M4st3r}",
-            "category": "game",
+            "category": ["csrf","ETC"],
             "difficulty": "basic"
         },
         {
@@ -134,8 +154,8 @@
             "description": "This is the seventh challenge.",
             "link": "./Question/question7/question7.html",
             "answer": "FLAG{o_game_success}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "reversing",
+            "difficulty": "basic"
         },
         {
             "id": 8,
@@ -144,8 +164,8 @@
             "description": "This is the eighth challenge.",
             "link": "./Question/question8/question8.html",
             "answer": "FLag{image_change}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "reversing",
+            "difficulty": "basic"
         },
         {
             "id": 9,
@@ -154,8 +174,8 @@
             "description": "This is the ninth challenge.",
             "link": "./Question/question9/question9.html",
             "answer": "Flag{LocalStorage_Modification}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "reversing",
+            "difficulty": "basic"
         },
         {
             "id": 10,
@@ -164,8 +184,8 @@
             "description": "This is the tenth challenge.",
             "link": "./Question/question10/question10.html",
             "answer": "flag{answer10}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "network",
+            "difficulty": "basic"
         },
         {
             "id": 11,
@@ -174,8 +194,8 @@
             "description": "This is the eleventh challenge.",
             "link": "./Question/question11/question11.html",
             "answer": "FLAG{js_code_analysis}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "reversing",
+            "difficulty": "basic"
         },
         {
             "id": 12,
@@ -184,8 +204,8 @@
             "description": "This is the twelfth challenge.",
             "link": "./Question/question12/question12.html",
             "answer": "FLAG{decoder_challenge_success}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "cryptology",
+            "difficulty": "basic"
         },
         {
             "id": 13,
@@ -194,7 +214,7 @@
             "description": "This is the thirteenth challenge.",
             "link": "./Question/question13/question13.html",
             "answer": "FLAG{advanced_buffer_overflow}",
-            "category": "sql",
+            "category": ["pwnable","reversing","cryptology"],
             "difficulty": "beginner"
         },
         {
@@ -204,7 +224,7 @@
             "description": "This is the fourteenth challenge.",
             "link": "./Question/question14/question14.html",
             "answer": "FLAG{number_baseball_success}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -213,9 +233,9 @@
             "markdownFile": "mk_15.md",
             "description": "This is the fifteenth challenge.",
             "link": "./Question/question15/question15.html",
-            "answer": "FLAG{hidden_with_lsb}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "answer": "FLAG{hidden_with_lsb>",
+            "category": "pwnable",
+            "difficulty": "advanced"
         },
         {
             "id": 16,
@@ -234,7 +254,7 @@
             "description": "This is the seventeenth challenge.",
             "link": "./Question/question17/question17.html",
             "answer": "FLAG{snake_master}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -244,7 +264,7 @@
             "description": "This is the eighteenth challenge.",
             "link": "./Question/question18/question18.html",
             "answer": "FLAG{SUBNETTING_SUCCESS}",
-            "category": "sql",
+            "category": "network",
             "difficulty": "beginner"
         },
         {
@@ -254,7 +274,7 @@
             "description": "This is the nineteenth challenge.",
             "link": "./Question/question19/question19.html",
             "answer": "FLAG{this_is_easy}",
-            "category": "sql",
+            "category": "linux",
             "difficulty": "beginner"
         },{
             "id": 20,
@@ -263,7 +283,7 @@
             "description": "This is the twentieth challenge.",
             "link": "./Question/question20/question20.html",
             "answer": "FLAG{ASCIIcode}",
-            "category": "sql",
+            "category": "linux",
             "difficulty": "beginner"
         },
         {
@@ -273,7 +293,7 @@
             "description": "This is the twenty-first challenge.",
             "link": "./Question/question21/question21.html",
             "answer": "Flag{Le_flag}",
-            "category": "sql",
+            "category": "cryptology",
             "difficulty": "beginner"
         },
         {
@@ -283,8 +303,8 @@
             "description": "This is the twenty-second challenge.",
             "link": "./Question/question22/question22.html",
             "answer": "Flag{hashing_practice}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": ["cryptology","pwnable"],
+            "difficulty": "intermediate"
         },
         {
             "id": 23,
@@ -293,7 +313,7 @@
             "description": "This is the twenty-third challenge.",
             "link": "./Question/question23/question23.html",
             "answer": "Flag{insecure_storage}",
-            "category": "sql",
+            "category": "windows",
             "difficulty": "beginner"
         },
         {
@@ -303,8 +323,8 @@
             "description": "This is the twenty-fourth challenge.",
             "link": "./Question/question24/question24.html",
             "answer": "FLAG{UU24encode_challenge}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "cryptology",
+            "difficulty": "intermediate"
         },   
         {
             "id": 25,
@@ -313,8 +333,8 @@
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question25/question25.html",
             "answer": "flag{25Challengesflag}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "intermediate"
         },
         {
             "id": 26,
@@ -323,7 +343,7 @@
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question26/question26.html",
             "answer": "Flag{BOMB_game}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -333,8 +353,8 @@
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question27/question27.html",
             "answer": "flag{questionChallenges27flag}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "advanced"
         },
         {
             "id": 28,
@@ -343,8 +363,8 @@
             "description": "This is the twenty-eighth challenge.",
             "link": "./Question/question28/question28.html",
             "answer": "flag{6763634368616c6c656e6765733238666c6167}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "intermediate"
         },
         {
             "id": 29,
@@ -353,8 +373,8 @@
             "description": "This is the twenty-ninth challenge.",
             "link": "./Question/question29/question29.html",
             "answer": "flag{4368616c6c656e6765666c6167}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "advanced"
         },
         {
             "id": 30,
@@ -363,8 +383,8 @@
             "description": "This is the thirtyth challenge.",
             "link": "./Question/question30/question30.html",
             "answer": "flag{a8b42ddb120d7a9c291323857118bff4}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "advanced"
         },
         {
             "id": 31,
@@ -373,8 +393,8 @@
             "description": "This is the thirty-first challenge.",
             "link": "./Question/question31/question31.html",
             "answer": "FLAG{cron_job_solved}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "intermediate"
         },
         {
             "id": 32,
@@ -383,7 +403,7 @@
             "description": "This is the thirty-second challenge.",
             "link": "./Question/question32/question32.html",
             "answer": "FLAG{COMPILE_DATE_CORRECT}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -393,8 +413,8 @@
             "description": "This is the thirty-third challenge.",
             "link": "./Question/question33/question33.html",
             "answer": "FLAG{ACL_CONFIGURATION_CORRECT}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": "ETC",
+            "difficulty": "advanced"
         },
         {
             "id": 34,
@@ -403,7 +423,7 @@
             "description": "This is the thirty-fourth challenge.",
             "link": "./Question/question34/question34.html",
             "answer": "flag{questionChallenges34flag}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -413,7 +433,7 @@
             "description": "This is the thirty-fifth challenge.",
             "link": "./Question/question35/question35.html",
             "answer": "flag{questionChallenges35flag}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -423,7 +443,7 @@
             "description": "This is the thirty-sixth challenge.",
             "link": "./Question/question36/question36.html",
             "answer": "flag{questionChallenges36flag}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -433,7 +453,7 @@
             "description": "This is the thirty-seventh challenge.",
             "link": "./Question/question37/question37.html",
             "answer": "flag{questionChallenges37flag}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -443,7 +463,7 @@
             "description": "This is the thirty-eighth challenge.",
             "link": "./Question/question38/question38.html",
             "answer": "flag{questionChallenges38flag}",
-            "category": "sql",
+            "category": "ETC",
             "difficulty": "beginner"
         },
         {
@@ -453,8 +473,8 @@
             "description": "This is the thirty-ninth challenge.",
             "link": "./Question/question39/question39.html",
             "answer": "flag{questionChallenges39flag}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "category": ["CTF","csrf","upload"],
+            "difficulty": "advanced"
         },
         {
             "id": 40,
@@ -462,9 +482,9 @@
             "markdownFile": "mk_40.md",
             "description": "This is the fortyth challenge.",
             "link": "./Question/question40/question40.html",
-            "answer": "flag{questionChallenges40flag}",
-            "category": "sql",
-            "difficulty": "beginner"
+            "answer": "FLAG{W0rd_V3ct0r_S3m4nt1c_M4st3r}",
+            "category": "ETC",
+            "difficulty": "intermediate"
         }
     ]
 } 

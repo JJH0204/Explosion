@@ -216,41 +216,66 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (!flagInput) return;
 
                             try {
-                                // config.json에서 해당 문제의 정답 확인
-                                const challengeInfo = config.challenges.find(c => c.id === cardNumber);
-                                if (!challengeInfo) {
-                                    throw new Error('Challenge not found');
-                                }
-
-                                // 입력된 플래그와 정답 비교
-                                if (flagInput.value === challengeInfo.answer) {
-                                    // 정답이 맞으면 saveClearedCard.php 호출
-                                    const response = await fetch('/assets/php/saveClearedCard.php', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded',
-                                        },
-                                        body: `cardId=${cardNumber}`
-                                    });
-
-                                    const result = await response.json();
-                                    if (result.success) {
-                                        // DB에서 실제 클리어한 스테이지 목록을 가져와서 localStorage 초기화
-                                        const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
-                                        const clearedResult = await clearedResponse.json();
+                                if (cardNumber === 25) {
+                                    try {
+                                        const response = await fetch('/assets/php/verify_flag.php');
+                                        const result = await response.json();
                                         
-                                        if (clearedResult.success) {
-                                            // DB의 실제 클리어 상태로 localStorage 초기화
-                                            localStorage.setItem('clearedStages', JSON.stringify(clearedResult.data));
+                                        if (result.success) {
+                                            const correctFlag = result.flag;
+                                            
+                                            if (flagInput.value === correctFlag) {
+                                                const saveResponse = await fetch('/assets/php/saveClearedCard.php', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                                    },
+                                                    body: `cardId=${cardNumber}`
+                                                });
+
+                                                const saveResult = await saveResponse.json();
+                                                if (saveResult.success) {
+                                                    alert('축하합니다! 문제를 해결했습니다!');
+                                                    location.reload();
+                                                } else {
+                                                    alert(saveResult.error || '오류가 발생했습니다.');
+                                                }
+                                            } else {
+                                                alert('틀린 답입니다. 다시 시도해주세요.');
+                                            }
+                                        } else {
+                                            throw new Error(result.error || '플래그 검증 중 오류가 발생했습니다.');
                                         }
-                                        
-                                        alert('축하합니다! 문제를 해결했습니다!');
-                                        location.reload();
-                                    } else {
-                                        alert(result.error || '오류가 발생했습니다.');
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        alert('플래그 검증 중 오류가 발생했습니다.');
                                     }
                                 } else {
-                                    alert('틀린 답입니다. 다시 시도해주세요.');
+                                    // 기존 다른 문제들의 처리 로직
+                                    const challengeInfo = config.challenges.find(c => c.id === cardNumber);
+                                    if (!challengeInfo) {
+                                        throw new Error('Challenge not found');
+                                    }
+
+                                    if (flagInput.value === challengeInfo.answer) {
+                                        const saveResponse = await fetch('/assets/php/saveClearedCard.php', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                            },
+                                            body: `cardId=${cardNumber}`
+                                        });
+
+                                        const saveResult = await saveResponse.json();
+                                        if (saveResult.success) {
+                                            alert('축하합니다! 문제를 해결했습니다!');
+                                            location.reload();
+                                        } else {
+                                            alert(saveResult.error || '오류가 발생했습니다.');
+                                        }
+                                    } else {
+                                        alert('틀린 답입니다. 다시 시도해주세요.');
+                                    }
                                 }
                             } catch (error) {
                                 console.error('Error submitting flag:', error);

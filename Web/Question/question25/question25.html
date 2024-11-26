@@ -151,60 +151,6 @@
     </div>
 
     <script>
-     function checkFlag() {
-        const userFlag = document.getElementById('userInput').value.trim();
-        const resultElement = document.getElementById('result');
-        const submitButton = document.getElementById('submitButton');
-
-        // DB에서 FLAG 값 가져오기
-        fetch('execute_query.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'query=' + encodeURIComponent(`SELECT FLAG FROM ${userTable}`)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.data && data.data.length > 0) {
-                const correctFlag = data.data[0].FLAG;
-                
-                if (userFlag === correctFlag) {
-                    // config.json 파일에서 현재 문제의 answer 값 가져오기
-                    fetch('../../data/config.json')
-                    .then(response => response.json())
-                    .then(config => {
-                        const challenge = config.challenges.find(c => c.id === 25);
-                        if (challenge) {
-                            alert('정답입니다! Flag: ' + challenge.answer);
-                            resultElement.style.color = '#00ff7f';
-                            resultElement.textContent = '정답입니다!';
-                            submitButton.style.display = 'inline-block';
-                        }
-                    });
-                } else {
-                    resultElement.style.color = '#ff4d4d';
-                    resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
-                    submitButton.style.display = 'none';
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            resultElement.style.color = '#ff4d4d';
-            resultElement.textContent = '오류가 발생했습니다.';
-        });
-    }
-
-    function toggleSSHInfo() {
-        const sshInfo = document.getElementById('sshInfo');
-        if (sshInfo.style.display === 'none') {
-            sshInfo.style.display = 'block';
-        } else {
-            sshInfo.style.display = 'none';
-        }
-    }
-
     function executeQuery() {
         const query = document.getElementById('sqlQuery').value;
         const resultDiv = document.getElementById('queryResult');
