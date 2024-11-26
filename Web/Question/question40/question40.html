@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>오늘의 단어 맞히기</title>
+    <style>
+        body { background: #1a1a1a; color: #00ff00; font-family: monospace; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #00ff00; }
+        .input-container { margin: 20px 0; display: flex; gap: 10px; }
+        input { flex: 1; padding: 10px; background: #1a1a1a; border: 1px solid #00ff00; color: #00ff00; font-family: monospace; }
+        button { padding: 10px 20px; background: #00ff00; border: none; color: #000; cursor: pointer; font-family: monospace; }
+        button:hover { background: #33ff33; }
+        #history { margin-top: 20px; border: 1px solid #00ff00; padding: 10px; min-height: 200px; background: #1a1a1a; }
+        .history-item { margin: 5px 0; padding: 5px; border-bottom: 1px solid #333; }
+        .recent { background: #2a2a2a; }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            backdrop-filter: blur(3px);
+        }
+        .modal-content {
+            position: relative;
+            background: #1a1a1a;
+            color: #00ff00;
+            margin: 40px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        .modal-content h1, .modal-content h2 {
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+            margin-top: 25px;
+        }
+        .modal-content section {
+            margin: 20px 0;
+            padding: 10px;
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #00ff00;
+            background: none;
+            border: none;
+            transition: transform 0.2s;
+        }
+        .close-button:hover {
+            transform: scale(1.2);
+            color: #33ff33;
+        }
+        .guide-button {
+            margin-left: 10px;
+            background: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            transition: all 0.3s ease;
+        }
+        .guide-button:hover {
+            background: #3a3a3a;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>오늘의 단어 맞히기</h1>
+        <div class="input-container">
+            <input type="text" id="wordInput" placeholder="단어를 입력하세요">
+            <button onclick="checkWord()">확인</button>
+            <button class="guide-button" onclick="showGuide()">가이드</button>
+        </div>
+        <div id="history"></div>
+    </div>
+
+    <!-- 가이드 모달 -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="hideGuide()">&times;</span>
+            <header>
+                <h1>오늘의 단어 맞히기</h1>
+                <p>정답 단어를 추측하고 의미적으로 얼마나 유사한지 알아보세요!</p>
+            </header>
+            <section>
+                <h2>게임 소개</h2>
+                <p>이 게임은 정답 단어를 추측하면서 의미적인 유사도를 점수로 알려줍니다. 유사도가 높은 단어를 기반으로 정답에 가까워질 수 있습니다.</p>
+            </section>
+            <section>
+                <h2>정답 단어의 범위</h2>
+                <p>정답 단어는 명사, 동사, 형용사 등 모든 품사의 기본형을 포함하며, 두 글자 이상의 단어만 선택됩니다.</p>
+                <p>예시: 행복, 기쁘다, 사랑하다, 야옹, 그래도, 갑자기</p>
+                <p>한 글자 단어도 전략적으로 추측해볼 수 있습니다.</p>
+            </section>
+            <section>
+                <h2>유사도란?</h2>
+                <p>유사도는 추측한 단어와 정답 단어가 의미적으로 얼마나 비슷한지를 점수(-100에서 +100)로 나타냅니다. +이면서 숫자가 클수록 유사도가 크다고 이해하면 됩니다.</p>
+                <p>유사도 계산은 Common Crawl 및 Wikipedia 데이터를 기반으로 훈련된 FastText를 사용하며, 데이터 편향이 있을 수 있습니다.</p>
+            </section>
+            <section>
+                <h2>유사도 높은 단어의 원리</h2>
+                <p>유사도는 철자가 아닌 의미 맥락을 기준으로 계산됩니다. 정답 단어와 같은 문장이나 문단에서 자주 사용되는 단어를 추측하는 것이 좋습니다.</p>
+                <p>예를 들어, '사랑'과 '증오'는 의미적으로 반대되지만 동일한 맥락에서 자주 언급될 수 있어 유사도가 비슷할 수 있습니다.</p>
+                <p>또한, 동음이의어를 고려해 정답 단어의 의미에 맞는 맥락을 유추해보세요.</p>
+            </section>
+            <section>
+                <h2>유사도를 더 잘 이해하려면?</h2>
+                <p>정답 단어를 맞힌 후에도 다른 추측 단어를 입력하여 유사도를 계속 확인할 수 있습니다.</p>
+                <p>정답 단어와 유사한 단어를 상위 1,000개 기준으로 확인하며, 유사도에 대한 이해를 높이고 추측 횟수를 줄이는 데 활용해 보세요.</p>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        let gameData = null;
+        let history = [];
+
+        // 쿠키 설정 함수
+        function setCookie(name, value) {
+            // 한국 시간으로 현재 날짜 가져오기
+            const now = new Date();
+            const kstNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+            
+            // 다음 날 자정 시간 설정
+            const expires = new Date(kstNow);
+            expires.setHours(24, 0, 0, 0);
+
+            document.cookie = name + '=' + encodeURIComponent(JSON.stringify(value)) + 
+                            ';expires=' + expires.toUTCString() + 
+                            ';path=/';
+        }
+
+        // 쿠키 가져오기 함수
+        function getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) {
+                    try {
+                        return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
+                    } catch (e) {
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
+
+        // 가이드 모달 표시/숨김 함수
+        function showGuide() {
+            document.getElementById('guideModal').style.display = 'block';
+        }
+
+        function hideGuide() {
+            document.getElementById('guideModal').style.display = 'none';
+        }
+
+        // ESC 키로 모달 닫기
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideGuide();
+            }
+        });
+
+        // 모달 외부 클릭시 닫기
+        window.addEventListener('click', function(e) {
+            if (e.target.className === 'modal') {
+                hideGuide();
+            }
+        });
+
+        // 히스토리 로드
+        function loadHistory() {
+            const savedHistory = getCookie('wordHistory');
+            if (savedHistory) {
+                history = savedHistory;
+                displayHistory(history);
+            }
+        }
+
+        async function fetchGameData() {
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'get_data.php', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        gameData = JSON.parse(xhr.responseText);
+                        loadHistory();
+                    } else {
+                        console.error('데이터를 가져오는데 실패했습니다:', xhr.statusText);
+                    }
+                };
+                xhr.onerror = function() {
+                    console.error('데이터를 가져오는데 실패했습니다');
+                };
+                xhr.send();
+            } catch (error) {
+                console.error('데이터를 가져오는데 실패했습니다:', error);
+            }
+        }
+
+        function checkWord() {
+            if (!gameData) return;
+            const input = document.getElementById('wordInput').value.trim();
+            if (!input) return;
+
+            let result = null;
+            if (input === gameData.key) {
+                if (gameData.flag) {
+                    alert(gameData.flag);
+                }
+                result = { rank: 0, word: input, similarity: 1.0 };
+            } else {
+                const found = gameData.top_scores.find(item => item[1] === input);
+                if (found) {
+                    result = { rank: found[0], word: found[1], similarity: found[2] };
+                } else {
+                    result = { rank: '순위 밖', word: input, similarity: '-' };
+                }
+            }
+
+            history = history.filter(item => item.word !== input);
+            history.unshift(result);
+
+            const sortedHistory = [
+                history[0],
+                ...history.slice(1).sort((a, b) => {
+                    if (a.rank === '순위 밖') return 1;
+                    if (b.rank === '순위 밖') return -1;
+                    return a.rank - b.rank;
+                })
+            ];
+
+            setCookie('wordHistory', sortedHistory);
+            displayHistory(sortedHistory);
+            document.getElementById('wordInput').value = '';
+        }
+
+        function displayHistory(sortedHistory) {
+            const historyDiv = document.getElementById('history');
+            historyDiv.innerHTML = sortedHistory.map((item, index) => {
+                const similarityText = item.similarity === '-' ? '-' : item.similarity.toFixed(3);
+                return `<div class="history-item ${index === 0 ? 'recent' : ''}">${item.rank}: ${item.word} : ${similarityText}</div>`;
+            }).join('');
+        }
+
+        fetchGameData();
+        document.getElementById('wordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkWord();
+        });
+    </script>
+</body>
+</html>
