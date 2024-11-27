@@ -677,6 +677,40 @@ document.addEventListener('DOMContentLoaded', function() {
             cancelFlag.addEventListener('click', () => flagPopup.style.display = 'none');
         }
 
+        // 플래그 생성 버튼 이벤트
+        const createFlag = document.getElementById('createFlag');
+        if (createFlag) {
+            createFlag.addEventListener('click', async () => {
+                const flagInput = document.getElementById('flagInput');
+                if (!flagInput || !flagInput.value.trim()) {
+                    alert('플래그를 입력해주세요.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/assets/php/create_flag.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `flag=${encodeURIComponent(flagInput.value)}`
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('플래그가 성공적으로 생성되었습니다.');
+                        flagPopup.style.display = 'none';
+                        flagInput.value = ''; // 입력 필드 초기화
+                    } else {
+                        alert(result.error || '플래그 생성에 실패했습니다.');
+                    }
+                } catch (error) {
+                    console.error('Error creating flag:', error);
+                    alert('플래그 생성 중 오류가 발생했습니다.');
+                }
+            });
+        }
+
         // 이벤트 버튼
         const eventBtn = document.getElementById('EventBtn');
         const eventPopup = document.getElementById('eventPopup');

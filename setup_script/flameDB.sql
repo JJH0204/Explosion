@@ -31,14 +31,40 @@ CREATE TABLE `LAB_SCORE` (
 	`SCORE` INT NOT NULL 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP DATABASE IF EXISTS `userDB`;
-CREATE DATABASE `userDB`;
+INSERT INTO ID_info (ID, PW, NICKNAME) VALUES ('flame', '$2y$10$iAyr/B348/gdixD4sYSnc.6mkXwo/yQ4/Jf1yG6x2JGZ96w3JVUCi', 'flame');
+INSERT INTO USER_info (ID, NICKNAME, SCORE, STAGE) VALUES ('flame', 'flame', 9999, 40);
+
+INSERT INTO ID_info (ID, PW, NICKNAME) VALUES ('flame_admin', '$2y$10$uitUiH8DZ3ekbt16pd5miOZIOWeUeg4vV5fMSsRkk/khsB82mV.J2', 'admin');
+INSERT INTO USER_info (ID, NICKNAME, SCORE, STAGE) VALUES ('flame_admin', 'admin', 9999, 40);
 
 INSERT INTO `LAB_SCORE` (ID, SCORE) VALUES (1,50), (2,50), (3,50), (4,50), (5,100), (6,50), (7,50), (8,50), (9,50), (10,50), (11,50), (12,50), (13,100), (14,100), (15,300), (16,100), (17,100), (18,100), (19,100), (20,100), (21,100), (22,200), (23,100), (24,200), (25,200), (26,100), (27,300), (28,200), (29,200), (30,300), (31,200), (32,100), (33,300), (34,100), (35,50), (36,50), (37,300), (38,200), (39,300), (40,200);
+
+DROP DATABASE IF EXISTS `userDB`;
+CREATE DATABASE `userDB`;
+use userDB;
+
+DROP TABLE IF EXISTS `flame`;
+CREATE TABLE `flame` (
+	`NICKNAME` VARCHAR(50) NOT NULL,
+	`FLAG` VARCHAR(100) NOT NULL 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+	`NICKNAME` VARCHAR(50) NOT NULL,
+	`FLAG` VARCHAR(100) NOT NULL 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `flame` (NICKNAME, FLAG) VALUES ('flame', 'flag{flame_is_real_admin}');
+INSERT INTO `admin` (NICKNAME, FLAG) VALUES ('admin', 'flag{admin_is_fake_admin}');
 
 CREATE USER `admin`@`localhost` identified by 'flamerootpassword';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
 GRANT CREATE USER ON *.* TO 'admin'@'localhost';
 GRANT GRANT OPTION ON *.* TO 'admin'@'localhost';
+
+CREATE USER `flame`@`localhost` identified by 'firewalld';
+GRANT SELECT, UPDATE ON `userDB`.`flame` TO 'flame'@'localhost';
+CREATE USER `flame_admin`@`localhost` identified by 'firewalld';
+GRANT SELECT, UPDATE ON `userDB`.`admin` TO 'flame_admin'@'localhost';
 
 FLUSH PRIVILEGES;

@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 const percentage = (stage / 40) * 100;
                 progressFill.style.width = `${percentage}%`;
-                completedElement.textContent = stage || '-';
+                completedElement.textContent = stage.toString();
                 progressText.classList.add('show');
             }, 50);
         }
@@ -581,10 +581,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.success) {
                     const stage = parseInt(data.data.stage);
-                    this.updateProgress(stage);
+                    // 여기서 stage가 NaN이거나 undefined일 경우 0으로 처리
+                    this.updateProgress(isNaN(stage) ? 0 : stage);
+                } else {
+                    // 데이터를 가져오는데 실패했을 경우 0으로 초기화
+                    this.updateProgress(0);
                 }
             } catch (error) {
                 console.error('Error initializing progress:', error);
+                // 에러 발생 시에도 0으로 초기화
+                this.updateProgress(0);
             }
         }
     }

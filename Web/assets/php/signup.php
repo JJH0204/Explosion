@@ -12,10 +12,15 @@ header('Content-Type: application/json');
 try {
     $ID = isset($_POST['ID']) ? $_POST['ID'] : null;
     $PW = isset($_POST['PW']) ? $_POST['PW'] : null;
+    $PWConfirm = isset($_POST['PWConfirm']) ? $_POST['PWConfirm'] : null;
     $Nickname = isset($_POST['Nickname']) ? $_POST['Nickname'] : null;
 
-    if (!($ID && $PW && $Nickname)) {
-        throw new Exception('ID, PW, or Nickname not set');
+    if (!($ID && $PW && $PWConfirm && $Nickname)) {
+        throw new Exception('필수 입력값이 누락되었습니다.');
+    }
+
+    if ($PW !== $PWConfirm) {
+        throw new Exception('비밀번호가 일치하지 않습니다.');
     }
 
     // testDB 처리

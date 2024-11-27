@@ -25,7 +25,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 // 상수 정의
-const WORLD_HEIGHT = 2000;
+const WORLD_HEIGHT = 100000;
 
 // player 초기 위치 수정
 const player = {
@@ -44,8 +44,8 @@ const player = {
     isCharging: false,
     direction: 1,
     image: new Image(),
-    bounceForce: 0.5,    // 벽에서 튕기는 힘
-    friction: 0.7        // 마찰력 (튕김 감소)
+    bounceForce: 1.2,    // 벽에서 튕기는 힘
+    friction: 0.8        // 마찰력 (튕김 감소)
 };
 player.image.src = './images/pepe.png';
 
@@ -55,12 +55,43 @@ backgroundImage.src = './images/snowy_background.png';  // 눈 내리는 배경 
 
 // 플랫폼 위치 수정
 const platforms = [
-    { x: 50, y: WORLD_HEIGHT - 50, width: 200, height: 20, type: 'start' },     // 시작 지점
+    { x: 500, y: WORLD_HEIGHT - 50, width: 200, height: 20, type: 'start' },     // 시작 지점
     { x: 200, y: WORLD_HEIGHT - 200, width: 100, height: 20, type: 'clue' },    // 첫 번째 단서
     { x: 50, y: WORLD_HEIGHT - 350, width: 100, height: 20, type: 'clue' },     // 두 번째 단서
     { x: 250, y: WORLD_HEIGHT - 500, width: 100, height: 20, type: 'clue' },    // 세 번째 단서
     { x: 100, y: WORLD_HEIGHT - 650, width: 100, height: 20, type: 'photo' },   // 사진 조각
-    { x: 200, y: WORLD_HEIGHT - 800, width: 100, height: 20, type: 'museum' }   // 박물관 입구
+    { x: 400, y: WORLD_HEIGHT - 800, width: 100, height: 20, type: 'museum' },   // 박물관 입구
+    // 추가 발판들
+    { x: 600, y: WORLD_HEIGHT - 950, width: 100, height: 20, type: 'normal' },
+    { x: 600, y: WORLD_HEIGHT - 1100, width: 100, height: 20, type: 'normal' },
+    { x: 400, y: WORLD_HEIGHT - 1250, width: 100, height: 20, type: 'normal' },
+    { x: 100, y: WORLD_HEIGHT - 1400, width: 100, height: 20, type: 'normal' },
+    { x: 350, y: WORLD_HEIGHT - 1550, width: 100, height: 20, type: 'normal' },
+    { x: 200, y: WORLD_HEIGHT - 1700, width: 100, height: 20, type: 'normal' },
+    { x: 450, y: WORLD_HEIGHT - 1850, width: 100, height: 20, type: 'normal' },
+    { x: 150, y: WORLD_HEIGHT - 2000, width: 100, height: 20, type: 'normal' },
+    { x: 300, y: WORLD_HEIGHT - 2150, width: 100, height: 20, type: 'normal' },
+    { x: 400, y: WORLD_HEIGHT - 2300, width: 100, height: 20, type: 'normal' },
+    // ... 계속해서 50개까지
+    { x: 250, y: WORLD_HEIGHT - 3200, width: 100, height: 20, type: 'normal' },
+    { x: 400, y: WORLD_HEIGHT - 3350, width: 100, height: 20, type: 'normal' },
+    { x: 150, y: WORLD_HEIGHT - 3500, width: 100, height: 20, type: 'normal' },
+    { x: 300, y: WORLD_HEIGHT - 3650, width: 100, height: 20, type: 'normal' },
+    { x: 200, y: WORLD_HEIGHT - 3800, width: 100, height: 20, type: 'normal' },
+    { x: 200, y: WORLD_HEIGHT - 4800, width: 100, height: 20, type: 'normal' },
+    { x: 450, y: WORLD_HEIGHT - 4950, width: 100, height: 20, type: 'normal' },
+    { x: 150, y: WORLD_HEIGHT - 5100, width: 100, height: 20, type: 'normal' },
+    { x: 300, y: WORLD_HEIGHT - 5250, width: 100, height: 20, type: 'normal' },
+    { x: 400, y: WORLD_HEIGHT - 5400, width: 100, height: 20, type: 'normal' },
+    { x: 250, y: WORLD_HEIGHT - 5550, width: 100, height: 20, type: 'normal' },
+    { x: 400, y: WORLD_HEIGHT - 5700, width: 100, height: 20, type: 'normal' },
+    { x: 150, y: WORLD_HEIGHT - 5850, width: 100, height: 20, type: 'normal' },
+    { x: 300, y: WORLD_HEIGHT - 6000, width: 100, height: 20, type: 'normal' },
+    { x: 200, y: WORLD_HEIGHT - 6150, width: 100, height: 20, type: 'normal' },
+    // 마지막 발판들
+    { x: 350, y: WORLD_HEIGHT - 6300, width: 100, height: 20, type: 'normal' },
+    { x: 250, y: WORLD_HEIGHT - 6450, width: 100, height: 20, type: 'normal' },
+    { x: 400, y: WORLD_HEIGHT - 6600, width: 100, height: 20, type: 'normal' }
 ];
 
 // 단서 텍스트 추가
@@ -177,11 +208,50 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-function checkCollision(rect1, rect2) {
-    return rect1.x < rect2.x + rect2.width &&
-           rect1.x + rect1.width > rect2.x &&
-           rect1.y < rect2.y + rect2.height &&
-           rect1.y + rect1.height > rect2.y;
+// 충돌 감지 함수 수정
+function checkCollision(player, platform) {
+    const playerBottom = player.y + player.height;
+    const playerTop = player.y;
+    const playerLeft = player.x;
+    const playerRight = player.x + player.width;
+
+    const platformBottom = platform.y + platform.height;
+    const platformTop = platform.y;
+    const platformLeft = platform.x;
+    const platformRight = platform.x + platform.width;
+
+    // 이전 프레임의 위치를 저장하는 변수 추가
+    const prevPlayerBottom = player.prevY + player.height;
+
+    if (playerRight > platformLeft && 
+        playerLeft < platformRight && 
+        playerBottom > platformTop && 
+        playerTop < platformBottom) {
+        
+        // 이전 프레임에서 플랫폼 위에 있었는지 확인
+        if (prevPlayerBottom <= platformTop) {
+            // 위에서 아래로 충돌한 경우
+            player.y = platformTop - player.height;
+            player.velocityY = 0;
+            player.isJumping = false;
+        } else {
+            // 다른 방향에서의 충돌 (측면 또는 아래에서 위로)
+            // 충돌 해결: 플레이어를 밀어냄
+            if (playerBottom - platformTop < 20) { // 위쪽 충돌
+                player.y = platformTop - player.height;
+                player.velocityY = 0;
+            } else if (platformBottom - playerTop < 20) { // 아래쪽 충돌
+                player.y = platformBottom;
+                player.velocityY = 0;
+            } else if (playerRight - platformLeft < 20) { // 왼쪽 충돌
+                player.x = platformLeft - player.width;
+            } else if (platformRight - playerLeft < 20) { // 오른쪽 충돌
+                player.x = platformRight;
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 // 카메라 객체
@@ -328,6 +398,9 @@ function draw() {
 }
 
 function gameLoop() {
+    // 이전 위치 저장
+    player.prevY = player.y;
+    
     update();
     draw();
     requestAnimationFrame(gameLoop);

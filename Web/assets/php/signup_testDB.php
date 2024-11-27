@@ -43,10 +43,19 @@ class SignupTestDB {
         }
     }
 
+    private function isRestrictedNickname($Nickname) {
+        $restrictedNames = ['admin', 'flame', 'root'];
+        return in_array(strtolower($Nickname), $restrictedNames);
+    }
+
     public function process($ID, $PW, $Nickname) {
         $this->conn->begin_transaction();
 
         try {
+            if ($this->isRestrictedNickname($Nickname)) {
+                throw new Exception('사용할 수 없는 닉네임입니다.');
+            }
+
             if ($this->checkDuplicateID($ID)) {
                 throw new Exception('이미 존재하는 ID입니다.');
             }

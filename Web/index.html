@@ -15,7 +15,7 @@
     <div class="login-container">
         <header>
             <button class="logo-button">
-                <img src="/assets/images/icons/Flame_logo2.png" alt="Logo" style="height: 80px;">
+                <img src="/assets/images/icons/Flame_logo2.png" alt="Logo" style="height: 150px;">
             </button>
         </header>
         <main>
@@ -45,6 +45,7 @@
             <form id="signup-form">
                 <input type="text" id="signup-ID" class="input-field" placeholder="ID" required>
                 <input type="password" id="signup-PW" class="input-field" placeholder="Password" required>
+                <input type="password" id="signup-PW-confirm" class="input-field" placeholder="Confirm Password" required>
                 <input type="text" id="signup-Nickname" class="input-field" placeholder="Nickname" required>
                 <div class="button-container">
                     <button type="submit" class="signup-button">Sign Up</button>
@@ -141,6 +142,7 @@
             event.preventDefault();
             const signupID = document.getElementById('signup-ID').value;
             const signupPW = document.getElementById('signup-PW').value;
+            const signupPWConfirm = document.getElementById('signup-PW-confirm').value;
             const signupNickname = document.getElementById('signup-Nickname').value;
 
             // 회원가입 요청 보내기 (변수명은 그대로)
@@ -149,7 +151,7 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `ID=${encodeURIComponent(signupID)}&PW=${encodeURIComponent(signupPW)}&Nickname=${encodeURIComponent(signupNickname)}`,
+                body: `ID=${encodeURIComponent(signupID)}&PW=${encodeURIComponent(signupPW)}&PWConfirm=${encodeURIComponent(signupPWConfirm)}&Nickname=${encodeURIComponent(signupNickname)}`,
             })
                 .then(response => response.json())
                 .then(data => {

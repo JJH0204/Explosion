@@ -1,7 +1,0 @@
-서버 리빌딩시
-flameDB.sql 실행
-usershell.sh 실행
-
-{ID/PW/NICKNAME} = {flame/flamerootpassword/flame}
-{ID/PW/NICKNAME} = {flame_admin/flamerootpassword/admin}
-으로 회원가입해서 두개 아이디 만들어주기

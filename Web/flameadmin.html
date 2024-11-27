@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flame Admin Workspace</title>
+    <title>Flame Admin Test Workspace</title>
     <link rel="stylesheet" href="/assets/styles/admin/admin1.css">
     <link rel="stylesheet" href="/assets/styles/admin/admin2.css">
     <style>
@@ -53,6 +53,7 @@
             <span class="logo-text">Flame Admin Worksapce</span>
         </div>
         <div class="header-menu">
+            <button class="menu-button" id="flagBtn">플래그 생성</button>
             <button class="menu-button" id="EventBtn">이벤트</button>
             <button class="menu-button" id="logoutBtn">로그아웃</button>
         </div>
@@ -117,6 +118,17 @@
     </div>
 
     <div id="challengePopup" class="challenge-popup"></div>
+
+    <div id="flagPopup" class="flag-popup">
+        <div class="flag-popup-content">
+            <h2 class="flag-title">플래그 생성</h2>
+            <input type="text" id="flagInput" class="flag-input" placeholder="생성할 플래그를 입력하세요">
+            <div class="flag-popup-buttons">
+                <button id="createFlag" class="flag-popup-button">생성</button>
+                <button id="cancelFlag" class="flag-popup-button">취소</button>
+            </div>
+        </div>
+    </div>
 
     <button class="footer-toggle">
         <img src="/assets/images/icons/qna.png" alt="QnA" style="width: 24px; height: 24px;">
