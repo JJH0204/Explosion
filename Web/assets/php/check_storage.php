@@ -1,4 +1,9 @@
 <?php
+/*
+    check_storage.php
+    - challenge 9 문제 체크
+    - 스토리지 조작 체크
+*/
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

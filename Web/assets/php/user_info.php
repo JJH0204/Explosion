@@ -1,4 +1,9 @@
 <?php
+/*
+    user_info.php
+    - 유저 정보 조회 용도
+    - 사이드 바 랭킹 표시 용도
+*/
 session_start();
 header('Content-Type: application/json');
 

@@ -249,6 +249,13 @@ function checkCollision(player, platform) {
                 player.x = platformRight;
             }
         }
+
+        // 마지막 발판에 착지했을 때
+        if (platform.type === 'normal' && platform.y === WORLD_HEIGHT - 6600) {
+            alert('돌아가!');
+            resetToStart();
+        }
+
         return true;
     }
     return false;
@@ -404,6 +411,14 @@ function gameLoop() {
     update();
     draw();
     requestAnimationFrame(gameLoop);
+}
+
+function resetToStart() {
+    player.x = 500; // 시작 지점 x 좌표
+    player.y = WORLD_HEIGHT - 70; // 시작 지점 y 좌표
+    player.velocityX = 0;
+    player.velocityY = 0;
+    player.isJumping = false;
 }
 
 gameLoop();

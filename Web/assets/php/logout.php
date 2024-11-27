@@ -1,4 +1,8 @@
 <?php
+/*
+    logout.php
+    - 로그아웃 용도
+*/
 session_start();
 $_SESSION = array(); // 세션 변수 초기화
 

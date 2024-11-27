@@ -1,4 +1,9 @@
 <?php
+/*
+    check_admin.php
+    - 관리자 권한 체크
+    - 관리자일 시 -> flameadmin.html 리다이렉트
+*/
 session_start();
 header('Content-Type: application/json');
 

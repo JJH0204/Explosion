@@ -1,4 +1,9 @@
 <?php
+/*
+    signup_testDB.php
+    - 회원가입 용도
+    - 회원가입 시 flameDB 조작 용도
+*/
 class SignupTestDB {
     private $conn;
     

@@ -1,4 +1,9 @@
 <?php
+/*
+    saveClearedCard.php
+    - 클리어한 카드 저장 용도
+    - 카드 클리어시 flameDB.CLEARED_STAGE 테이블에 저장
+*/
 session_start();
 
 // 로그인 확인

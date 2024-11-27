@@ -1,4 +1,9 @@
 <?php
+/*
+    get_cleared_stages.php
+    - 클리어한 스테이지 조회
+    - 클리어한 스테이지 몬스터 카드 출력 용도
+*/
 // 에러 리포팅 설정
 error_reporting(E_ALL);
 ini_set('display_errors', 0);

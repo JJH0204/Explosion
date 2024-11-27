@@ -1,4 +1,9 @@
 <?php
+/*
+    save-image.php
+    - Challenge 8 문제 체크 용도
+    - 이미지 저장 용도
+*/
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

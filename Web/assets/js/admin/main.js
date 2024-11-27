@@ -1,3 +1,4 @@
+// flame 페이지 동작 js
 document.addEventListener('DOMContentLoaded', function() {
     class AdminCardManager {
         constructor() {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Analysis Challenge</title>
+    <title>로또 번호 맞추기 도전</title>
     <style>
         body {
             background-color: #0a0a0a;
@@ -16,19 +16,49 @@
         .container {
             margin: 0 auto;
             padding: 20px;
-            max-width: 600px;
+            max-width: 800px;
             background-color: #1a1a1a;
             border: 1px solid #00ff00;
             border-radius: 5px;
         }
 
-        input {
+        .lotto-balls {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             background-color: #2a2a2a;
-            color: #00ff00;
             border: 1px solid #00ff00;
-            padding: 10px;
-            width: 80%;
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ball.selected {
+            background-color: #00ff00;
+            color: #000;
+        }
+
+        .selected-numbers {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+        }
+
+        .timer {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #ff9900;
         }
 
         button {
@@ -37,6 +67,8 @@
             border: none;
             padding: 10px 20px;
             cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
         }
 
         button:hover {
@@ -47,40 +79,164 @@
             margin-top: 20px;
             font-size: 1.2em;
         }
+
+        .history {
+            margin-top: 20px;
+            text-align: left;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <h1>JavaScript Analysis Challenge</h1>
+    <h1>로또 번호 맞추기 도전</h1>
     <div class="container">
-        <p>올바른 암호를 입력하여 플래그를 획득하세요.</p>
-        <input type="text" id="passwordInput" placeholder="암호 입력">
-        <button onclick="checkPassword()">확인</button>
-        <p id="result"></p>
+        <p>1부터 45까지의 숫자 중 6개를 선택하세요!</p>
+        <div class="timer" id="timer">다음 추첨까지: 03:00</div>
+        
+        <div class="selected-numbers">
+            선택한 번호: <span id="selectedDisplay"></span>
+        </div>
+
+        <div class="lotto-balls" id="ballContainer">
+            <!-- 자바스크립트로 동적 생성 -->
+        </div>
+
+        <button onclick="clearSelection()">초기화</button>
+        <button onclick="autoSelect()">자동 선택</button>
+        
+        <div id="result"></div>
+        
+        <div class="history">
+            <h3>이전 추첨 기록</h3>
+            <div id="drawHistory"></div>
+        </div>
     </div>
 
     <script>
-        const secretKey = "secret2024";
+        let selectedNumbers = new Set();
+        let lastDrawnNumbers = null;
+        let timerInterval;
+        let timeLeft = 180; // 3분
 
-        function decryptFlag() {
-            const encodedFlag = [0x46, 0x4C, 0x41, 0x47, 0x7B, 0x6A, 0x73, 0x5F, 0x63, 0x6F, 0x64, 0x65, 0x5F, 0x61, 0x6E, 0x61, 0x6C, 0x79, 0x73, 0x69, 0x73, 0x7D];
-            return encodedFlag.map(byte => String.fromCharCode(byte)).join('');
-        }
-
-        function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            const result = document.getElementById('result');
-
-            if (input === secretKey) {
-                const flag = decryptFlag();
-                result.style.color = '#00ff00';
-                result.innerHTML = `축하합니다. 숨겨진 플래그를 찾았습니다.<br>플래그: ${flag}`;
-            } else {
-                result.style.color = '#ff0000';
-                result.textContent = '암호가 틀렸습니다. 다시 시도하세요.';
+        // 볼 생성
+        function createBalls() {
+            const container = document.getElementById('ballContainer');
+            for (let i = 1; i <= 45; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.textContent = i;
+                ball.onclick = () => toggleBall(i);
+                container.appendChild(ball);
             }
         }
 
-        console.log("힌트: secretKey 값을 확인하세요.");
+        // 볼 선택/해제
+        function toggleBall(number) {
+            const ball = document.querySelector(`.ball:nth-child(${number})`);
+            if (selectedNumbers.has(number)) {
+                selectedNumbers.delete(number);
+                ball.classList.remove('selected');
+            } else if (selectedNumbers.size < 6) {
+                selectedNumbers.add(number);
+                ball.classList.add('selected');
+            }
+            updateSelectedDisplay();
+        }
+
+        // 선택된 번호 표시 업데이트
+        function updateSelectedDisplay() {
+            const numbers = Array.from(selectedNumbers).sort((a, b) => a - b);
+            document.getElementById('selectedDisplay').textContent = 
+                numbers.join(', ') || '아직 선택된 번호가 없습니다';
+        }
+
+        // 선택 초기화
+        function clearSelection() {
+            selectedNumbers.clear();
+            document.querySelectorAll('.ball').forEach(ball => {
+                ball.classList.remove('selected');
+            });
+            updateSelectedDisplay();
+        }
+
+        // 자동 선택
+        function autoSelect() {
+            clearSelection();
+            while (selectedNumbers.size < 6) {
+                const num = Math.floor(Math.random() * 45) + 1;
+                if (!selectedNumbers.has(num)) {
+                    selectedNumbers.add(num);
+                    document.querySelector(`.ball:nth-child(${num})`).classList.add('selected');
+                }
+            }
+            updateSelectedDisplay();
+        }
+
+        // 타이머 업데이트
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `다음 추첨까지: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (timeLeft === 0) {
+                drawNumbers();
+                timeLeft = 180;
+            } else {
+                timeLeft--;
+            }
+        }
+
+        // 번호 추첨
+        async function drawNumbers() {
+            if (selectedNumbers.size !== 6) {
+                document.getElementById('result').innerHTML = 
+                    '<span style="color: #ff0000;">6개의 번호를 모두 선택해주세요!</span>';
+                return;
+            }
+
+            const response = await fetch('check_lotto.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    numbers: Array.from(selectedNumbers).sort((a, b) => a - b)
+                })
+            });
+
+            const data = await response.json();
+            // console.log('서버 응답 데이터:', data);
+            lastDrawnNumbers = data.drawnNumbers;
+
+            updateHistory(data.drawnNumbers, Array.from(selectedNumbers));
+            
+            if (data.correct) {
+                document.getElementById('result').innerHTML = 
+                    `<span style="color: #00ff00;">축하합니다! 플래그를 획득하셨습니다!<br>FLAG: ${data.flag}</span>`;
+            } else {
+                document.getElementById('result').innerHTML = 
+                    `<span style="color: #ff9900;">아쉽네요! 이번 당첨 번호: ${data.drawnNumbers.join(', ')}</span>`;
+            }
+        }
+
+        // 기록 업데이트
+        function updateHistory(drawn, selected) {
+            const historyDiv = document.getElementById('drawHistory');
+            const entry = document.createElement('div');
+            entry.innerHTML = `
+                <p>당첨 번호: ${drawn.join(', ')}<br>
+                선택 번호: ${selected.join(', ')}</p>
+            `;
+            historyDiv.insertBefore(entry, historyDiv.firstChild);
+        }
+
+        // 초기화
+        createBalls();
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>

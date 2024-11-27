@@ -1,4 +1,9 @@
 <?php
+/*
+    signup_userDB.php
+    - 회원가입 용도
+    - 회원가입 시 userDB 조작 용도
+*/
 class SignupUserDB {
     private $conn;
     
