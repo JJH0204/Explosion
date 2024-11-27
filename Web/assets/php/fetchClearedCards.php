@@ -11,7 +11,7 @@ $nickname = $_SESSION['nickname'];
 
 try {
     // 데이터베이스 연결
-    $conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'testDB');
+    $conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'flameDB');
     if ($conn->connect_error) {
         echo json_encode(['success' => false, 'error' => 'Database connection failed: ' . $conn->connect_error]);
         exit;

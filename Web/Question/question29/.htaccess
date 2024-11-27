@@ -1,0 +1,36 @@
+# 기본 보안 설정
+Options -Indexes -MultiViews
+AllowOverride All
+
+# JavaScript 파일 접근 차단
+<FilesMatch "\.(js)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# 특정 파일 접근 차단
+<Files "script.js">
+    Order Deny,Allow
+    Deny from all
+    # 추가 보안 헤더
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+</Files>
+
+# 보안 헤더 설정
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'"
+</IfModule>
+
+# PHP 엔진 사용
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# 특정 IP 차단 (선택사항)
+#Order Allow,Deny
+#Allow from all
+#Deny from xxx.xxx.xxx.xxx 

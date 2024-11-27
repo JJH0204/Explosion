@@ -13,7 +13,7 @@ $submittedAnswer = $_POST['answer'];
 
 try {
     // DB 연결
-    $conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'testDB');
+    $conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'flameDB');
     if ($conn->connect_error) {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }

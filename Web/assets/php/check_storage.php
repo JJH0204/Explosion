@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 $serverIP = 'localhost';
 $DB_rootID = "admin";
 $DB_rootPW = "flamerootpassword";
-$dbname = "testDB";
+$dbname = "flameDB";
 
 try {
     $conn = new mysqli($serverIP, $DB_rootID, $DB_rootPW, $dbname);

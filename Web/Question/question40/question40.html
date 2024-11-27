@@ -256,7 +256,24 @@
 
         function displayHistory(sortedHistory) {
             const historyDiv = document.getElementById('history');
-            historyDiv.innerHTML = sortedHistory.map((item, index) => {
+            
+            // Create a copy of the history array to sort
+            const sortedItems = [...sortedHistory];
+            
+            // Remove the most recent entry (if exists) to handle it separately
+            const mostRecent = sortedItems.shift();
+            
+            // Sort the remaining items by rank (handling numeric and non-numeric ranks)
+            sortedItems.sort((a, b) => {
+                if (a.rank === '순위 밖') return 1;
+                if (b.rank === '순위 밖') return -1;
+                return a.rank - b.rank;
+            });
+            
+            // Combine the arrays with most recent first
+            const finalItems = mostRecent ? [mostRecent, ...sortedItems] : sortedItems;
+            
+            historyDiv.innerHTML = finalItems.map((item, index) => {
                 let similarityText = '-';
                 if (item.similarity !== '-') {
                     const similarityValue = typeof item.similarity === 'string' ? 

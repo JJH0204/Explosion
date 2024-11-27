@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: application/json');
 
 $host = 'localhost';
-$db = 'testDB';
+$db = 'flameDB';
 $username = 'admin';
 $passwd = 'flamerootpassword';
 

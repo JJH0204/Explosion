@@ -74,28 +74,51 @@
             event.preventDefault();
             const ID = document.getElementById('ID').value;
             const PW = document.getElementById('PW').value;
+            const ROLE = 'user';
+
+            // URL 인코딩된 폼 데이터 생성
+            const formData = new URLSearchParams();
+            formData.append('ID', ID);
+            formData.append('PW', PW);
+            formData.append('ROLE', ROLE);
 
             fetch('/assets/php/login.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `ID=${encodeURIComponent(ID)}&PW=${encodeURIComponent(PW)}`,
+                body: formData.toString()
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        sessionStorage.setItem('loggedIn', 'true');
-                        sessionStorage.removeItem('refreshed');
-                        window.location.href = 'flame.html';
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Login response:', data);
+                
+                if (data.success) {
+                    sessionStorage.setItem('loggedIn', 'true');
+                    sessionStorage.setItem('userRole', data.role);
+                    
+                    if (data.role === 'admin' || data.role === 'flame') {
+                        console.log('Redirecting to admin page...');
+                        window.location.href = 'flameadmin.html';
                     } else {
-                        document.getElementById('error-message').textContent = 'ID 또는 PW가 잘못되었습니다.';
-                        document.getElementById('error-message').style.display = 'block';
+                        console.log('Redirecting to user page...');
+                        window.location.href = 'flame.html';
                     }
-                })
-                .catch(error => {
-                    console.error('로그인 요청 실패:', error);
-                });
+                } else {
+                    document.getElementById('error-message').textContent = data.error || 'ID 또는 PW가 잘못되었습니다.';
+                    document.getElementById('error-message').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Login request failed:', error);
+                document.getElementById('error-message').textContent = '로그인 처리 중 오류가 발생했습니다.';
+                document.getElementById('error-message').style.display = 'block';
+            });
         });
 
         // Sign up 버튼 클릭 시 모달 팝업 열기

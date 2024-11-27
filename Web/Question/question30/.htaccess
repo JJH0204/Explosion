@@ -1,0 +1,21 @@
+# JavaScript 파일 직접 접근 차단
+<FilesMatch "\.js$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 특정 파일 접근 차단
+<Files "script.js">
+    Order allow,deny
+    Deny from all
+</Files> 
+
+<FilesMatch "\.json$">
+    Order allow,deny
+    Deny from all
+</FilesMatch> 
+
+<Files "flags.json">
+    Order allow,deny
+    Deny from all
+</Files> 

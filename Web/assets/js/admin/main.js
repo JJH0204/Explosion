@@ -173,7 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             <h2 class="challenge-title">Challenge ${cardNumber}</h2>
                             
                             <div class="tags-container">
-                                <span class="tag category-tag">${config.categories[challengeInfo.category].name}</span>
+                                ${Array.isArray(challengeInfo.category) 
+                                    ? challengeInfo.category.slice(0, 3).map(cat => 
+                                        `<span class="tag category-tag">${config.categories[cat].name}</span>`
+                                    ).join('')
+                                    : `<span class="tag category-tag">${config.categories[challengeInfo.category].name}</span>`
+                                }
                                 <span class="tag difficulty-tag">${config.difficulty[challengeInfo.difficulty].name}</span>
                                 <span class="tag points-tag">${config.difficulty[challengeInfo.difficulty].points}pt</span>
                             </div>
@@ -209,43 +214,120 @@ document.addEventListener('DOMContentLoaded', function() {
                         submitButton.addEventListener('click', async () => {
                             const flagInput = popup.querySelector(`#flagInput-${cardNumber}`);
                             if (!flagInput) return;
-
+                            
                             try {
-                                // config.json에서 해당 문제의 정답 확인
-                                const challengeInfo = config.challenges.find(c => c.id === cardNumber);
-                                if (!challengeInfo) {
-                                    throw new Error('Challenge not found');
-                                }
-
-                                // 입력된 플래그와 정답 비교
-                                if (flagInput.value === challengeInfo.answer) {
-                                    // 정답이 맞으면 saveClearedCard.php 호출
-                                    const response = await fetch('/assets/php/saveClearedCard.php', {
+                                // 25번과 38번 문제는 DB에서 직접 플래그 확인
+                                if (cardNumber === 25) {
+                                    const response = await fetch('/Question/question25/question25.php', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/x-www-form-urlencoded',
                                         },
-                                        body: `cardId=${cardNumber}`
+                                        body: `flag=${encodeURIComponent(flagInput.value)}`
                                     });
 
                                     const result = await response.json();
                                     if (result.success) {
-                                        // DB에서 실제 클리어한 스테이지 목록을 가져와서 localStorage 초기화
-                                        const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
-                                        const clearedResult = await clearedResponse.json();
-                                        
-                                        if (clearedResult.success) {
-                                            // DB의 실제 클리어 상태로 localStorage 초기화
-                                            localStorage.setItem('clearedStages', JSON.stringify(clearedResult.data));
+                                        // 정답이 맞으면 saveClearedCard.php 호출
+                                        const saveResponse = await fetch('/assets/php/saveClearedCard.php', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                            },
+                                            body: `cardId=${cardNumber}`
+                                        });
+
+                                        const saveResult = await saveResponse.json();
+                                        if (saveResult.success) {
+                                            const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                            const clearedResult = await clearedResponse.json();
+                                            
+                                            if (clearedResult.success) {
+                                                localStorage.setItem('clearedStages', JSON.stringify(clearedResult.data));
+                                            }
+                                            
+                                            alert('축하합니다! 문제를 해결했습니다!');
+                                            location.reload();
+                                        } else {
+                                            alert(saveResult.error || '오류가 발생했습니다.');
                                         }
-                                        
-                                        alert('축하합니다! 문제를 해결했습니다!');
-                                        location.reload();
                                     } else {
-                                        alert(result.error || '오류가 발생했습니다.');
+                                        alert(result.error || '틀린 답입니다. 다시 시도해주세요.');
+                                    }
+                                } else if (cardNumber === 38) {
+                                    const response = await fetch('/Question/question38/question38.php', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                        },
+                                        body: `flag=${encodeURIComponent(flagInput.value)}`
+                                    });
+
+                                    const result = await response.json();
+                                    if (result.success) {
+                                        // 정답이 맞으면 saveClearedCard.php 호출
+                                        const saveResponse = await fetch('/assets/php/saveClearedCard.php', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                            },
+                                            body: `cardId=${cardNumber}`
+                                        });
+
+                                        const saveResult = await saveResponse.json();
+                                        if (saveResult.success) {
+                                            const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                            const clearedResult = await clearedResponse.json();
+                                            
+                                            if (clearedResult.success) {
+                                                localStorage.setItem('clearedStages', JSON.stringify(clearedResult.data));
+                                            }
+                                            
+                                            alert('축하합니다! 문제를 해결했습니다!');
+                                            location.reload();
+                                        } else {
+                                            alert(saveResult.error || '오류가 발생했습니다.');
+                                        }
+                                    } else {
+                                        alert(result.error || '틀린 답입니다. 다시 시도해주세요.');
                                     }
                                 } else {
-                                    alert('틀린 답입니다. 다시 시도해주세요.');
+                                    // 다른 문제들은 기존 config.json 검증 로직 사용
+                                    const challengeInfo = config.challenges.find(c => c.id === cardNumber);
+                                    if (!challengeInfo) {
+                                        throw new Error('Challenge not found');
+                                    }
+
+                                    // 입력된 플래그와 정답 비교
+                                    if (flagInput.value === challengeInfo.answer) {
+                                        // 정답이 맞으면 saveClearedCard.php 호출
+                                        const response = await fetch('/assets/php/saveClearedCard.php', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                            },
+                                            body: `cardId=${cardNumber}`
+                                        });
+
+                                        const result = await response.json();
+                                        if (result.success) {
+                                            // DB에서 실제 클리어한 스테이지 목록을 가져와서 localStorage 초기화
+                                            const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                            const clearedResult = await clearedResponse.json();
+                                            
+                                            if (clearedResult.success) {
+                                                // DB의 실제 클리어 상태로 localStorage 초기화
+                                                localStorage.setItem('clearedStages', JSON.stringify(clearedResult.data));
+                                            }
+                                            
+                                            alert('축하합니다! 문제를 해결했습니다!');
+                                            location.reload();
+                                        } else {
+                                            alert(result.error || '오류가 발생했습니다.');
+                                        }
+                                    } else {
+                                        alert('틀린 답입니다. 다시 시도해주세요.');
+                                    }
                                 }
                             } catch (error) {
                                 console.error('Error submitting flag:', error);
@@ -525,7 +607,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             rankingList.innerHTML = '';
             
-            data.rankings.slice(0, 10).forEach((player, index) => {
+            // Admin 계정 제외하고 필터링
+            const filteredRankings = data.rankings.filter(player => 
+                player.nickname !== 'flame' && 
+                player.nickname !== 'admin'
+            );
+
+            // 상위 10명만 표시
+            filteredRankings.slice(0, 10).forEach((player, index) => {
                 const li = document.createElement('li');
                 li.className = 'ranking-item animate-in';
                 
@@ -553,27 +642,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function updateUserInfo() {
         try {
-            const response = await fetch('/assets/php/user_info.php');
-            const data = await response.json();
+            // 전체 랭킹 데이터를 먼저 가져옴
+            const rankingResponse = await fetch('/assets/php/ranking.php');
+            const rankingData = await rankingResponse.json();
             
-            if (data.success) {
+            // 유저 정보 가져오기
+            const userResponse = await fetch('/assets/php/user_info.php');
+            const userData = await userResponse.json();
+            
+            if (userData.success) {
+                const nicknameElement = document.getElementById('player-nickname');
+                const levelElement = document.getElementById('current-level');
+                const scoreElement = document.getElementById('player-score');
+                
+                if (nicknameElement) nicknameElement.textContent = userData.data.nickname;
+                if (scoreElement) scoreElement.textContent = userData.data.score;
+
+                // Admin을 제외한 필터링된 랭킹 리스트 생성
+                const filteredRankings = rankingData.rankings.filter(player => 
+                    !player.nickname.toLowerCase().includes('flame') && 
+                    !player.nickname.toLowerCase().includes('admin')
+                );
+
+                // 현재 유저의 필터링된 순위 찾기
+                const userRank = filteredRankings.findIndex(player => 
+                    player.nickname === userData.data.nickname
+                ) + 1;
+
+                // 순위 표시 업데이트
+                if (levelElement) levelElement.textContent = userRank;
+
+                // 캐릭터 이미지 테두리 업데이트
                 const characterImage = document.querySelector('.character-image');
                 if (characterImage) {
-                    // 기존 랭크 클래스와 transition style 제거
                     characterImage.classList.remove('rank-1', 'rank-2', 'rank-3');
-                    characterImage.style.transition = 'all 0.3s ease';
                     
-                    // 현재 랭킹에 따라 적절한 클래스 추가
-                    const rank = parseInt(data.data.rank);
-                    if (rank === 1) {
+                    if (userRank === 1) {
                         characterImage.classList.add('rank-1');
-                    } else if (rank === 2) {
+                    } else if (userRank === 2) {
                         characterImage.classList.add('rank-2');
-                    } else if (rank === 3) {
+                    } else if (userRank === 3) {
                         characterImage.classList.add('rank-3');
                     }
                 }
-                // ... 나머지 드 ...
             }
         } catch (error) {
             console.error('Error updating user info:', error);

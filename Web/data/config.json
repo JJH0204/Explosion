@@ -27,6 +27,10 @@
             "name": "SQL 인젝션",
             "description": "데이터베이스 관련 취약점"
         },
+        "command": {
+            "name": "Command Injection",
+            "description": "명령어 인젝션 취약점"
+        },
         "xss": {
             "name": "크로스 사이트 스크립팅",
             "description": "스크립트 인젝션 취약점"
@@ -39,7 +43,7 @@
             "name": "인증 및 인가",
             "description": "권한 관련 취약점"
         },
-        "csrf": {
+        "CSRF": {
             "name": "CSRF",
             "description": "요청 위조 관련 취약점"
         },
@@ -124,7 +128,7 @@
             "description": "This is the fourth challenge.",
             "link": "./Question/question4/question4.html",
             "answer": "FLAG{proxy_role_manipulation_success}",
-            "category": "csrf",
+            "category": "CSRF",
             "difficulty": "basic"
         },
         {
@@ -144,7 +148,7 @@
             "description": "This is the sixth challenge.",
             "link": "./Question/question6/question6.html",
             "answer": "FLAG{F4st_R3fl3x_M4st3r}",
-            "category": ["csrf","ETC"],
+            "category": ["CSRF","ETC"],
             "difficulty": "basic"
         },
         {
@@ -332,7 +336,6 @@
             "markdownFile": "mk_25.md",
             "description": "This is the twenty-fifth challenge.",
             "link": "./Question/question25/question25.html",
-            "answer": "flag{25Challengesflag}",
             "category": "ETC",
             "difficulty": "intermediate"
         },
@@ -373,8 +376,8 @@
             "description": "This is the twenty-ninth challenge.",
             "link": "./Question/question29/question29.html",
             "answer": "flag{4368616c6c656e6765666c6167}",
-            "category": "ETC",
-            "difficulty": "advanced"
+            "category": ["command","ETC"],
+            "difficulty": "intermediate"
         },
         {
             "id": 30,
@@ -432,9 +435,9 @@
             "markdownFile": "mk_35.md",
             "description": "This is the thirty-fifth challenge.",
             "link": "./Question/question35/question35.html",
-            "answer": "flag{questionChallenges35flag}",
-            "category": "ETC",
-            "difficulty": "beginner"
+            "answer": "FLAG{linux_master}",
+            "category": "linux",
+            "difficulty": "basic"
         },
         {
             "id": 36,
@@ -442,9 +445,9 @@
             "markdownFile": "mk_36.md",
             "description": "This is the thirty-sixth challenge.",
             "link": "./Question/question36/question36.html",
-            "answer": "flag{questionChallenges36flag}",
-            "category": "ETC",
-            "difficulty": "beginner"
+            "answer": "FLAG{network_admin_pro}",
+            "category": "network",
+            "difficulty": "basic"
         },
         {
             "id": 37,
@@ -452,9 +455,9 @@
             "markdownFile": "mk_37.md",
             "description": "This is the thirty-seventh challenge.",
             "link": "./Question/question37/question37.html",
-            "answer": "flag{questionChallenges37flag}",
-            "category": "ETC",
-            "difficulty": "beginner"
+            "answer": "FLAG{ACL_RULES_CORRECT}",
+            "category": "network",
+            "difficulty": "advanced"
         },
         {
             "id": 38,
@@ -462,9 +465,8 @@
             "markdownFile": "mk_38.md",
             "description": "This is the thirty-eighth challenge.",
             "link": "./Question/question38/question38.html",
-            "answer": "flag{questionChallenges38flag}",
-            "category": "ETC",
-            "difficulty": "beginner"
+            "category": ["sql","CSRF"],
+            "difficulty": "intermediate"
         },
         {
             "id": 39,
@@ -473,7 +475,7 @@
             "description": "This is the thirty-ninth challenge.",
             "link": "./Question/question39/question39.html",
             "answer": "flag{questionChallenges39flag}",
-            "category": ["CTF","csrf","upload"],
+            "category": ["CTF","CSRF","upload"],
             "difficulty": "advanced"
         },
         {

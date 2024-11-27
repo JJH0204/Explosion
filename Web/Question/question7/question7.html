@@ -217,6 +217,19 @@
                 }
             });
         });
+        document.addEventListener('keydown', (event) => {
+        // Ctrl+F 감지
+        if (event.ctrlKey && event.key === 'f') {
+            event.preventDefault(); // 기본 동작 막기
+            alert('Ctrl+F 검색 기능이 비활성화되어 있습니다.');
+        }
+
+        // Cmd+F (MacOS) 감지
+        if (event.metaKey && event.key === 'f') {
+            event.preventDefault();
+            alert('Cmd+F 검색 기능이 비활성화되어 있습니다.');
+        }
+    });
     </script>
 </body>
 </html>
