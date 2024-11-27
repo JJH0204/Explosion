@@ -12,22 +12,28 @@
         css 파일 내 중복된 코드(css에 정의된 스타일이 html에서 다시 정의되는 것도 포함)
 
     [] 파일 최적화
-        [] root 디렉토리
+        [] root(Web)
             [flame.html, flameadmin.html, index.html]
 
-        [] assets/php 디렉토리
-            [check_admin.php, check_storage.php, checkSession.php, get_cleared_stages.php, login.php, logout.php, ranking.php,
-            save-image.php, saveClearedCard.php, signup_testDB.php, signup_userDB.php, signup.php, user_info.php]
+            [] test 디렉토리 (테스트 폴더에서 작업 후 오류 없을 시 -> 실제 파일에 업데이트)
+            
+            [] Question (실제 문제 로직 폴더)
 
-        [] assets/js 디렉토리
-            [assets/js/admin/admin.js, assets/js/admin/main.js]
+            [] data (문제 md, 정보, 플래그 폴더)
 
-        [] assets/styles 디렉토리
-            [assets/styles/admin/admin1.css, assets/styles/admin/admin2.css, assets/styles/admin/main1.css, assets/styles/admin/main2.css
-            assets/styles/etc/login_styles.css]
+        [] assets
+            [] php
+                [check_admin.php, check_storage.php, checkSession.php, get_cleared_stages.php, login.php, logout.php, ranking.php,
+                save-image.php, saveClearedCard.php, signup_testDB.php, signup_userDB.php, signup.php, user_info.php]
 
-        [] 그 외 디렉토리
-            [assets/images, test(테스트폴더에서 작업 후 오류 없을 시 -> 실제 파일에 업데이트), Question]
+            [] js
+                [assets/js/admin/admin.js, assets/js/admin/main.js]
+
+            [] styles
+                [assets/styles/admin/admin1.css, assets/styles/admin/admin2.css, assets/styles/admin/main1.css, assets/styles/admin/main2.css,
+                assets/styles/etc/login_styles.css]
+
+            [] images (모두 사용)
 
 [] 언어 확장
     [] 영어

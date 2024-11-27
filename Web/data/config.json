@@ -197,9 +197,9 @@
             "markdownFile": "mk_11.md",
             "description": "This is the eleventh challenge.",
             "link": "./Question/question11/question11.html",
-            "answer": "FLAG{js_code_analysis}",
-            "category": "reversing",
-            "difficulty": "basic"
+            "answer": "FLAG{L0770_PR3D1C71ON_M4573R}",
+            "category": ["network","pwnable"],
+            "difficulty": "advanced"
         },
         {
             "id": 12,
