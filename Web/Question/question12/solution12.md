@@ -1,33 +1,51 @@
-# 문제 12 - Decoder Challenge Solution
+# 문제 12 - Phone Number Challenge Solution
 
 ## 문제 설명
-이 문제는 Base64로 암호화된 메시지를 해독하고 규칙에 따라 해독된 메시지를 추출하여 제출하는 웹 해킹 문제입니다. 제공된 메시지를 디코딩하고 지정된 규칙을 적용하여 메시지를 확인해야 합니다.
+이 문제는 웹 페이지에서 제시된 전화번호(070-8272-9218)를 입력하는 웹 해킹 문제입니다. 전화번호는 슬라이더를 통해 입력해야 하며, XSS 취약점을 이용하여 우회할 수 있습니다.
 
 ## 풀이 과정
 
-### 1. 소스 코드 분석
-HTML 소스 코드와 JavaScript 파일에서 암호화된 메시지와 해독 로직을 확인할 수 있습니다. 암호화된 메시지는 다음과 같습니다:
-U1RBVEVfT0ZfQ09ERTpKcG5sMTIzJEtlY2hfU2VjcmV0
+### 1. 정상적인 풀이 방법
+1. 웹 페이지에 접속하면 슬라이더가 표시됩니다.
+2. 슬라이더를 조작하여 목표 전화번호인 070-8272-9218을 입력합니다.
+3. "전화 걸기" 버튼을 클릭하여 정답을 제출합니다.
 
-### 2. Base64 디코딩
-암호화된 메시지는 Base64로 인코딩되어 있습니다. 이를 디코딩하면 다음과 같은 결과를 얻습니다:
-STATE_OF_CODE:Jpnl123$Kech_Secret
+### 2. XSS 취약점을 이용한 풀이
+1. URL 파라미터 `shared`를 통해 XSS 공격이 가능합니다.
+2. 취약점이 발생하는 소스코드는 다음과 같습니다:
+```javascript
+function getSharedNumber() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shared = urlParams.get('shared');
+    if (shared) {
+        // XSS 취약점: shared 파라미터 값을 직접 innerHTML로 삽입
+        document.getElementById('selectedNumber').innerHTML = '선택된 번호: ' + shared;
+        // 슬라이더 값도 업데이트
+        if (!isNaN(shared.replace(/-/g, ''))) {
+            slider.value = shared.replace(/-/g, '');
+        }
+    }
+}
+```
+위 코드에서 `innerHTML`을 사용하여 검증 없이 `shared` 파라미터 값을 직접 삽입하는 부분이 XSS 취약점을 발생시킵니다.
 
-### 3. 플래그 추출
-Jpnl123$Kech_Secret
-이 값을 제출하면 플래그를 얻습니다.
+3. 다음과 같은 URL을 사용하여 전화번호를 자동으로 입력할 수 있습니다:
+```
+?shared=<img src=x onerror="document.getElementById('phoneSlider').value=7082729218;checkNumber();">
+```
+4. XSS 공격이 성공하면 자동으로 정답이 입력되고 플래그가 표시됩니다.
 
 ## 힌트
-1. 메시지가 Base64로 인코딩되어 있다는 점을 활용하세요.
-2. 디코딩한 문자열에서 콜론(:) 뒤의 값을 제출해야 합니다.
-3. Base64 디코딩은 브라우저 개발자 도구(F12) 또는 온라인 도구를 사용해도 됩니다.
+1. 전화번호는 하이픈(-)을 제외한 11자리 숫자입니다.
+2. URL 파라미터를 통한 입력 검증 우회가 가능합니다.
+3. JavaScript 이벤트 핸들러를 활용하여 자동화된 입력이 가능합니다.
 
 ## 사용된 기술
-- Base64 디코딩: 메시지를 해독하기 위한 핵심 기술
-- 문자열 조작: 디코딩된 메시지에서 특정 규칙에 따라 값을 추출
-- 웹 디버깅 도구: 소스 코드 및 JavaScript 분석
+- XSS(Cross-Site Scripting): URL 파라미터를 통한 스크립트 주입
+- DOM 조작: JavaScript를 통한 슬라이더 값 변경
+- 입력 검증 우회: URL 파라미터를 이용한 입력 메커니즘 우회
 
 ## 최종 플래그
 ```
-FLAG{decoder_challenge_success}
+FLAG{C4ll_M3_M4yB3_B4by}
 ```

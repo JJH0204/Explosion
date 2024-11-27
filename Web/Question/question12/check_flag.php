@@ -1,29 +1,36 @@
 <?php
 header('Content-Type: application/json');
 
-// POST 요청 확인
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die(json_encode(['success' => false, 'message' => 'Invalid method']));
-}
+// CORS 설정 (필요한 경우)
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
-// 제출된 플래그 가져오기
-$submitted_flag = $_POST['flag'] ?? '';
+// 정답 전화번호 설정
+$correct_number = "07082729218";  // 하이픈 제외
+$flag = "FLAG{C4ll_M3_M4yB3_B4by}";
 
-// 정답 플래그
-$correct_flag = "Jpnl123$Kech_Secret";
-$final_flag = "FLAG{decoder_challenge_success}";
-
-// 플래그 검증
-if (trim($submitted_flag) === $correct_flag) {
-    echo json_encode([
-        'success' => true,
-        'message' => '정답입니다!',
-        'flag' => $final_flag
-    ]);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_number = isset($_POST['number']) ? $_POST['number'] : '';
+    
+    // 입력값에서 하이픈 제거
+    $user_number = str_replace('-', '', $user_number);
+    
+    if ($user_number === $correct_number) {
+        echo json_encode([
+            'success' => true,
+            'flag' => $flag
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => '틀린 전화번호입니다.'
+        ]);
+    }
 } else {
     echo json_encode([
         'success' => false,
-        'message' => '틀렸습니다. 다시 시도하세요.'
+        'message' => '잘못된 요청입니다.'
     ]);
 }
 ?>
