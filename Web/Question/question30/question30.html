@@ -25,7 +25,10 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 // 상수 정의
-const WORLD_HEIGHT = 100000;
+const WORLD_HEIGHT = 10000;
+const MINIMAP_WIDTH = 100;
+const MINIMAP_HEIGHT = 200;
+let showMinimap = false;
 
 // player 초기 위치 수정
 const player = {
@@ -187,11 +190,22 @@ document.addEventListener('keydown', (e) => {
         player.jumpForce = 0;
     }
     if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'q') {
-        isCommandMode = true;
-        commandUI.style.display = 'block';
-        const commandInput = document.getElementById('commandInput');
-        commandInput.value = '';
-        commandInput.focus();
+        if (isCommandMode) {
+            // 커맨드 모드가 활성화된 상태에서는 닫기
+            isCommandMode = false;
+            commandUI.style.display = 'none';
+        } else {
+            // 커맨드 모드가 비활성화된 상태에서는 열기
+            isCommandMode = true;
+            commandUI.style.display = 'block';
+            const commandInput = document.getElementById('commandInput');
+            commandInput.value = '';
+            commandInput.focus();
+        }
+        e.preventDefault();
+    }
+    if (e.ctrlKey && e.key.toLowerCase() === 'w') {
+        showMinimap = !showMinimap;
         e.preventDefault();
     }
 });
@@ -401,6 +415,34 @@ function draw() {
         const gaugeWidth = (player.jumpForce / player.maxJumpForce) * 50;
         ctx.fillStyle = 'yellow';
         ctx.fillRect(player.x, player.y - camera.y - 15, gaugeWidth, 5);
+    }
+
+    // draw 함수의 미니맵 부분 수정
+    if (showMinimap) {
+        // 미니맵 배경
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(canvas.width - MINIMAP_WIDTH - 10, 10, MINIMAP_WIDTH, MINIMAP_HEIGHT);
+
+        // 플랫폼 그리기
+        const minimapScale = MINIMAP_HEIGHT / 7000;
+        platforms.forEach(platform => {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(
+                canvas.width - MINIMAP_WIDTH - 10 + (platform.x * MINIMAP_WIDTH / canvas.width),
+                10 + (platform.y * minimapScale),
+                (platform.width * MINIMAP_WIDTH / canvas.width),
+                2
+            );
+        });
+
+        // 플레이어 위치 표시
+        ctx.fillStyle = 'red';
+        ctx.fillRect(
+            canvas.width - MINIMAP_WIDTH - 10 + (player.x * MINIMAP_WIDTH / canvas.width),
+            10 + (player.y * minimapScale),
+            4,
+            4
+        );
     }
 }
 
