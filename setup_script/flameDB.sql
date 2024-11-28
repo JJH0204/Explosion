@@ -67,8 +67,8 @@ CREATE TABLE `admin` (
 	`FLAG` VARCHAR(100) NOT NULL 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `flame` (NICKNAME, FLAG) VALUES ('flame', 'flag{flame_is_real_admin}');
-INSERT INTO `admin` (NICKNAME, FLAG) VALUES ('admin', 'flag{admin_is_fake_admin}');
+INSERT INTO `flame` (NICKNAME, FLAG) VALUES ('flame', 'FL4g{flame_15_R341_4dm1n}');
+INSERT INTO `admin` (NICKNAME, FLAG) VALUES ('admin', 'Fl4g{admin_15_f4k3_4dm1n}');
 
 CREATE USER `admin`@`localhost` identified by 'flamerootpassword';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
