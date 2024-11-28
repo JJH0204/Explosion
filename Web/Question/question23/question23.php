@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // 제출된 플래그 가져오기
 $submitted_flag = $_POST['flag'] ?? '';
-$correct_flag = "F1rstP4sSw0rD";
+$correct_flag = "4dM1n";
 $final_flag = "Flag{insecure_storage}";
 
 if ($submitted_flag === $correct_flag) {

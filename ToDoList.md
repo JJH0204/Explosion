@@ -1,5 +1,5 @@
 [] !!!!!!!!!!![[[ 주석 ]]]!!!!!!!!!!!! 
-    모든 사용하는 파일에 무슨 파일인지 주석 달기!
+모든 사용하는 파일에 무슨 파일인지 주석 달기!
 
 [] 보안 강화
     [] WAF 및 디렉터리 보호
@@ -85,7 +85,5 @@ bak 디렉토리로 옮긴 파일은 추후 삭제 예정 + bak 주석 추가해
     [assets/js/etc, assets/js/main,
     assets/php/main,
     assets/styles/etc, assets/styles/main,
-    node_modules,
-    Qustion/test,
-    node_modules(이거 진짜 뭐임?)]
+    Qustion/test,]
 

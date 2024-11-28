@@ -8,7 +8,7 @@
    - 게임 시작 버튼을 클릭하여 게임 시작
    - 기본적으로 단어 맞추기당 1점씩 획득
    - script.js 읽어보면 커맨드 인젝션 을 할떄 앞에 오는 단어가 내려오는 명령어 혹은 command 일때 명령어가 인식됨
-  ![alt text](image-1.png)
+  ![alt text](./images/image-1.png)
 
 2. Command Injection 취약점 발견
    - 입력창에 `command;ls` 또는 `단어;ls` 입력 시 가상 디렉토리 내용 확인 가능

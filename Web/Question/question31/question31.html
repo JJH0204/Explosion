@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cronjob Challenge</title>
+    <title>Challenge 31: Cronjob</title>
     <style>
         body {
             background-color: #121212;
@@ -93,7 +93,7 @@
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('./validate_flag.php', {
+                const response = await fetch('question31.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `flag=${encodeURIComponent(flag)}`

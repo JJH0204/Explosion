@@ -1,35 +1,30 @@
 # 문제 24 - Decoder Challenge Solution
 
 ## 문제 설명
-File - Insecure storage 1
-이 문제는 tgz 파일을 다운로드 받아 압축을 풀고 사용자의 패스워드를 찾는 문제입니다.
+이 문제는 해시로 암호화된 문자열을 해독하고 규칙에 따라 플래그를 추출하는 웹 해킹 문제입니다. 
+제공된 해시를 디코딩하여 원래 문자열을 확인하고, 이를 플래그로 제출해야 합니다.
 
-## 풀이 과정
-주어진 파일을 다운로드 받아 압축을 풀고 파일을 열어보면 사용자의 패스워드를 찾을 수 있습니다.
-
-방법 2가지
-
-1. PC 에서 sql 프로그램 깔아서  압축파일 안에 있는 signons.sqlite 파일 열어서 moz_logins 테이블을 찾아보면 암호화된 사용자의 패스워드를 찾을 수 있습니다.
-https://download.sqlitebrowser.org/DB.Browser.for.SQLite-v3.13.1-win64.msi
-
-프로그렘 실행후 signons.sqlite 파일을 열어 moz_logins 테이블을 찾아보면 암호화된 사용자의 패스워드를 찾을 수 있습니다.
-
-
-2. 리눅스 시스템 
-wget https://github.com/unode/firefox_decrypt 에서 firefox_decrypt.py 를 실행하면 패스워드 출력 
+96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92
 
 
 ### 플래그 추출
 
-Password:F1rstP4sSw0rD
+4dM1n
 
 ## 힌트
-1.사용자의 비밀번호 찾기
-2.https://github.com/unode/firefox_decrypt
-3.https://download.sqlitebrowser.org/
+주어진 문자열 96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92 해시값입니다. 이 값이 어떤 해시 알고리즘 SHA-256(64) 등으로 생성된 것인지 식별하고, 이를 크래킹하여 원래의 값을 알아내야 합니다.
+해시값의 길이를 기준으로 어떤 알고리즘인지 추정할 수 있습니다:
+96719db60d8e3f498c98d94155e1296aac105ck4923290c89eeeb3ba26d3eef92 현재 65자 입니다 
+![alt text](./images/image.png)
+
+MD5: 32자 (16바이트, 128비트)
+SHA-1: 40자 (20바이트, 160비트)
+SHA-256: 64자 (32바이트, 256비트)
+k 를 지운 해시는 64자 길이를 가지므로, 이는 SHA-256로 생성된 해시일 가능성이 높습니다.
+
 
 ## 사용된 기술
-
+https://md5hashing.net/hash
 
 
 ## 최종 플래그

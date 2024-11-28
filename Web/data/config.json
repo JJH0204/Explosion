@@ -157,7 +157,7 @@
             "markdownFile": "mk_7.md",
             "description": "This is the seventh challenge.",
             "link": "./Question/question7/question7.html",
-            "answer": "FLAG{o_game_success}",
+            "answer": "FLAG{find_the_O_success}",
             "category": "reversing",
             "difficulty": "basic"
         },
@@ -187,7 +187,7 @@
             "markdownFile": "mk_10.md",
             "description": "This is the tenth challenge.",
             "link": "./Question/question10/question10.html",
-            "answer": "flag{answer10}",
+            "answer": "flag{find_flame_real_ip}",
             "category": "network",
             "difficulty": "basic"
         },
@@ -267,7 +267,7 @@
             "markdownFile": "mk_18.md",
             "description": "This is the eighteenth challenge.",
             "link": "./Question/question18/question18.html",
-            "answer": "FLAG{SUBNETTING_SUCCESS}",
+            "answer": "FLAG{SUBNETTING_MASTER}",
             "category": "network",
             "difficulty": "beginner"
         },
@@ -415,7 +415,7 @@
             "markdownFile": "mk_33.md",
             "description": "This is the thirty-third challenge.",
             "link": "./Question/question33/question33.html",
-            "answer": "FLAG{ACL_CONFIGURATION_CORRECT}",
+            "answer": "FLAG{ACL_RULES_CORRECT}",
             "category": "ETC",
             "difficulty": "advanced"
         },
@@ -425,7 +425,7 @@
             "markdownFile": "mk_34.md",
             "description": "This is the thirty-fourth challenge.",
             "link": "./Question/question34/question34.html",
-            "answer": "flag{questionChallenges34flag}",
+            "answer": "FLAG{M4lw4r3_4n4lys1s_Pr0}",
             "category": "ETC",
             "difficulty": "beginner"
         },

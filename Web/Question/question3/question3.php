@@ -4,12 +4,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($input, true);
     $userInput = $data['input'] ?? '';
 
-    // Base64로 디코딩된 값이 'hacker123'인지 확인
+    // 정답과 플래그를 서버 측 상수로 정의
+    define('CORRECT_ANSWER', 'aGFja2VyMTIz');
+    define('FLAG', 'FLAG{base64_decode_success}');
+
     try {
-        if (base64_decode($userInput) === 'hacker123') {
+        if ($userInput === CORRECT_ANSWER) {
             echo json_encode([
                 'success' => true,
-                'flag' => 'FLAG{base64_decode_success}'
+                'message' => '정답입니다! 플래그는: ' . FLAG
             ]);
         } else {
             echo json_encode([

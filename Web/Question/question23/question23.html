@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cryptanalysis Challenge</title>
+    <title>Challenge 23: Cryptanalysis</title>
     <style>
         body {
             background-color: #121212;
@@ -47,15 +47,6 @@
         #result {
             margin-top: 20px;
             font-size: 1.2em;
-        }
-
-        .hint {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #aaaaaa;
-            background-color: #2a2a2a;
-            padding: 10px;
-            border-radius: 5px;
         }
         .ssh-info {
         margin: 20px auto;
@@ -116,7 +107,7 @@
     <div class="container">
         <p>File - Insecure storage.</p>
         <div class="download-section">
-            <a href="ch20.tgz" download class="download-button" style="
+            <a href="question23.txt" download class="download-button" style="
                 display: inline-block;
                 background-color: #00ff00;
                 color: #000;
@@ -125,22 +116,15 @@
                 border-radius: 5px;
                 margin: 10px 0;
             ">
-                Challenge23.tgz 다운로드
+                question23.txt 다운로드
             </a>
         </div>
-        <p>해독된 사용자 패스워드를 입력하세요:</p>
+        <p>해독된 플래그 를 입력하세요:</p>
         <input type="text" id="userInput" placeholder="해독된 플래그 입력" style="display: block; width: 30%; margin: 10px auto; padding: 10px; text-align: center; background-color: #2a2a2a; color: #00ff00; border: 1px solid #00ff00;">
         <div class="button-group">
             <button onclick="checkFlag()">제출</button>
         </div>
         <p id="result"></p>
-    </div>
-
-    <div class="hint">
-        <p>1.사용자의 비밀번호 찾기</p>
-        <p>2.https://download.sqlitebrowser.org/</p>
-        <p>3.https://github.com/unode/firefox_decrypt</p>
-        </div>
     </div>
 
     <script>

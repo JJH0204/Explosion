@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 
 $CORRECT_IP = "211.229.100.142";
-$FLAG = "flag{answer10}";
+$FLAG = "flag{find_flame_real_ip}";
 
 $input = file_get_contents("php://input");
 $data = json_decode($input, true);

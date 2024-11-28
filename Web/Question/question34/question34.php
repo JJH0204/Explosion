@@ -1,6 +1,20 @@
 <?php
 header("Content-Type: application/json");
 
+// POST 요청이 아닌 경우 접근 차단
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(403);
+    echo json_encode(["status" => "error", "message" => "Forbidden"]);
+    exit;
+}
+
+// Content-Type이 application/json이 아닌 경우 차단
+if ($_SERVER["CONTENT_TYPE"] !== "application/json") {
+    http_response_code(400);
+    echo json_encode(["status" => "error", "message" => "Invalid content type"]);
+    exit;
+}
+
 // 정답과 플래그
 $correctAnswers = [
     "dllMainAddr" => "0x1000D02E",

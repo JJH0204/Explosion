@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Binary_code Challenge</title>
+    <title>Challenge 20: Binary Code</title>
     <style>
         body {
             background-color: #121212;
@@ -69,7 +69,7 @@
     </style>
 </head>
 <body>
-    <h1>Binary_code Challenge</h1>
+    <h1>Binary Code Challenge</h1>
     <div class="container">
         <p>SSH 접속 후 올바른 플래그를 찾아 제출하세요.</p>
 
@@ -93,7 +93,7 @@
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('./validate_flag.php', {
+                const response = await fetch('question20.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `flag=${encodeURIComponent(flag)}`

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buffer Overflow Challenge</title>
+    <title>Challenge 13: Buffer Overflow</title>
     <style>
         body {
             background-color: #121212;
@@ -60,9 +60,10 @@
     <div class="container">
         <p>적절한 값을 입력하여 숨겨진 결과를 찾아보세요.</p>
         <p class="hint">
-            힌트: 입력 값은 <b>32자 이상</b>이어야 하며, 특정 문자열을 포함해야 합니다.
+            힌트: 입력 값은 <b>32자 이상</b>이어야 합니다.
         </p>
-        <input type="text" id="inputBuffer" placeholder="값을 입력하세요">
+        <p class="hint" id="magicHint" style="display: none;"></p>
+        <input type="text" id="inputBuffer" placeholder="값을 입력하세요" oninput="checkMagicNumber()">
         <button onclick="checkOverflow()">버퍼 전송</button>
         <p id="result"></p>
     </div>
@@ -77,17 +78,28 @@
             return str;
         }
 
-        // 힌트 동적으로 표시
         const magicNumber = "424F4642"; // 특정 조건 값
-        document.getElementById('magicHint').textContent = `${magicNumber} (ASCII: ${hexToAscii(magicNumber)})`;
-
+        
+        // 입력값 확인 및 힌트 표시 함수
+        function checkMagicNumber() {
+            const input = document.getElementById('inputBuffer').value;
+            const magicHintElement = document.getElementById('magicHint');
+            
+            if (input === magicNumber) {
+                magicHintElement.textContent = `힌트: ${magicNumber} (ASCII: ${hexToAscii(magicNumber)})`;
+                magicHintElement.style.display = 'block';
+            } else {
+                magicHintElement.style.display = 'none';
+            }
+        }
+        
         // 입력 값을 서버로 전송
         async function checkOverflow() {
             const input = document.getElementById('inputBuffer').value;
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('./validate.php', { // PHP로 요청
+                const response = await fetch('question13.php', { // PHP로 요청
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ input })

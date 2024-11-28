@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 Not Found</title>
+    <title>Challenge 3: 404 Not Found</title>
     <style>
         body {
             background-color: #1a1a1a;
@@ -52,7 +52,7 @@
 <body>
     <!-- 힌트1: 소스 코드를 확인하세요 -->
     <div class="container">
-        <h1>404 - Page Not Found</h1>
+        <h1>Challenge 3: 404 - Page Not Found</h1>
         <div id="login-form">
             <input type="password" id="auth-key" placeholder="인증 키를 입력하세요">
             <button onclick="authenticate()">확인</button>
@@ -61,10 +61,8 @@
     </div>
 
     <script>
-        const _0x4e8a=['getElementById','value','auth-key','result','innerHTML','정답입니다! 플래그는: ','틀렸습니다!','display','block','login-form','에러 발생:','&amp;','&lt;','&gt;','&quot;','&#039;','aGFja2VyMTIz','hacker123','FLAG{base64_decode_success}','힌트2: 비밀 키는 Base64로 인코딩되어 있습니다.','힌트3: 개발자 도구의 콘솔에서 atob() 함수를 사용해보세요.'];
+        const _0x4e8a=['getElementById','value','auth-key','result','innerHTML','display','block','login-form','에러 발생:','&amp;','&lt;','&gt;','&quot;','&#039;','YUdGamEyVnlNVEl6'];
         const _0x2d4f=function(_0x4e8aa){return _0x4e8a[_0x4e8aa]};
-        // 힌트2: 비밀 키는 Base64로 인코딩되어 있습니다.
-        // 힌트3: 개발자 도구의 콘솔에서 atob() 함수를 사용해보세요.
         console.log('힌트2: 비밀 키는 Base64로 인코딩되어 있습니다.');
         console.log('힌트3: 개발자 도구의 콘솔에서 atob() 함수를 사용해보세요.');
 
@@ -83,7 +81,7 @@
             .then(data => {
                 if (data.success) {
                     resultElement.style.color = '#00ff00';
-                    resultElement.textContent = '정답입니다! 플래그는: ' + data.flag;
+                    resultElement.textContent = data.message;
                 } else {
                     resultElement.style.color = '#ff0000';
                     resultElement.textContent = '틀렸습니다!';

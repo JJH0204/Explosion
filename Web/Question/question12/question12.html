@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전화번호 도전</title>
+    <title>Challenge 12: Call Phone Number</title>
     <style>
         body {
             background-color: #121212;
@@ -121,12 +121,19 @@
         }
 
         .hint {
-            margin-top: 20px;
+            margin: 20px auto;
+            max-width: 600px;
             font-size: 0.9em;
             color: #aaaaaa;
             background-color: #2a2a2a;
             padding: 10px;
             border-radius: 5px;
+            text-align: center;
+        }
+
+        .hint h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
         }
 
         .controls {
@@ -173,7 +180,8 @@
     </div>
 
     <div class="hint">
-        <p>힌트: 슬라이더를 움직여 올바른 전화번호를 맞추면 플래그를 획득할 수 있습니다.</p>
+        <h3>힌트</h3>
+        <p>슬라이더를 움직여 올바른 전화번호를 맞추면 플래그를 획득할 수 있습니다.</p>
     </div>
 
     <script>
@@ -214,7 +222,7 @@
         function checkNumber() {
             const userNumber = String(slider.value).padStart(11, '0');
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'check_flag.php', true);
+            xhr.open('POST', 'question12.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             
             xhr.onload = function() {

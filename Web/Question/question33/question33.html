@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACL Configuration Challenge</title>
+    <title>Challenge 33: ACL Configuration</title>
     <style>
         body {
             background-color: #121212;
@@ -87,7 +87,7 @@
     <script>
         async function checkACL() {
             const aclCode = document.getElementById('aclCode').value.trim();
-            const response = await fetch("validate_acl.php", {
+            const response = await fetch("question33.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ acl: aclCode })

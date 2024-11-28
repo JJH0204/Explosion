@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O 찾기 게임</title>
+    <title>Challenge 7: O Finder Game</title>
     <style>
         body {
             background-color: #121212;
@@ -147,12 +147,25 @@
             isGameActive = false;
 
             if (selectedChar === 'O') {
-                fetch('flag.php')
-                    .then(response => response.json())
-                    .then(data => {
+                fetch('question7.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: 'valid_game_completion'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.flag) {
                         resultElement.style.color = '#00ff7f';
                         resultElement.textContent = `정답입니다! 플래그: ${data.flag}`;
-                    });
+                    } else {
+                        resultElement.style.color = '#ff4d4d';
+                        resultElement.textContent = '오류가 발생했습니다.';
+                    }
+                });
             } else {
                 resultElement.style.color = '#ff4d4d';
                 resultElement.textContent = '틀렸습니다. 새로고침하여 다시 시작하세요.';

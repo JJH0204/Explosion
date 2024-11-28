@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server IP Challenge</title>
+    <title>Challenge 10: Server IP Challenge</title>
     <style>
         body {
             background-color: #1a1a1a;
@@ -16,7 +16,7 @@
             margin: 0;
         }
         .container {
-            background-color: #000000;
+            background-color: #1e1e1e;
             padding: 2rem;
             border: 1px solid #00ff00;
             border-radius: 5px;
@@ -24,12 +24,14 @@
             max-width: 600px;
         }
         input {
-            background-color: #1a1a1a;
-            border: 1px solid #00ff00;
+            display: block;
+            width: 30%;
+            margin: 10px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #2a2a2a;
             color: #00ff00;
-            padding: 8px 15px;
-            margin: 10px;
-            width: 200px;
+            border: 1px solid #00ff00;
             outline: none;
         }
         button {
@@ -51,9 +53,14 @@
             color: #ff0000;
         }
         .hint {
+            margin: 20px auto;
+            max-width: 600px;
             font-size: 0.9em;
-            color: #888;
-            margin-top: 20px;
+            color: #aaaaaa;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
         }
     </style>
 </head>
@@ -73,7 +80,6 @@
         <p id="result"></p>
         
         <div class="hint">
-            <p>힌트:</p>
             <ul style="text-align: left;">
                 <li>cmd나 powershell을 사용해보세요</li>
                 <li>ping, tracert, nslookup 등의 네트워크 도구를 활용해보세요</li>

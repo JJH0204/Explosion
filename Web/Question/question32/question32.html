@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malware Challenge</title>
+    <title>Challenge 32: Malware Analysis</title>
     <style>
         body {
             background-color: #121212;
@@ -28,7 +28,7 @@
             border: 1px solid #00ff00;
             padding: 10px;
             width: 60%;
-            margin-bottom: 10px;
+            margin: 20px 0;
             text-align: center;
         }
 
@@ -53,14 +53,14 @@
             background-color: #2a2a2a;
             color: #00ff00;
             padding: 15px;
-            margin-top: 20px;
+            margin: 20px 0 40px 0;
             border-radius: 5px;
             text-align: left;
         }
     </style>
 </head>
 <body>
-    <h1>Malware Challenge</h1>
+    <h1>Malware Analysis Challenge</h1>
     <div class="container">
         <p>
             FLARE 환경에서 제공된 실행 파일 <b>Lab16-01.exe</b>의 컴파일 날짜를 확인하세요.<br>
@@ -85,7 +85,7 @@
     <script>
         async function checkDate() {
             const date = document.getElementById('compileDate').value.trim();
-            const response = await fetch("validate_compile_date.php", {
+            const response = await fetch("question32.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ date })

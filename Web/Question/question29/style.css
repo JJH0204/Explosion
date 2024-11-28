@@ -35,6 +35,11 @@ body {
     color: #00ff00;
     border: 1px solid #00ff00;
     border-radius: 5px;
+    text-align: center;
+}
+
+#typing-input::placeholder {
+    text-align: center;
 }
 
 #score {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>2D 점프킹</title>
+    <title>Challenge 30: 2D JumpKing</title>
     <style>
         canvas {
             border: 2px solid black;
@@ -204,7 +204,7 @@ document.addEventListener('keydown', (e) => {
         }
         e.preventDefault();
     }
-    if (e.ctrlKey && e.key.toLowerCase() === 'w') {
+    if (e.key.toLowerCase() === 'm') {
         showMinimap = !showMinimap;
         e.preventDefault();
     }
@@ -424,21 +424,38 @@ function draw() {
         ctx.fillRect(canvas.width - MINIMAP_WIDTH - 10, 10, MINIMAP_WIDTH, MINIMAP_HEIGHT);
 
         // 플랫폼 그리기
-        const minimapScale = MINIMAP_HEIGHT / 7000;
+        const minimapScale = MINIMAP_HEIGHT / 7000;  // 마지막 발판 높이에 맞춰 조정
         platforms.forEach(platform => {
+            // 미니맵 내부에 플랫폼이 표시되도록 위치 조정
+            const minimapX = Math.min(
+                Math.max(
+                    canvas.width - MINIMAP_WIDTH - 10 + (platform.x * MINIMAP_WIDTH / canvas.width),
+                    canvas.width - MINIMAP_WIDTH - 10
+                ),
+                canvas.width - 10
+            );
+            
             ctx.fillStyle = 'white';
             ctx.fillRect(
-                canvas.width - MINIMAP_WIDTH - 10 + (platform.x * MINIMAP_WIDTH / canvas.width),
+                minimapX,
                 10 + (platform.y * minimapScale),
-                (platform.width * MINIMAP_WIDTH / canvas.width),
+                Math.min((platform.width * MINIMAP_WIDTH / canvas.width), MINIMAP_WIDTH),
                 2
             );
         });
 
-        // 플레이어 위치 표시
+        // 플레이어 위치 표시 - 미니맵 내부로 제한
+        const playerMinimapX = Math.min(
+            Math.max(
+                canvas.width - MINIMAP_WIDTH - 10 + (player.x * MINIMAP_WIDTH / canvas.width),
+                canvas.width - MINIMAP_WIDTH - 10
+            ),
+            canvas.width - 10
+        );
+        
         ctx.fillStyle = 'red';
         ctx.fillRect(
-            canvas.width - MINIMAP_WIDTH - 10 + (player.x * MINIMAP_WIDTH / canvas.width),
+            playerMinimapX,
             10 + (player.y * minimapScale),
             4,
             4

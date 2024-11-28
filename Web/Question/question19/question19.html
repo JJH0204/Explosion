@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Flag Challenge</title>
+    <title>Challenge 19: Find Flag</title>
     <style>
         body {
             background-color: #121212;
@@ -49,15 +49,6 @@
             font-size: 1.2em;
         }
 
-        .hint {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #aaaaaa;
-            background-color: #2a2a2a;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
         .ssh-info {
             margin: 20px auto;
             padding: 20px;
@@ -86,20 +77,13 @@
         <p>포트: <span style="color: #00ff00;">2226</span></p>
     </div>
 
-    <div class="hint">
-        <h3>힌트</h3>
-        <ul>
-            <li><code>find</code> 명령어를 활용하세요.</li>
-        </ul>
-    </div>
-
     <script>
         async function submitFlag() {
             const flag = document.getElementById('flagInput').value.trim();
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('./validate_flag.php', {
+                const response = await fetch('question19.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `flag=${encodeURIComponent(flag)}`

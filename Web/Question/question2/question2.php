@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode([
             'success' => true,
             'message' => '축하합니다! 플래그를 찾았습니다',
-            'flag' => 'RkxBR3tzb3VyY2VfY29kZV9hbmFseXNpc30='
+            'flag' => 'FLAG{source_code_analysis}'
         ]);
     } else {
         echo json_encode([

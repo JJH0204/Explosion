@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>지렁이 게임</title>
+    <title>Challenge 17: Snake Game</title>
     <style>
         body {
             background-color: #121212;
@@ -86,7 +86,7 @@
         // 서버에서 플래그 가져오기
         async function getFlag() {
             try {
-                const response = await fetch('./question17.php');
+                const response = await fetch(`./question17.php?score=${score}`);
                 const data = await response.json();
                 const resultElement = document.getElementById('result');
 
@@ -95,7 +95,7 @@
                     resultElement.innerHTML = `축하합니다! 플래그를 획득했습니다.<br>플래그: ${data.flag}`;
                 } else {
                     resultElement.style.color = '#ff0000';
-                    resultElement.textContent = '플래그를 가져오지 못했습니다. 다시 시도해주세요.';
+                    resultElement.textContent = data.message || '플래그를 가져오지 못했습니다. 다시 시도해주세요.';
                 }
             } catch (error) {
                 const resultElement = document.getElementById('result');
