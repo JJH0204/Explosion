@@ -17,15 +17,110 @@
             height: 100%;
         }
 
-        #challengePopup .challenge-popup-content {
-            background-color: #1a1a1a !important;
-            max-width: 700px !important;
-            max-height: 85vh !important;
-            width: 90% !important;
-            padding: 20px !important;
-            margin: 20px auto !important;
-            border-radius: 10px !important;
-            position: relative !important;
+        .flag-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: none;
+        }
+
+        .flag-popup.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flag-popup-content {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .event-message {
+            padding: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .event-message img {
+            width: 90%;
+            height: auto;
+            border-radius: 5px;
+            margin: 10px 0;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .event-message p {
+            color: #00ff00;
+            font-size: 1.1em;
+            margin-top: 15px;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            font-family: 'Courier New', monospace;
+        }
+
+        .event-message img:hover {
+            transform: scale(1.02);
+        }
+
+        .event-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        #eventPopup {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        #eventPopup .event-popup-content {
+            background-color: #1a1a1a;
+            max-width: 800px;
+            width: 90%;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            text-align: center;
+        }
+
+        #eventPopup .event-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        #eventPopup .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
         }
 
         #challengePopup .flag-input-container {
@@ -37,6 +132,28 @@
 
         #challengePopup .flag-input {
             height: 32px !important;
+        }
+
+        .fullscreen-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .fullscreen-popup img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -110,7 +227,11 @@
     <div id="eventPopup" class="flag-popup">
         <div class="flag-popup-content">
             <h2 class="event-title">FLAME EVENT!</h2>
-            <p class="event-message">현재 진행 중인 이벤트가 없습니다.</p>
+            <div class="event-message">
+                <img src="/assets/images/event/event1.gif" alt="Event">
+                <p>이미지 클릭</p>
+
+            </div>
             <div class="flag-popup-buttons">
                 <button id="closeEvent" class="flag-popup-button">CLOSE</button>
             </div>
@@ -326,8 +447,54 @@
             window.onpopstate = function() {
                 window.history.go(1);
             };
+
+            // 이벤트 버튼 클릭 이벤트
+            document.getElementById('EventBtn').addEventListener('click', function() {
+                const popup = document.getElementById('eventPopup');
+                popup.style.display = 'flex';
+                popup.classList.add('show');
+            });
+
+            // 팝업 닫기 버튼 클릭 이벤트
+            document.querySelector('#eventPopup .flag-popup-button').addEventListener('click', function() {
+                const popup = document.getElementById('eventPopup');
+                popup.style.display = 'none';
+                popup.classList.remove('show');
+            });
+
+            // 팝업 외부 클릭 시 닫기
+            document.getElementById('eventPopup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                    this.classList.remove('show');
+                }
+            });
+
+            // 이미지 클릭 시 전체화면 표시
+            document.querySelector('.event-message img').addEventListener('click', function() {
+                const fullscreenPopup = document.getElementById('fullscreenPopup');
+                const fullscreenImg = fullscreenPopup.querySelector('img');
+                fullscreenImg.src = this.src;
+                fullscreenPopup.style.display = 'block';
+            });
+
+            // 전체화면 팝업 클릭 시 닫기
+            document.getElementById('fullscreenPopup').addEventListener('click', function() {
+                this.style.display = 'none';
+            });
+
+            // ESC 키로 전체화면 닫기
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.getElementById('fullscreenPopup').style.display = 'none';
+                }
+            });
         });
     </script>
+    <!-- 전체화면 팝업 추가 -->
+    <div id="fullscreenPopup" class="fullscreen-popup">
+        <img src="" alt="Fullscreen Event">
+    </div>
 </body>
 
 </html>

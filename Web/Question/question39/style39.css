@@ -1,0 +1,300 @@
+body {
+    background-color: #121212;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+}
+
+#header {
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(0, 255, 0, 0.1);
+    border-bottom: 2px solid #00ff00;
+}
+
+#header h1 {
+    margin: 0;
+    font-size: 24px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+#timer {
+    font-size: 24px;
+    color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    margin: 10px 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    display: inline-block;
+}
+
+#main-content {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: stretch;
+    min-height: 600px;
+    max-height: 80vh;
+    padding: 20px;
+}
+
+#game-area {
+    position: relative;
+    flex: 1;
+    min-width: 900px;
+    background-color: #121212;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#side-panel {
+    width: 130px;
+    background-color: #121212;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+#best-time {
+    background-color: rgba(0, 255, 0, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #00ff00;
+}
+
+#best-time h2 {
+    margin: 0 0 6px 0;
+    font-size: 14px;
+    text-align: center;
+    color: #00ff00;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+#best-time-value {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 4px;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+#history-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 255, 0, 0.1);
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #00ff00;
+    overflow: hidden;
+}
+
+#history-list h2 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    text-align: center;
+    color: #00ff00;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+#history-items {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.history-item {
+    padding: 5px;
+    border: 1px solid #00ff00;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    font-size: 11px;
+}
+
+#history-items::-webkit-scrollbar {
+    width: 4px;
+}
+
+#history-items::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+#history-items::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+}
+
+#message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    color: #00ff00;
+    text-align: center;
+    z-index: 2000;
+    font-family: 'Courier New', monospace;
+    background-color: rgba(0, 0, 0, 0.95);
+    padding: 30px 50px;
+    border-radius: 15px;
+    white-space: nowrap;
+    border: 3px solid #00ff00;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+    letter-spacing: 2px;
+    backdrop-filter: blur(5px);
+    display: none;
+}
+
+#message.show {
+    display: block;
+}
+
+#message.success {
+    animation: glowPulse 2s infinite;
+    font-weight: bold;
+}
+
+#start-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1000;
+}
+
+#start-button {
+    font-size: 24px;
+    padding: 15px 40px;
+    background-color: transparent;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+#start-button:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    transform: scale(1.05);
+}
+
+#countdown {
+    font-size: 120px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #00ff00;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    animation: countdownPulse 1s infinite;
+}
+
+.number-button {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #00ff00;
+    border-radius: 50%;
+    background-color: rgba(42, 42, 42, 0.9);
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    opacity: 0.5;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.number-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    opacity: 0.8;
+}
+
+.number-button.current {
+    opacity: 1;
+    border-width: 3px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    animation: pulseBorder 1.5s infinite;
+}
+
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        border-color: rgba(0, 255, 0, 0.8);
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(0, 255, 0, 1);
+        box-shadow: 0 0 50px rgba(0, 255, 0, 0.5);
+        border-color: rgba(0, 255, 0, 1);
+    }
+    100% {
+        text-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        border-color: rgba(0, 255, 0, 0.8);
+    }
+}
+
+@keyframes pulseBorder {
+    0% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 255, 0, 1);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+}
+
+@keyframes countdownPulse {
+    0% {
+        text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        transform: scale(1);
+    }
+    50% {
+        text-shadow: 0 0 40px rgba(0, 255, 0, 1);
+        transform: scale(1.1);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        transform: scale(1);
+    }
+}

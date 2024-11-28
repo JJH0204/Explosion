@@ -474,9 +474,9 @@
             "markdownFile": "mk_39.md",
             "description": "This is the thirty-ninth challenge.",
             "link": "./Question/question39/question39.html",
-            "answer": "flag{questionChallenges39flag}",
-            "category": ["CTF","CSRF","upload"],
-            "difficulty": "advanced"
+            "answer": "FLAG{XxXx_h4rd_t0_gu3ss_XxXx_39th_Ch4ll3ng3}",
+            "category": ["pwnable","network","xss"],
+            "difficulty": "intermediate"
         },
         {
             "id": 40,
