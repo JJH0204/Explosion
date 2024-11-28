@@ -7,87 +7,32 @@
     <link rel="stylesheet" href="style24.css">
 </head>
 <body>
-    <h1>Decoding Challenge</h1>
+    <h1>Decoding</h1>
     <div class="container">
         <p>File - Insecure storage.</p>
         <div class="download-section">
-            <form id="loginForm" class="login-form" style="
-                background-color: #2a2a2a;
-                padding: 20px;
-                border-radius: 5px;
-                margin: 10px 0;
-            ">
-                <div id="loginMessage" style="
-                    margin-bottom: 10px;
-                    padding: 5px;
-                    border-radius: 3px;
-                    display: none;
-                "></div>
-                <div style="margin-bottom: 15px;">
-                    <input type="text" id="username" placeholder="사용자 이름" style="
-                        background-color: #1e1e1e;
-                        color: #00ff00;
-                        border: 1px solid #00ff00;
-                        padding: 8px;
-                        width: 200px;
-                        margin-bottom: 10px;
-                        border-radius: 3px;
-                    ">
+            <form id="loginForm" class="login-form">
+                <div id="loginMessage"></div>
+                <div>
+                    <input type="text" id="username" placeholder="사용자 이름">
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <input type="password" id="password" placeholder="비밀번호" style="
-                        background-color: #1e1e1e;
-                        color: #00ff00;
-                        border: 1px solid #00ff00;
-                        padding: 8px;
-                        width: 200px;
-                        margin-bottom: 10px;
-                        border-radius: 3px;
-                    ">
+                <div>
+                    <input type="password" id="password" placeholder="비밀번호">
                 </div>
-                <button type="button" onclick="login()" style="
-                    background-color: #00ff00;
-                    color: #000;
-                    padding: 8px 20px;
-                    border: none;
-                    border-radius: 3px;
-                    cursor: pointer;
-                ">로그인</button>
+                <button type="button" onclick="login()">로그인</button>
             </form>
-            <div id="downloadSection" style="
-                display: none;
-                background-color: #2a2a2a;
-                padding: 20px;
-                border-radius: 5px;
-                margin: 10px 0;
-            ">
-                <a href="./download/UU24encode.txt" download class="download-button" style="
-                    background-color: #00ff00;
-                    color: #000;
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    display: inline-block;
-                ">파일 다운로드</a>
+            <div id="downloadSection">
+                <a href="./download/UU24encode.txt" download class="download-button">파일 다운로드</a>
             </div>
         </div>
         <p>해독된 사용자 패스워드를 입력하세요:</p>
-        <input type="text" id="userInput" placeholder="해독된 플래그 입력" style="
-            background-color: #2a2a2a;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 8px;
-            width: 200px;
-            margin-bottom: 10px;
-            border-radius: 3px;
-            text-align: center;
-        ">
+        <input type="text" id="userInput" placeholder="해독된 플래그 입력">
         <div class="button-group">
             <button onclick="checkFlag()">제출</button>
         </div>
         <p id="result"></p>
     </div>
 
-    <script src="script24.min.js"></script>
+    <script src="question24.js"></script>
 </body>
 </html>

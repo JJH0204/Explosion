@@ -7,7 +7,7 @@ async function checkFlag() {
         const formData = new FormData();
         formData.append('action', 'checkFlag');
 
-        const response = await fetch('check_flag.php', {
+        const response = await fetch('question28.php', {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'

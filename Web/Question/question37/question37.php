@@ -13,7 +13,8 @@ $denyRules = [
     "deny icmp host 192.168.30.100 host 192.168.10.100 echo",
     "deny icmp host 192.168.30.100 host 192.168.10.100 echo-reply",
     "deny icmp 192.168.30.0 0.0.0.255 host 192.168.10.110 echo",
-    "deny icmp 192.168.30.0 0.0.0.255 host 192.168.10.110 echo-reply"
+    "deny icmp 192.168.30.0 0.0.0.255 host 192.168.10.110 echo-reply",
+    "deny tcp 192.168.30.0 0.0.0.255 host 192.168.10.110 eq www"
 ];
 
 // POST 데이터 가져오기
@@ -84,5 +85,5 @@ if (!empty($remainingPermitRules) || !empty($remainingDenyRules)) {
 }
 
 // 모든 검증이 통과된 경우 플래그 반환
-echo json_encode(["status" => "success", "flag" => "FLAG{ACL_CONFIGURATION_CORRECT}"]);
+echo json_encode(["status" => "success", "flag" => "flag{ACL_RULES_CORRECT}"]);
 ?>

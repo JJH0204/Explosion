@@ -24,6 +24,7 @@
 
         input {
             background-color: #2a2a2a;
+            border-radius: 3px;
             color: #00ff00;
             border: 1px solid #00ff00;
             padding: 10px;
@@ -39,6 +40,8 @@
             padding: 10px 20px;
             cursor: pointer;
             margin-top: 20px;
+            font-weight: bold;
+            border-radius: 5px;
         }
 
         button:hover {
@@ -65,7 +68,7 @@
             <p>1) DLLMain의 주소는 무엇인가?</p>
             <input type="text" id="dllMainAddr" placeholder="예: 0x10001000">
             
-            <p>2) 0x10001757 주소에 위치한 gethostbyname 호출을 <br>보면 어떤 주소로 DNS 요청이 이루어지는가?</p>
+            <p>2) 0x10001757 주소에 위치한 gethostbyname 호출을 보면 <br>어떤 주소로 DNS 요청이 이루어지는가?</p>
             <input type="text" id="dnsRequest" placeholder="도메인 주소 입력">
         </div>
 

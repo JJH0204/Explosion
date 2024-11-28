@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             messageElement.classList.add('show');
             addHistoryRecord(timeTaken, true);
             
-            fetch('process39.php', {
+            fetch('question39.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

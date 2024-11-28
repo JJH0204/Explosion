@@ -16,7 +16,7 @@
         .container {
             margin: 0 auto;
             padding: 20px;
-            max-width: 700px;
+            max-width: 600px;
             background-color: #1e1e1e;
             border: 1px solid #00ff00;
             border-radius: 5px;
@@ -24,45 +24,28 @@
 
         .character-grid {
             display: grid;
-            grid-template-columns: repeat(20, 30px);
-            gap: 5px;
+            grid-template-columns: repeat(20, 25px);
+            gap: 3px;
             justify-content: center;
-            margin: 20px 0;
-            max-width: 700px;
-            overflow: hidden;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
         }
 
         .character {
-            background-color: #2a2a2a;
+            background-color: #1e1e1e;
             color: #00ff00;
             border: 1px solid #00ff00;
-            font-size: 1em;
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .character:hover {
-            background-color: #33ff99;
-        }
-
-        .correct {
-            background-color: #007bff !important;
-            color: #ffffff;
-        }
-
-        .hint {
-            background-color: #ffff00 !important;
-            color: #000 !important;
-        }
-
-        .wrong {
-            background-color: #ff0000 !important;
-            color: #ffffff;
+            border-radius: 3px;
+            font-size: 0.9em;
         }
 
         button {
@@ -72,25 +55,25 @@
             padding: 10px 20px;
             cursor: pointer;
             margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
         }
 
         button:hover {
             background-color: #33ff99;
         }
 
-        #result {
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-
         #timer {
-            font-size: 1.2em;
-            margin-top: 10px;
+            background-color: #2a2a2a;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
         }
     </style>
 </head>
 <body>
-    <h1>O 찾기 게임</h1>
+    <h1>O Finder Game</h1>
     <div class="container">
         <p>아래 0들 사이에서 <b>O</b>를 찾으세요!</p>
         <div id="timer">남은 시간: <span id="timeLeft">20</span>초</div>

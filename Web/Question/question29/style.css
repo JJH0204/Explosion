@@ -80,8 +80,9 @@ body {
     padding: 10px 20px;
     background-color: #2a2a2a;
     color: #00ff00;
-    border: 1px solid #00ff00;
+    border: 5px solid #00ff00;
     cursor: pointer;
+    font-weight: bold;
 }
 
 #game-start {
@@ -91,9 +92,10 @@ body {
     transform: translate(-50%, -50%);
     background-color: #1e1e1e;
     padding: 20px;
-    border: 2px solid #00ff00;
+    border: 5px solid #00ff00;
     text-align: center;
     z-index: 1000;
+    font-weight: bold;
 }
 
 #start-btn {
@@ -101,8 +103,9 @@ body {
     padding: 10px 20px;
     background-color: #2a2a2a;
     color: #00ff00;
-    border: 1px solid #00ff00;
+    border: 5px solid #00ff00;
     cursor: pointer;
+    font-weight: bold;
 }
 
 #result-div {

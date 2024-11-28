@@ -7,28 +7,56 @@
     <style>
         body {
             background-color: #121212;
-            color: #fff;
-            font-family: Arial, sans-serif;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
             text-align: center;
+            padding: 20px;
             margin: 0;
-            padding: 0;
+            min-height: 100vh;
         }
+
+        .container {
+            margin: 40px auto 0;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
         canvas {
             display: block;
             margin: 20px auto;
-            background-color: #1e1e1e;
-            border: 2px solid #00ff00;
+            background-color: #2a2a2a;
+            border: 1px solid #00ff00;
         }
+
         #score {
             font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        #result {
+            width: 400px;
+            margin: 20px auto;
+            font-size: 1.2em;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #00ff00;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>지렁이 게임</h1>
-    <p id="score">점수: 0</p>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div id="result" style="margin-top: 20px; font-size: 1.2em;"></div>
+    <div class="container">
+        <h1>Snake Game</h1>
+        <p id="score">point: 0</p>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="result"></div>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");

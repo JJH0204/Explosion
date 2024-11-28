@@ -27,10 +27,27 @@
             color: #00ff00;
             border: 1px solid #00ff00;
             padding: 10px;
-            width: 80%;
-            margin-bottom: 10px;
+            width: 60%;
+            height: 20px;
+            margin: 10px auto;
+            border-radius: 5px;
             resize: none;
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        input {
+            display: block;
+            width: 30%;
+            margin: 10px auto;
+            padding: 10px;
             text-align: center;
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
         }
 
         button {
@@ -39,6 +56,8 @@
             border: none;
             padding: 10px 20px;
             cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
         }
 
         button:hover {
@@ -49,74 +68,10 @@
             margin-top: 20px;
             font-size: 1.2em;
         }
-
-        .ssh-info {
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #1e1e1e;
-        border: 1px solid #00ff00;
-        border-radius: 5px;
-        max-width: 600px;
-    }
-
-    .putty-info {
-        margin-top: 20px;
-        text-align: left;
-        padding: 15px;
-        background-color: #2a2a2a;
-        border-radius: 5px;
-    }
-
-    .putty-info ol {
-        margin-left: 20px;
-        padding-left: 20px;
-    }
-
-    .putty-info li {
-        margin: 5px 0;
-    }
-
-    button {
-        background-color: #00ff00;
-        color: #000;
-        border: none;
-        padding: 10px 20px;
-        margin: 10px 0;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-    button:hover {
-        background-color: #33ff99;
-    }
-
-    .command {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 10px 0;
-    }
-
-    code {
-        background-color: #2a2a2a;
-        padding: 5px 10px;
-        border-radius: 3px;
-    }
-
-    input {
-        background-color: #2a2a2a !important;
-        color: #00ff00 !important;
-    }
-
-    input:focus {
-        background-color: #2a2a2a !important;
-        color: #00ff00 !important;
-        outline: none;
-    }
     </style>
 </head>
 <body>
-    <h1>Cryptanalysis Challenge</h1>
+    <h1>Cryptanalysis Challenge 1</h1>
     <div class="container">
         <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
         <textarea id="cipherText" readonly style="width: 50%; text-align: center;">8f6b1ecc7d7c0377c707ec6913cbbc3d</textarea>

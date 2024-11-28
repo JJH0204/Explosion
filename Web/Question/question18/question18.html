@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>기본 서브넷팅 문제</title>
+    <title>Challenge 18: Basic Subnetting</title>
     <style>
         body {
             background-color: #121212;
@@ -11,10 +11,12 @@
             font-family: 'Courier New', monospace;
             text-align: center;
             padding: 20px;
+            margin: 0;
+            min-height: 100vh;
         }
 
         .container {
-            margin: 0 auto;
+            margin: 40px auto 0;
             padding: 20px;
             max-width: 600px;
             background-color: #1e1e1e;
@@ -29,7 +31,7 @@
             padding: 10px;
             width: 80%;
             margin-bottom: 10px;
-            border-radius: 3px;
+            border-radius: 5px;
         }
 
         .group {
@@ -43,7 +45,8 @@
             padding: 10px 20px;
             cursor: pointer;
             margin-top: 20px;
-            border-radius: 3px;
+            font-weight: bold;
+            border-radius: 5px;
         }
 
         button:hover {
@@ -54,10 +57,14 @@
             margin-top: 20px;
             font-size: 1.2em;
         }
+
+        h3 {
+            margin: 30px 0 15px 0;
+        }
     </style>
 </head>
 <body>
-    <h1>기본 서브넷팅 문제</h1>
+    <h1>Basic Subnetting Challenge</h1>
     <div class="container">
         <p>네트워크 <b>192.168.1.0/24</b>을 동일한 크기의 4개 서브넷으로 나누세요.</p>
 
@@ -96,7 +103,7 @@
                 host4: document.getElementById('host4').value.trim()
             };
 
-            const response = await fetch("check_answers.php", {
+            const response = await fetch("question18.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)

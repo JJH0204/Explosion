@@ -28,16 +28,19 @@
             border: 1px solid #00ff00;
             padding: 10px;
             width: 80%;
-            margin-bottom: 10px;
+            margin: 20px 0 10px 0;
             border-radius: 3px;
+            text-align: center;
         }
 
         button {
             background-color: #00ff00;
             color: #000;
-            border: none;
+            border: 1px solid #00ff00;
             padding: 10px 20px;
             cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
         }
 
         button:hover {
@@ -49,22 +52,26 @@
             font-size: 1.2em;
         }
 
-        .hint {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #aaaaaa;
-            background-color: #2a2a2a;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
         .ssh-info {
             margin: 20px auto;
             padding: 20px;
-            background-color: #1e1e1e;
+            background-color: #2a2a2a;
             border: 1px solid #00ff00;
             border-radius: 5px;
             max-width: 600px;
+        }
+
+        .ssh-info h3 {
+            color: #00ff00;
+            margin-top: 0;
+        }
+
+        .ssh-info p {
+            margin: 10px 0;
+        }
+
+        .ssh-info span {
+            color: #00ff00;
         }
     </style>
 </head>
@@ -73,7 +80,7 @@
     <div class="container">
         <p>SSH 접속 후 올바른 플래그를 찾아 제출하세요.</p>
 
-        <input type="text" id="flagInput" placeholder="플래그를 입력하세요">
+        <input type="text" id="flagInput" placeholder="플래그를 입력하세요.">
         <button onclick="submitFlag()">제출</button>
         <p id="result"></p>
     </div>

@@ -2,13 +2,13 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>오늘의 단어 맞히기</title>
+    <title>Challenge 40: Today's Word Guessing</title>
     <style>
         body { background: #1a1a1a; color: #00ff00; font-family: monospace; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #00ff00; }
+        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 5px; border: 1px solid #00ff00; }
         .input-container { margin: 20px 0; display: flex; gap: 10px; }
-        input { flex: 1; padding: 10px; background: #1a1a1a; border: 1px solid #00ff00; color: #00ff00; font-family: monospace; }
-        button { padding: 10px 20px; background: #00ff00; border: none; color: #000; cursor: pointer; font-family: monospace; }
+        input { flex: 1; padding: 10px; background: #1a1a1a; border: 1px solid #00ff00; color: #00ff00; border-radius: 3px; }
+        button { padding: 10px 20px; background: #00ff00; border: 1px solid #00ff00; color: #000; cursor: pointer; border-radius: 5px; font-weight: bold; }
         button:hover { background: #33ff33; }
         #history { margin-top: 20px; border: 1px solid #00ff00; padding: 10px; min-height: 200px; background: #1a1a1a; }
         .history-item { margin: 5px 0; padding: 5px; border-bottom: 1px solid #333; }
@@ -82,7 +82,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>오늘의 단어 맞히기</h1>
+        <h1>Today's Word Guessing Challenge</h1>
         <div class="input-container">
             <input type="text" id="wordInput" placeholder="단어를 입력하세요">
             <button onclick="checkWord()">확인</button>
@@ -101,7 +101,8 @@
             </header>
             <section>
                 <h2>게임 소개</h2>
-                <p>이 게임은 정답 단어를 추측하면서 의미적인 유사도를 점수로 알려줍니다. 유사도가 높은 단어를 기반으로 정답에 가까워질 수 있습니다.</p>
+                <p>이 게임은 정답 단어를 추측하면서 의미적인 유사도를 점수로 알려줍니다.</p>
+                <p>유사도가 높은 단어를 기반으로 정답에 가까워질 수 있습니다.</p>
             </section>
             <section>
                 <h2>정답 단어의 범위</h2>
@@ -111,19 +112,23 @@
             </section>
             <section>
                 <h2>유사도란?</h2>
-                <p>유사도는 추측한 단어와 정답 단어가 의미적으로 얼마나 비슷한지를 점수(-100에서 +100)로 나타냅니다. +이면서 숫자가 클수록 유사도가 크다고 이해하면 됩니다.</p>
-                <p>유사도 계산은 Common Crawl 및 Wikipedia 데이터를 기반으로 훈련된 FastText를 사용하며, 데이터 편향이 있을 수 있습니다.</p>
+                <p>유사도는 추측한 단어와 정답 단어가 의미적으로 얼마나 비슷한지를 점수(-100에서 +100)로 나타냅니다.</p>
+                <p>+이면서 숫자가 클수록 유사도가 크다고 이해하면 됩니다.</p>
+                <p>유사도 계산은 Common Crawl 및 Wikipedia 데이터를 기반으로 훈련된 FastText를 사용합니다.</p>
+                <p>데이터 편향이 있을 수 있습니다.</p>
             </section>
             <section>
                 <h2>유사도 높은 단어의 원리</h2>
-                <p>유사도는 철자가 아닌 의미 맥락을 기준으로 계산됩니다. 정답 단어와 같은 문장이나 문단에서 자주 사용되는 단어를 추측하는 것이 좋습니다.</p>
-                <p>예를 들어, '사랑'과 '증오'는 의미적으로 반대되지만 동일한 맥락에서 자주 언급될 수 있어 유사도가 비슷할 수 있습니다.</p>
+                <p>유사도는 철자가 아닌 의미 맥락을 기준으로 계산됩니다.</p>
+                <p>정답 단어와 같은 문장이나 문단에서 자주 사용되는 단어를 추측하는 것이 좋습니다.</p>
+                <p>'사랑'과 '증오'는 의미적으로 반대되지만 동일한 맥락에서 자주 언급될 수 있어 유사도가 비슷할 수 있습니다.</p>
                 <p>또한, 동음이의어를 고려해 정답 단어의 의미에 맞는 맥락을 유추해보세요.</p>
             </section>
             <section>
                 <h2>유사도를 더 잘 이해하려면?</h2>
                 <p>정답 단어를 맞힌 후에도 다른 추측 단어를 입력하여 유사도를 계속 확인할 수 있습니다.</p>
-                <p>정답 단어와 유사한 단어를 상위 1,000개 기준으로 확인하며, 유사도에 대한 이해를 높이고 추측 횟수를 줄이는 데 활용해 보세요.</p>
+                <p>정답 단어와 유사한 단어를 상위 1,000개 기준으로 확인할 수 있습니다.</p>
+                <p>유사도에 대한 이해를 높이고 추측 횟수를 줄이는 데 활용해 보세요.</p>
             </section>
         </div>
     </div>
@@ -205,7 +210,7 @@
 
         async function fetchGameData() {
             try {
-                const response = await fetch('get_data.php');
+                const response = await fetch('question40.php');
                 gameData = await response.json();
                 if (gameData.error) {
                     console.error('Error:', gameData.error);
@@ -223,7 +228,7 @@
             if (!input) return;
 
             try {
-                const response = await fetch(`get_data.php?word=${encodeURIComponent(input)}`);
+                const response = await fetch(`question40.php?word=${encodeURIComponent(input)}`);
                 const newData = await response.json();
                 
                 let result = null;

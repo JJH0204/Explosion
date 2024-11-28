@@ -455,7 +455,7 @@
             "markdownFile": "mk_37.md",
             "description": "This is the thirty-seventh challenge.",
             "link": "./Question/question37/question37.html",
-            "answer": "FLAG{ACL_RULES_CORRECT}",
+            "answer": "flag{ACL_RULES_CORRECT}",
             "category": "network",
             "difficulty": "advanced"
         },
