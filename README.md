@@ -22,14 +22,14 @@ Flame WarGame은 웹 보안 학습을 위한 실전형 워게임 플랫폼입니
 ## 프로젝트 구조
 ```
 Flame_WarGame/
-├── Web/                      # 웹 애플리케이션 루트
-│   ├── Question/            # 문제 파일들
-│   ├── assets/             # 정적 파일 (이미지, CSS, JS)
+├── Web/                   # 웹 애플리케이션 루트
+│   ├── Question/          # 문제 파일들
+│   ├── assets/            # 정적 파일 (이미지, CSS, JS)
 │   ├── data/              # 데이터 파일
 │   ├── index.html         # 로그인 페이지
 │   ├── flame.html         # 메인 페이지
 │   └── flameadmin.html    # 관리자 페이지
-└── setup_script/           # 환경 설정 스크립트 
+└── setup_script/          # 환경 설정 스크립트 
 ```
 
 ## 설치 및 실행
