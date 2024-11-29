@@ -11,9 +11,9 @@ header('Content-Type: application/json');
 ob_start();
 
 try {
-    $serverIP = 'localhost';
-    $DB_rootID = "admin";
-    $DB_rootPW = "flamerootpassword";
+    $serverIP = 'db';
+    $DB_rootID = "root";
+    $DB_rootPW = "rootpassword";
     $dbname = "flameDB";
 
     $ID = isset($_POST['ID']) ? $_POST['ID'] : null;

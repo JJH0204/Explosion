@@ -7,19 +7,20 @@
 session_start();
 header('Content-Type: application/json');
 
-$host = 'localhost';
+$host = 'db';
 $db = 'flameDB';
-$username = 'admin';
-$passwd = 'flamerootpassword';
+$username = 'root';
+$passwd = 'rootpassword';
 
 try {
     $conn = new mysqli($host, $username, $passwd, $db);
     if ($conn->connect_error) {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }
+    $conn->set_charset('utf8mb4');
 
     if (isset($_SESSION['nickname'])) {
-        $nickname = $_SESSION['nickname'];
+        $nickname = $_SESSION['nickname']
 
         // 먼저 전체 랭킹을 가져옴 (실시간 랭킹과 동일한 정렬 기준 사용)
         $rankQuery = "SELECT NICKNAME, SCORE, STAGE, RECOREDE_DATE 

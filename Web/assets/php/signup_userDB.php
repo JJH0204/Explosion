@@ -8,11 +8,11 @@ class SignupUserDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'userDB');
+        $this->conn = new mysqli('db', 'root', 'rootpassword', 'userDB');
         if ($this->conn->connect_error) {
             throw new Exception('userDB connection failed: ' . $this->conn->connect_error);
         }
-        $this->conn->set_charset('utf8');
+        $this->conn->set_charset('utf8mb4');
     }
 
     private function createNicknameTable($Nickname) {
@@ -42,13 +42,13 @@ class SignupUserDB {
         $escapedNickname = $this->conn->real_escape_string($Nickname);
 
         // 원래 비밀번호로 MySQL 사용자 생성
-        $createUserSql = "CREATE USER IF NOT EXISTS '$escapedID'@'localhost' IDENTIFIED BY 'firewalld'";
+        $createUserSql = "CREATE USER IF NOT EXISTS '$escapedID'@'db' IDENTIFIED BY 'firewalld'";
         if (!$this->conn->query($createUserSql)) {
             throw new Exception('Failed to create MySQL user: ' . $this->conn->error);
         }
 
         // 권한 부여
-        $grantSql = "GRANT UPDATE, SELECT ON userDB.`$escapedNickname` TO '$escapedID'@'localhost'";
+        $grantSql = "GRANT UPDATE, SELECT ON userDB.`$escapedNickname` TO '$escapedID'@'db'";
         if (!$this->conn->query($grantSql)) {
             throw new Exception('Failed to grant permissions: ' . $this->conn->error);
         }
@@ -63,7 +63,7 @@ class SignupUserDB {
         $escapedID = $this->conn->real_escape_string($ID);
         
         $this->conn->query("DROP TABLE IF EXISTS `$tableName`");
-        $this->conn->query("DROP USER IF EXISTS '$escapedID'@'localhost'");
+        $this->conn->query("DROP USER IF EXISTS '$escapedID'@'db'");
         $this->conn->query("FLUSH PRIVILEGES");
     }
 

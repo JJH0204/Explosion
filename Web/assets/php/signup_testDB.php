@@ -8,11 +8,11 @@ class SignupTestDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'flameDB');
+        $this->conn = new mysqli('db', 'root', 'rootpassword', 'flameDB');
         if ($this->conn->connect_error) {
             throw new Exception('flameDB connection failed: ' . $this->conn->connect_error);
         }
-        $this->conn->set_charset('utf8');
+        $this->conn->set_charset('utf8mb4');
     }
 
     private function checkDuplicateID($ID) {
@@ -80,4 +80,4 @@ class SignupTestDB {
             $this->conn->close();
         }
     }
-} 
+}
