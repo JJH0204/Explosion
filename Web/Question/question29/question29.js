@@ -261,7 +261,7 @@
                     if (compareWords(value, word.element.textContent)) {
                         gameContainer.removeChild(word.element);
                         words.splice(index, 1);
-                        score += 10;  // 맞춘 단어는 10점 증가
+                        score += pointsPerWord;  // 고정된 10점 대신 pointsPerWord 사용
                         scoreValue.textContent = score;
                         wordFound = true;
                         
@@ -271,7 +271,6 @@
                     }
                 });
 
-                // 틀린 단어를 입력했을 때의 처리는 compareWords 함수에서 처리됨
                 typingInput.value = '';
             }
         });

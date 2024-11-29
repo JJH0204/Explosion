@@ -8,7 +8,7 @@ $input = $data['input'] ?? '';
 if (strlen($input) === 36 && substr($input, 32, 4) === "BOFB") {
     echo json_encode([
         'status' => 'success',
-        'flag' => 'FLAG{buffer_overflow_challenge}'
+        'flag' => 'FLAG{advanced_buffer_overflow}'
     ]);
 } else {
     echo json_encode([

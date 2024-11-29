@@ -56,8 +56,8 @@ async function checkFlag(stage) {
 
 function downloadImage() {
     const link = document.createElement('a');
-    link.href = './ChallengeFiles/question30.png';
-    link.download = './ChallengeFiles/question30.png';
+    link.href = './ChallengeFile/question30.png';
+    link.download = './ChallengeFile/question30.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -65,8 +65,8 @@ function downloadImage() {
 
 function pcap() {
     const link = document.createElement('a');
-    link.href = './ChallengeFiles/xmas2011.pcap';
-    link.download = './ChallengeFiles/xmas2011.pcap';
+    link.href = './ChallengeFile/xmas2011.pcap';
+    link.download = './ChallengeFile/xmas2011.pcap';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

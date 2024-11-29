@@ -8,7 +8,26 @@ if (!isset($_SESSION['nickname'])) {
 }
 
 $host = 'localhost';
-$user = $_SESSION['nickname'];
+// flameDB에서 사용자 ID 조회
+$tempConn = new mysqli($host, 'admin', 'flamerootpassword', 'flameDB');
+if ($tempConn->connect_error) {
+    die(json_encode(['error' => '데이터베이스 연결 실패: ' . $tempConn->connect_error]));
+}
+
+// 사용자 ID 조회
+$nickname = $tempConn->real_escape_string($_SESSION['nickname']);
+$idQuery = "SELECT ID FROM ID_info WHERE NICKNAME='$nickname'";
+$result = $tempConn->query($idQuery);
+
+if (!$result || $result->num_rows === 0) {
+    $tempConn->close();
+    die(json_encode(['error' => '사용자 ID를 찾을 수 없습니다.']));
+}
+
+$user = $result->fetch_assoc()['ID'];
+$tempConn->close();
+
+// 기존 데이터베이스 연결
 $password = 'firewalld';
 $database = 'userDB';
 
@@ -23,7 +42,7 @@ $query = $_POST['query'] ?? '';
 
 if (!empty($query)) {
     // 현재 로그인한 사용자의 테이블 이름
-    $userTable = $_SESSION['user_id'];
+    $userTable = $_SESSION['nickname'];
     
     // SHOW DATABASES 쿼리 허용
     $cleanQuery = strtolower(trim(str_replace(';', '', $query)));

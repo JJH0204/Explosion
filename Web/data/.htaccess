@@ -1,0 +1,14 @@
+Options -Indexes
+Order deny,allow
+Deny from all
+
+# Allow access to browser source files only
+<FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico)$">
+    Allow from all
+</FilesMatch>
+
+# Prevent viewing of .htaccess and .json files
+<FilesMatch "\.(htaccess|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

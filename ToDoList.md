@@ -87,3 +87,12 @@ bak 디렉토리로 옮긴 파일은 추후 삭제 예정 + bak 주석 추가해
     assets/styles/etc, assets/styles/main,
     Qustion/test,]
 
+--------
+
+사용자 계정 조회할 때 아이디를 기준으로 조회 -> 25
+플래그 버그 수정 -> 13
+29번 버그 수정
+
+admin페이지에서 -> 25번 문제 SQL 오류
+solution 파일들 따로 옮긴 후 접근 제한
+config.json 파일 DB로 옮기기

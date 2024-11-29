@@ -237,7 +237,7 @@
             "markdownFile": "mk_15.md",
             "description": "This is the fifteenth challenge.",
             "link": "./Question/question15/question15.html",
-            "answer": "FLAG{hidden_with_lsb>",
+            "answer": "FLAG{hidden_with_lsb}",
             "category": "pwnable",
             "difficulty": "advanced"
         },

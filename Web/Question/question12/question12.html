@@ -233,6 +233,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateDisplay(0);
             getSharedNumber();  // URL 파라미터 확인
+
+            // 슬라이더의 방향키 조작 방지
+            slider.addEventListener('keydown', function(e) {
+                if(e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+                   e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 </body>
