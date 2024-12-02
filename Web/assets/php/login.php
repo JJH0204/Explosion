@@ -11,7 +11,7 @@ header('Content-Type: application/json');
 ob_start();
 
 try {
-    $serverIP = 'db';
+    $serverIP = 'localhost';
     $DB_rootID = "db_admin";
     $DB_rootPW = "flamerootpassword";
     $dbname = "flameDB";

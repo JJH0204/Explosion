@@ -7,7 +7,7 @@
 session_start();
 header('Content-Type: application/json');
 
-$host = 'db';
+$host = 'localhost';
 $db = 'flameDB';
 $username = 'db_admin';
 $passwd = 'flamerootpassword';

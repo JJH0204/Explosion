@@ -4,7 +4,7 @@
     - 랭킹 조회 용도
 */
 header('Content-Type: application/json');
-$host = '127.0.0.1';
+$host = 'localhost';
 $db = 'flameDB';
 $username = 'db_admin';
 $passwd = 'flamerootpassword';
