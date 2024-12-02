@@ -9,7 +9,7 @@ if (!isset($_SESSION['nickname'])) {
 
 $host = 'localhost';
 // flameDB에서 사용자 ID 조회
-$tempConn = new mysqli($host, 'admin', 'flamerootpassword', 'flameDB');
+$tempConn = new mysqli($host, 'db_admin', 'flamerootpassword', 'flameDB');
 if ($tempConn->connect_error) {
     die(json_encode(['error' => '데이터베이스 연결 실패: ' . $tempConn->connect_error]));
 }

@@ -70,14 +70,14 @@ CREATE TABLE `admin` (
 INSERT INTO `flame` (NICKNAME, FLAG) VALUES ('flame', 'FL4g{flame_15_R341_4dm1n}');
 INSERT INTO `admin` (NICKNAME, FLAG) VALUES ('admin', 'Fl4g{admin_15_f4k3_4dm1n}');
 
-CREATE USER `admin`@`localhost` identified by 'flamerootpassword';
+CREATE USER `db_admin`@`localhost` identified by 'flamerootpassword';
 GRANT ALL PRIVILEGES ON *.* TO 'db_admin'@'localhost';
 GRANT CREATE USER ON *.* TO 'db_admin'@'localhost';
 GRANT GRANT OPTION ON *.* TO 'db_admin'@'localhost';
 
 CREATE USER `flame`@`localhost` identified by 'firewalld';
 GRANT SELECT, UPDATE ON `userDB`.`flame` TO 'flame'@'localhost';
-CREATE USER `flame_admin`@`localhost` identified by 'firewalld';
+CREATE USER `admin`@`localhost` identified by 'firewalld';
 GRANT SELECT, UPDATE ON `userDB`.`admin` TO 'flame_admin'@'localhost';
 
 FLUSH PRIVILEGES;

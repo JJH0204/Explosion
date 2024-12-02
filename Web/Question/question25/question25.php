@@ -7,11 +7,11 @@ if (!isset($_SESSION['nickname']) || !isset($_POST['flag'])) {
 }
 
 $host = 'localhost';
-$user = 'admin';
+$user = 'db_admin';
 $password = 'flamerootpassword';
 $database = 'userDB';
 
-// admin 계정으로 데이터베이스 연결
+// db_admin 계정으로 데이터베이스 연결
 $conn = new mysqli($host, $user, $password, $database);
 
 if ($conn->connect_error) {
