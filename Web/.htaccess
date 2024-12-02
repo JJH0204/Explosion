@@ -16,3 +16,8 @@ AddDefaultCharset UTF-8
 
 # 모든 요청에 대해 접근 허용
 Require all granted
+
+# 확장자 숨기기
+RewriteEngine On 
+RewriteRule ^index$ index.html [L]
+RewriteRule ^flame$ flame.html [L]

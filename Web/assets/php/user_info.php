@@ -20,7 +20,7 @@ try {
     $conn->set_charset('utf8mb4');
 
     if (isset($_SESSION['nickname'])) {
-        $nickname = $_SESSION['nickname']
+        $nickname = $_SESSION['nickname'];
 
         // 먼저 전체 랭킹을 가져옴 (실시간 랭킹과 동일한 정렬 기준 사용)
         $rankQuery = "SELECT NICKNAME, SCORE, STAGE, RECOREDE_DATE 
