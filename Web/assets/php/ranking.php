@@ -6,7 +6,7 @@
 header('Content-Type: application/json');
 $host = '127.0.0.1';
 $db = 'flameDB';
-$username = 'admin';
+$username = 'db_admin';
 $passwd = 'flamerootpassword';
 $charset = 'utf8mb4';
 

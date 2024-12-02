@@ -1,7 +1,7 @@
 <?php
 $passwords = [
     'flame' => 'flamerootpassword',
-    'flame_admin' => 'flamerootpassword'
+    'admin' => 'flamerootpassword'
 ];
 
 foreach ($passwords as $id => $password) {

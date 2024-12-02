@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
 $serverIP = 'localhost';
-$DB_rootID = "admin";
+$DB_rootID = "db_admin";
 $DB_rootPW = "flamerootpassword";
 $dbname = "flameDB";
 

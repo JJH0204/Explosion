@@ -9,7 +9,7 @@ if (!isset($_SESSION['nickname']) || !isset($_POST['flag'])) {
 
 try {
     // admin 권한으로 직접 userDB에 연결
-    $conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'userDB');
+    $conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'userDB');
     if ($conn->connect_error) {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }

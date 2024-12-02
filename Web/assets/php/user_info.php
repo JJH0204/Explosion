@@ -9,8 +9,8 @@ header('Content-Type: application/json');
 
 $host = 'db';
 $db = 'flameDB';
-$username = 'root';
-$passwd = 'rootpassword';
+$username = 'db_admin';
+$passwd = 'flamerootpassword';
 
 try {
     $conn = new mysqli($host, $username, $passwd, $db);

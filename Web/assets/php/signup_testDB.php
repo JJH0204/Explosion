@@ -8,7 +8,7 @@ class SignupTestDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('db', 'root', 'rootpassword', 'flameDB');
+        $this->conn = new mysqli('db', 'db_admin', 'flamerootpassword', 'flameDB');
         if ($this->conn->connect_error) {
             throw new Exception('flameDB connection failed: ' . $this->conn->connect_error);
         }

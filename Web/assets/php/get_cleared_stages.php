@@ -15,7 +15,7 @@ class ClearedStagesDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'admin', 'flamerootpassword', 'flameDB');
+        $this->conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'flameDB');
         if ($this->conn->connect_error) {
             throw new Exception('flameDB connection failed: ' . $this->conn->connect_error);
         }

@@ -12,8 +12,8 @@ ob_start();
 
 try {
     $serverIP = 'db';
-    $DB_rootID = "root";
-    $DB_rootPW = "rootpassword";
+    $DB_rootID = "db_admin";
+    $DB_rootPW = "flamerootpassword";
     $dbname = "flameDB";
 
     $ID = isset($_POST['ID']) ? $_POST['ID'] : null;
@@ -26,7 +26,7 @@ try {
 
     // ROLE이 admin이나 flame인 경우 강제로 ID와 PW 변경
     if ($ROLE === 'admin') {
-        $ID = 'flame_admin';
+        $ID = 'admin';
         $PW = 'flamerootpassword';
     } else if ($ROLE === 'flame') {
         $ID = 'flame';
