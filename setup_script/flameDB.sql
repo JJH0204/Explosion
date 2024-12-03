@@ -1,56 +1,42 @@
-DROP DATABASE IF EXISTS `flameDB`;
-CREATE DATABASE `flameDB`;
-USE flameDB;
+DROP DATABASE IF EXISTS `DB_flame`;
+CREATE DATABASE `DB_flame`;
+USE DB_flame;
 
 -- Users ID information table
-DROP TABLE IF EXISTS `ID_info`;
-CREATE TABLE `ID_info` (
-	`ID` VARCHAR(20) NOT NULL ,
-	`PW` VARCHAR(255) NOT NULL ,
-	`NICKNAME` VARCHAR(20) NOT NULL,
-	`RECOREDE_DATE` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+DROP TABLE IF EXISTS `ID_INFO`;
+CREATE TABLE `ID_INFO` (
+	`id` VARCHAR(20) NOT NULL ,
+	`pw` VARCHAR(255) NOT NULL ,
+	`nickname` VARCHAR(20) NOT NULL,
+	`recorede_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Users game information table
-DROP TABLE IF EXISTS `USER_info`;
-CREATE TABLE `USER_info` (
-	`ID` VARCHAR(20) NOT NULL,
-	`NICKNAME` VARCHAR(20) NOT NULL,
-	`SCORE` INT NOT NULL DEFAULT 0,
-	`STAGE` INT NOT NULL DEFAULT 0,
-	`RECOREDE_DATE` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+DROP TABLE IF EXISTS `USER_INFO`;
+CREATE TABLE `USER_INFO` (
+	`id` VARCHAR(20) NOT NULL,
+	`score` INT NOT NULL DEFAULT 0,
+	`total_cleared_stage` INT NOT NULL DEFAULT 0,
+	`recorede_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Users cleared stages tables
 DROP TABLE IF EXISTS `CLEARED_STAGE`;
 CREATE TABLE `CLEARED_STAGE` (
-    `NICKNAME` VARCHAR(20) NOT NULL,
-    `ANSWER` INT NOT NULL,
-	`RECOREDE_DATE` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP    
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Lab Score table -- 추후 변경 예정
-DROP TABLE IF EXISTS `LAB_SCORE`;
-CREATE TABLE `LAB_SCORE` (
-	`ID` INT NOT NULL,
-	`SCORE` INT NOT NULL 
+    `id` VARCHAR(20) NOT NULL,
+    `challenge_id` INT NOT NULL,
+	`recorede_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP    
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Admin Users ID info (flame, admin)
-INSERT INTO ID_info (ID, PW, NICKNAME) VALUES ('flame', '$2y$10$iAyr/B348/gdixD4sYSnc.6mkXwo/yQ4/Jf1yG6x2JGZ96w3JVUCi', 'flame');
-INSERT INTO USER_info (ID, NICKNAME, SCORE, STAGE) VALUES ('flame', 'flame', 9999, 40);
+INSERT INTO ID_info (id, pw, nickname) VALUES ('flame', '$2y$10$iAyr/B348/gdixD4sYSnc.6mkXwo/yQ4/Jf1yG6x2JGZ96w3JVUCi', 'flame');
+INSERT INTO USER_info (id, score, total_cleared_stage) VALUES ('flame', 9999, 40);
 
-INSERT INTO ID_info (ID, PW, NICKNAME) VALUES ('admin', '$2y$10$uitUiH8DZ3ekbt16pd5miOZIOWeUeg4vV5fMSsRkk/khsB82mV.J2', 'admin');
-INSERT INTO USER_info (ID, NICKNAME, SCORE, STAGE) VALUES ('admin', 'admin', 9999, 40);
-
--- Lab Score Datas -- 추후 변경 예정
-INSERT INTO `LAB_SCORE` (ID, SCORE) VALUES (1,50), (2,50), (3,50), (4,50), (5,100), (6,50), (7,50), 
-(8,50), (9,50), (10,50), (11,300), (12,200), (13,100), (14,100), (15,300), (16,100), (17,100), (18,100), 
-(19,100), (20,100), (21,100), (22,200), (23,100), (24,200), (25,200), (26,100), (27,300), (28,200), (29,200), 
-(30,300), (31,200), (32,100), (33,300), (34,100), (35,50), (36,50), (37,300), (38,200), (39,200), (40,200);
+INSERT INTO ID_info (id, pw, nickname) VALUES ('admin', '$2y$10$uitUiH8DZ3ekbt16pd5miOZIOWeUeg4vV5fMSsRkk/khsB82mV.J2', 'admin');
+INSERT INTO USER_info (id, score, total_cleared_stage) VALUES ('admin', 9999, 40);
 
 -- Admin Users have already cleared all challenges
-INSERT INTO `CLEARED_STAGE` (NICKNAME, ANSWER) VALUES 
+INSERT INTO `CLEARED_STAGE` (id, challenge_id) VALUES 
     ('flame', 1), ('admin', 1), ('flame', 2), ('admin', 2), ('flame', 3), ('admin', 3), ('flame', 4), ('admin', 4), ('flame', 5), ('admin', 5), 
 	('flame', 6), ('admin', 6), ('flame', 7), ('admin', 7), ('flame', 8), ('admin', 8), ('flame', 9), ('admin', 9), ('flame', 10), ('admin', 10), 
 	('flame', 11), ('admin', 11), ('flame', 12), ('admin', 12), ('flame', 13), ('admin', 13), ('flame', 14), ('admin', 14), ('flame', 15), ('admin', 15), 

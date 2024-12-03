@@ -1,19 +1,19 @@
-DROP DATABASE IF EXISTS `challengeDB`;
-CREATE DATABASE `challengeDB`;
-USE challengeDB;
+DROP DATABASE IF EXISTS `DB_challenge`;
+CREATE DATABASE `DB_challenge`;
+USE DB_challenge;
 
 -- Lab Information table
-DROP TABLE IF EXISTS `CHALLENGE_info`;
+DROP TABLE IF EXISTS `CHALLENGE_INFO`;
 CREATE TABLE `CHALLENGE_info` (
-	`ID` INT NOT NULL,
-	`SCORE` INT NOT NULL,
-    `TITLE` VARCHAR(50) NOT NULL,
-    `CATEGORY` VARCHAR(100) NOT NULL,
-    `DIFFICULTY` VARCHAR(20) NOT NULL,
-    `ANSWER` VARCHAR(50)
+	`challenge_id` INT NOT NULL,
+	`challenge_score` INT NOT NULL,
+    `challenge_title` VARCHAR(50) NOT NULL,
+    `challenge_category` VARCHAR(100) NOT NULL,
+    `challenge_defficulty` VARCHAR(20) NOT NULL,
+    `challenge_answer` VARCHAR(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `CHALLENGE_info` (ID, SCORE, TITLE, CATEGORY, DIFFICULTY, ANSWER) VALUES 
+INSERT INTO `CHALLENGE_info` (challenge_id, challenge_score, challenge_title, challenge_category, challenge_defficulty, challenge_answer) VALUES 
 (1,50,"Basic Wargame","cryptology","basic","flame1answer"), 
 (2,50,"HTML source code analysis","cryptology,reversing","basic","FLAG{source_code_analysis}"), 
 (3,50,"404 Not Found","cryptology,reversing","basic","FLAG{base64_decode_success}"), 
