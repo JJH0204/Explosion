@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 
 // POST 데이터 받기
 $input = file_get_contents("php://input");

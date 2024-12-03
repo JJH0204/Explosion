@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+// header('Content-Type: application/json');
 
 $CORRECT_IP = "211.229.100.142";
 $FLAG = "flag{find_flame_real_ip}";

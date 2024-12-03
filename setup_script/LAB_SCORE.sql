@@ -1,0 +1,56 @@
+DROP DATABASE IF EXISTS `challengeDB`;
+CREATE DATABASE `challengeDB`;
+USE challengeDB;
+
+-- Lab Information table
+DROP TABLE IF EXISTS `CHALLENGE_info`;
+CREATE TABLE `CHALLENGE_info` (
+	`ID` INT NOT NULL,
+	`SCORE` INT NOT NULL,
+    `TITLE` VARCHAR(50) NOT NULL,
+    `CATEGORY` VARCHAR(100) NOT NULL,
+    `DIFFICULTY` VARCHAR(20) NOT NULL,
+    `ANSWER` VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `CHALLENGE_info` (ID, SCORE) VALUES 
+(1,50), 
+(2,50), 
+(3,50), 
+(4,50), 
+(5,100), 
+(6,50), 
+(7,50), 
+(8,50), 
+(9,50), 
+(10,50), 
+(11,300), 
+(12,200), 
+(13,100), 
+(14,100), 
+(15,300), 
+(16,100), 
+(17,100), 
+(18,100), 
+(19,100), 
+(20,100), 
+(21,100), 
+(22,200), 
+(23,100), 
+(24,200), 
+(25,200), 
+(26,100), 
+(27,300), 
+(28,200), 
+(29,200), 
+(30,300), 
+(31,200), 
+(32,100), 
+(33,300), 
+(34,100), 
+(35,50), 
+(36,50), 
+(37,300), 
+(38,200), 
+(39,200), 
+(40,200);
