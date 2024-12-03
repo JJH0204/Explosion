@@ -37,6 +37,11 @@ function serveHtml() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Challenge 24: Decoding</title>
     <link rel="stylesheet" href="style24.css">
+    <style>
+        #downloadSection, #flagForm {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Decoding</h1>
@@ -94,6 +99,19 @@ function serveHtml() {
             });
 
             return false;
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 로그인 정보 확인
+            if (username === 'admin' && password === 'adminpass') {
+                document.getElementById('downloadSection').style.display = 'block'; // 다운로드 섹션 표시
+                document.getElementById('flagForm').style.display = 'block'; // 플래그 입력란 표시
+            } else {
+                document.getElementById('loginMessage').textContent = '로그인 실패: 잘못된 사용자 이름 또는 비밀번호';
+            }
         }
     </script>
 </body>
