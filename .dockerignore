@@ -1,8 +1,0 @@
-.git
-.gitignore
-README.md
-bak/
-*.tgz
-docker-compose.yml
-Dockerfile
-.dockerignore
