@@ -1,29 +1,414 @@
 <?php
-header('Content-Type: application/json');
-
-// CSRF 방지
 session_start();
-if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
-    die(json_encode(['success' => false, 'message' => 'Invalid request']));
-}
 
-// POST 요청 확인
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die(json_encode(['success' => false, 'message' => 'Invalid method']));
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 액션 확인
+    $action = $_POST['action'] ?? '';
 
-// 액션 확인
-$action = $_POST['action'] ?? '';
-
-if ($action === 'getFlag') {
-    echo json_encode([
-        'success' => true,
-        'flag' => 'Flag{BOMB_game}'
-    ]);
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid action'
-    ]);
+    if ($action === 'getFlag') {
+        echo json_encode([
+            'success' => true,
+            'flag' => 'Flag{BOMB_game}'
+        ]);
+        exit; 
+    } else {
+        die(json_encode(['success' => false, 'message' => 'Invalid action']));
+    }
 }
-?> 
+?>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge 26: Minesweeper</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            margin: 40px auto 0;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        #minesweeper {
+            display: inline-grid;
+            grid-template-columns: repeat(5, 50px);
+            gap: 2px;
+            padding: 10px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #3a3a3a;
+            border: 1px solid #00ff00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .cell.revealed {
+            background-color: #1e1e1e;
+        }
+
+        .cell.mine {
+            background-color: #ff4444;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        #timer {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .hidden-search {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .hidden-search input {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 30%;
+            margin: 10px auto;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .hidden-search.active {
+            display: block;
+        }
+
+        .cell.mine-hint {
+            background-color: #3a3a3a;
+            position: relative;
+        }
+
+        .cell.mine-hint::after {
+            content: '💣';
+            position: absolute;
+            opacity: 0.3;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minesweeper</h1>
+        <div id="timer">시간: 0초</div>
+        <div id="minesweeper"></div>
+        <div class="button-group">
+            <button onclick="resetGame()">새 게임</button>
+          
+        </div>
+        <div id="hiddenSearch" class="hidden-search">
+            <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+        </div>
+        <div id="result"></div>
+        <div id="overlay" class="overlay"></div>
+        <div id="victoryPopup" class="popup">
+            <div id="flagContainer" class="flag"></div>
+            <button onclick="closePopup()">닫기</button>
+        </div>
+    </div>
+
+    <script>
+        const GRID_SIZE = 5;
+        const MINE_COUNT = 5;
+        let grid = [];
+        let revealed = [];
+        let gameStarted = false;
+        let gameEnded = false;
+        let timer;
+        let seconds = 0;
+
+        // 히든 검색창 활성화 상태
+        let isSearchEnabled = false;
+
+        let adminModeActive = false;  // 관리자 모드 상태 추적
+        let pendingAdminCommand = ''; // 입력된 명령어 저장
+
+        function createGrid() {
+            grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+            revealed = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(false));
+            
+            // 지뢰 배치
+            let minesPlaced = 0;
+            while (minesPlaced < MINE_COUNT) {
+                const x = Math.floor(Math.random() * GRID_SIZE);
+                const y = Math.floor(Math.random() * GRID_SIZE);
+                if (grid[y][x] !== -1) {
+                    grid[y][x] = -1;
+                    minesPlaced++;
+                }
+            }
+
+            // 숫자 계산
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    if (grid[y][x] !== -1) {
+                        grid[y][x] = countAdjacentMines(x, y);
+                    }
+                }
+            }
+        }
+
+        function countAdjacentMines(x, y) {
+            let count = 0;
+            for (let dy = -1; dy <= 1; dy++) {
+                for (let dx = -1; dx <= 1; dx++) {
+                    const newY = y + dy;
+                    const newX = x + dx;
+                    if (newY >= 0 && newY < GRID_SIZE && newX >= 0 && newX < GRID_SIZE) {
+                        if (grid[newY][newX] === -1) count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        function revealCell(x, y) {
+            if (!gameStarted) {
+                startTimer();
+                gameStarted = true;
+            }
+
+            if (gameEnded || revealed[y][x]) return;
+
+            revealed[y][x] = true;
+            const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+            cell.classList.add('revealed');
+            cell.classList.remove('mine-hint');  // 힌트 제거
+
+            if (grid[y][x] === -1) {
+                // 지뢰 밟음
+                gameOver(false);
+                cell.classList.add('mine');
+                cell.textContent = '💣';
+            } else {
+                // 숫자 표시
+                if (grid[y][x] > 0) {
+                    cell.textContent = grid[y][x];
+                } else {
+                    // 빈 칸이면 주변 셀도 공개
+                    for (let dy = -1; dy <= 1; dy++) {
+                        for (let dx = -1; dx <= 1; dx++) {
+                            const newY = y + dy;
+                            const newX = x + dx;
+                            if (newY >= 0 && newY < GRID_SIZE && newX >= 0 && newX < GRID_SIZE) {
+                                if (!revealed[newY][newX]) {
+                                    revealCell(newX, newY);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            checkWin();
+        }
+
+        function checkWin() {
+            let unrevealedSafeCells = false;
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    if (!revealed[y][x] && grid[y][x] !== -1) {
+                        unrevealedSafeCells = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!unrevealedSafeCells) {
+                gameOver(true);
+            }
+        }
+
+        async function gameOver(won) {
+            gameEnded = true;
+            clearInterval(timer);
+            const resultElement = document.getElementById('result');
+            
+            if (won) {
+                resultElement.style.color = '#00ff7f';
+                resultElement.textContent = `승리! 걸린 시간: ${seconds}초`;
+                try {
+                    const response = await fetch('question26.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: 'action=getFlag'
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        resultElement.innerHTML = `승리! 걸린 시간: ${seconds}초<br>플래그: ${data.flag}`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching flag:', error);
+                    resultElement.textContent = '플래그를 가져오는데 실패했습니다.';
+                }
+            } else {
+                resultElement.style.color = '#ff4d4d';
+                resultElement.textContent = '게임 오버!';
+                revealAllMines();
+            }
+        }
+
+        function revealAllMines() {
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    if (grid[y][x] === -1) {
+                        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                        cell.classList.add('revealed', 'mine');
+                        cell.textContent = '💣';
+                    }
+                }
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                seconds++;
+                document.getElementById('timer').textContent = `시간: ${seconds}초`;
+            }, 1000);
+        }
+
+        function resetGame() {
+            clearInterval(timer);
+            seconds = 0;
+            document.getElementById('timer').textContent = '시간: 0초';
+            document.getElementById('result').textContent = '';
+            gameStarted = false;
+            gameEnded = false;
+            adminModeActive = false;  // 관리자 모드 초기화
+            createGrid();
+            renderGrid();
+            
+            // 검색창 초기화
+            document.getElementById('searchInput').value = '';
+            hideMineHints();
+        }
+
+        function renderGrid() {
+            const container = document.getElementById('minesweeper');
+            container.innerHTML = '';
+            
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.x = x;
+                    cell.dataset.y = y;
+                    cell.addEventListener('click', () => revealCell(x, y));
+                    container.appendChild(cell);
+                }
+            }
+        }
+
+        // 키 입력 감지
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + Shift + F를 누르면 히든 검색창 토글
+            if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+                e.preventDefault(); // 기본 검색 동작 방지
+                toggleHiddenSearch();
+            }
+        });
+
+        // 히든 검색창 토글 함수
+        function toggleHiddenSearch() {
+            const searchDiv = document.getElementById('hiddenSearch');
+            isSearchEnabled = !isSearchEnabled;
+            
+            if (isSearchEnabled) {
+                searchDiv.classList.add('active');
+                document.getElementById('searchInput').focus();
+            } else {
+                searchDiv.classList.remove('active');
+            }
+        }
+
+        // 검색 입력 이벤트 수정 - 키 입력 감지로 변경
+        document.getElementById('searchInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // 기본 엔터 동작 방지
+                const searchTerm = this.value.toLowerCase();
+                
+                // adminmod 입력 후 엔터 시 지뢰 위치 표시
+                if (searchTerm === 'adminmode') {
+                    adminModeActive = true;
+                    showMineHints();
+                } else {
+                    adminModeActive = false;
+                    hideMineHints();
+                }
+            }
+        });
+
+        // 지뢰 힌트 표시 함수
+        function showMineHints() {
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    if (grid[y][x] === -1 && !revealed[y][x]) {
+                        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                        cell.classList.add('mine-hint');
+                    }
+                }
+            }
+        }
+
+        // 지뢰 힌트 숨기기 함수
+        function hideMineHints() {
+            const cells = document.querySelectorAll('.mine-hint');
+            cells.forEach(cell => {
+                cell.classList.remove('mine-hint');
+            });
+        }
+
+        // 게임 초기화
+        resetGame();
+    </script>
+</body>
+</html>

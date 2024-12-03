@@ -1,6 +1,4 @@
 <?php
-// header('Content-Type: application/json');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents("php://input"), true);
     
@@ -18,11 +16,139 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'message' => '잘못된 요청입니다.'
         ]);
     }
-} else {
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'message' => '잘못된 요청 방식입니다.'
-    ]);
-}
+    exit;
+} 
 ?> 
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge 5: FileHub</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        .panel {
+            text-align: left;
+            padding: 15px;
+            margin: 20px 0 30px 0;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #00ff00;
+        }
+
+        input,
+        textarea {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 95%;
+            margin: 20px 0 10px 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        button, .button-link {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 10px;
+            border-radius: 3px;
+        }
+
+        button:hover, .button-link:hover {
+            background-color: #33ff99;
+        }
+
+        #upload-result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 파일 업로드 input 스타일 개선 */
+        input[type="file"] {
+            background-color: #1e1e1e;
+            padding: 10px;
+            width: 95%;
+            margin: 10px 0;
+            border: 1px dashed #00ff00;
+            cursor: pointer;
+        }
+
+        input[type="file"]::-webkit-file-upload-button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>FileHub</h1>
+
+        <!-- 파일 업로드 -->
+        <div class="panel">
+            <h3>파일 업로드</h3>
+            <input type="file" id="file-upload">
+            <div class="button-group">
+                <button onclick="uploadFile()">업로드</button>
+                <a class="button-link" href="script.txt" target="_blank">script</a>
+            </div>
+            <div id="upload-result"></div>
+        </div>
+
+        <!-- 관리자 패널 -->
+        <div class="panel hidden" id="admin-panel">
+            <h3>관리자 패널</h3>
+            <div id="admin-content"></div>
+        </div>
+    </div>
+
+    <script src="question5.js"></script>
+</body>
+
+</html>

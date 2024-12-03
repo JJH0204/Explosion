@@ -1,45 +1,198 @@
 <?php
-header('Content-Type: application/json');
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('X-XSS-Protection: 1; mode=block');
-
-try {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // POST 데이터 받기
     $input = file_get_contents("php://input");
     $data = json_decode($input, true);
 
     if (!$data || !isset($data['score'])) {
-        throw new Exception('잘못된 입력입니다.');
+        echo json_encode([
+            'success' => false,
+            'message' => '잘못된 입력입니다.'
+        ]);
+        exit;
     }
 
     $score = intval($data['score']);
     
     // 점수 유효성 검사
     if ($score < 0 || $score > 10000) {
-        throw new Exception('유효하지 않은 점수입니다.');
+        echo json_encode([
+            'success' => false,
+            'message' => '유효하지 않은 점수입니다.'
+        ]);
+        exit;
     }
 
-    // 여기에 점수 저장 로직을 추가할 수 있습니다
-    // 예: 데이터베이스에 저장
-
+    // 100ms 미만일 경우 flag 추가
     $response = [
         'success' => true,
         'message' => '점수가 저장되었습니다.',
         'score' => $score
     ];
 
-    // 100ms 미만일 경우 flag 추가
     if ($score < 100) {
         $response['flag'] = "FLAG{F4st_R3fl3x_M4st3r}";
     }
 
     echo json_encode($response);
-} catch (Exception $e) {
-    http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
-    ]);
+    exit;
 }
-?>
+?> 
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge 6: Reaction Speed Test</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        .instructions {
+            text-align: left;
+            padding: 15px;
+            margin: 20px 0 30px 0;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+        }
+
+        .flag-condition {
+            text-align: left;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+        }
+
+        #target {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #000;
+            user-select: none;
+        }
+
+        /* 게임 상태별 색상 유지 */
+        .waiting {
+            background-color: #ff0000;
+            border: 1px solid #ff0000;
+        }
+
+        .ready {
+            background-color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+        }
+
+        #resetBtn {
+            background-color: #007bff;  /* 파란색 버튼 */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        #resetBtn:hover {
+            background-color: #0056b3;  /* 더 진한 파란색 */
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .stat-label {
+            color: #00ff00;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: #00ff00;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="title">Reaction Speed Test</h1>
+        
+        <div class="instructions">
+            <h2>게임 방법</h2>
+            <ul>
+                <li>빨간색 화면을 클릭하면 게임이 시작됩니다.</li>
+                <li>화면이 초록색으로 바뀔 때까지 기다리세요.</li>
+                <li>초록색으로 바뀌면 최대한 빨리 클릭하세요!</li>
+                <li>너무 일찍 클릭하면 실격됩니다.</li>
+            </ul>
+        </div>
+
+        <div class="flag-condition">
+            🎯 플래그 획득 조건: 반응 속도 100ms 미만 달성
+        </div>
+
+        <div id="target" class="waiting">
+            클릭하여 시작
+        </div>
+
+        <div id="result"></div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">최고 기록</div>
+                <div id="bestScore" class="stat-value">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">평균 기록</div>
+                <div id="avgScore" class="stat-value">-</div>
+            </div>
+        </div>
+
+        <div id="history"></div>
+        <button id="resetBtn">리셋</button>
+    </div>
+    <script src="question6.js"></script>
+</body>
+</html>

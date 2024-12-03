@@ -1,30 +1,154 @@
 <?php
-header('Content-Type: application/json');
-
-// CSRF 방지
 session_start();
-if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
-    die(json_encode(['success' => false, 'message' => 'Invalid request']));
-}
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
-// POST 요청 확인
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die(json_encode(['success' => false, 'message' => 'Invalid method']));
-}
-
-// 제출된 플래그 가져오기
-$submitted_flag = $_POST['flag'] ?? '';
+// 정답 플래그 설정
 $correct_flag = "Flag{Le_flag}";
+$flag = "FLAG{L3_fl4g}"; // 실제 플래그로 변경하세요.
 
-if ($submitted_flag === $correct_flag) {
-    echo json_encode([
-        'success' => true,
-        'flag' => $correct_flag
-    ]);
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid flag'
-    ]);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $submitted_flag = isset($_POST['flag']) ? $_POST['flag'] : '';
+
+    // 제출된 플래그 확인
+    if ($submitted_flag === $correct_flag) {
+        echo json_encode([
+            'success' => true,
+            'flag' => $flag
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => '틀린 플래그입니다.'
+        ]);
+    }
+    exit;
 }
-?> 
+?>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge 21: Cryptanalysis 1</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        textarea {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            resize: none;
+        }
+
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #33ff99;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+    button {
+        background-color: #0f0;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #33ff99;
+    }
+
+    .command {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    code {
+        background-color: #2a2a2a;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+    </style>
+</head>
+<body>
+    <h1>Cryptanalysis 1</h1>
+    <div class="container">
+        <p>암호화된 메시지를 해독하여 올바른 플래그를 제출하세요.</p>
+        <textarea id="cipherText" readonly style="height: 80px; width: 60%; white-space: pre-wrap; word-wrap: break-word; overflow: hidden; margin: 10px auto; display: block;">
+            4c6520666c6167206465206365206368616c6c656e6765206573743a3436366336313637376234633635356636363663363136373764
+        </textarea>
+        <p>해독된 플래그를 입력하세요:</p>
+        <input type="text" id="userInput" placeholder="해독된 플래그 입력" style="display: block; width: 30%; margin: 10px auto; padding: 10px; text-align: center; background-color: #2a2a2a; color: #00ff00; border: 1px solid #00ff00; border-radius: 3px;">
+        <button onclick="checkFlag()">제출</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        async function checkFlag() {
+            const userFlag = document.getElementById('userInput').value.trim();
+            const resultElement = document.getElementById('result');
+
+            try {
+                const response = await fetch('question21.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: 'flag=' + encodeURIComponent(userFlag)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultElement.style.color = '#00ff7f';
+                    resultElement.innerHTML = `정답입니다!<br>플래그: ${data.flag}`;
+                } else {
+                    resultElement.style.color = '#ff4d4d';
+                    resultElement.textContent = '틀렸습니다. 다시 시도하세요.';
+                }
+            } catch (error) {
+                resultElement.style.color = '#ff4d4d';
+                resultElement.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+            }
+        }
+    </script>
+</body>
+</html>

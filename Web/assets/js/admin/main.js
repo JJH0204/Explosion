@@ -341,7 +341,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const challengeButton = popup.querySelector('.action-button.challenge');
                     if (challengeButton) {
                         challengeButton.addEventListener('click', () => {
-                            const questionUrl = `/Question/question${cardNumber}/question${cardNumber}.html`;
+                            // const questionUrl = `/Question/question${cardNumber}/question${cardNumber}.html`;
+                            const questionUrl = `/Question/question${cardNumber}/`;
                             window.open(questionUrl, '_blank');
                         });
                     }

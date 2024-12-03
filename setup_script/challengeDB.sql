@@ -34,7 +34,7 @@ INSERT INTO `CHALLENGE_info` (challenge_id, challenge_score, challenge_title, ch
 (18,100,"Basic Subnetting", "network", "beginner", "FLAG{SUBNETTING_MASTER}"), 
 (19,100,"Find Flag", "linux", "beginner", "FLAG{this_is_easy}"), 
 (20,100,"Binary Code", "linux", "beginner", "FLAG{ASCIIcode}"), 
-(21,100,"Cryptanalysis 1", "cryptology", "beginner", "Flag{Le_flag}"), 
+(21,100,"Cryptanalysis 1", "cryptology", "beginner", "FLAG{L3_fl4g}"), 
 (22,200,"Cryptanalysis 2", "cryptology,pwnable", "intermediate", "Flag{hashing_practice}"), 
 (23,100,"Cryptanalysis 3", "windows", "beginner", "Flag{insecure_storage}"), 
 (24,200,"Decoding", "cryptology", "intermediate", "FLAG{UU24encode_challenge}"), 
