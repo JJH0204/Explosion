@@ -774,7 +774,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupPopups();
     updateUserInfo();
     updateRanking();
-    setInterval(updateRanking, 180000);
+    //setInterval(updateRanking, 180000); // 보안상 이유로 3분에 한 랭킹 업데이트 제거
 
     // 로고 버튼 클릭 이벤트 추가
     const logoButton = document.querySelector('.logo-button');
