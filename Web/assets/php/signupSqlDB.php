@@ -4,7 +4,7 @@
     - 회원가입 용도
     - 회원가입 시 userDB 조작 용도
 */
-class SignupUserDB {
+class SignupSqlDB {
     private $conn;
     
     public function __construct() {

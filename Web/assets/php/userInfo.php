@@ -16,13 +16,13 @@ try {
         throw new Exception("Database connection was not established correctly.");
     }
 
-    if (isset($_SESSION['nickname'])) {
-        $nickname = $_SESSION['nickname'];
+    if (isset($_SESSION['id'])) {
+        $id = $_SESSION['id'];
 
         // 먼저 전체 랭킹을 가져옴 (실시간 랭킹과 동일한 정렬 기준 사용)
-        $rankQuery = "SELECT NICKNAME, SCORE, STAGE, RECOREDE_DATE 
-                     FROM USER_info 
-                     ORDER BY SCORE DESC, RECOREDE_DATE ASC";
+        $rankQuery = "SELECT nickname, score, total_cleared_stage, recorede_date 
+                     FROM USER_INFO 
+                     ORDER BY score DESC, recorede_date ASC";
         
         $rankResult = $conn->query($rankQuery);
         $rank = 1;
@@ -32,10 +32,10 @@ try {
 
         // 유저의 순위 찾기
         while($row = $rankResult->fetch_assoc()) {
-            if($row['NICKNAME'] === $nickname) {
+            if($row['nickname'] === $nickname) {
                 $userRank = $rank;
-                $userScore = $row['SCORE'];
-                $userStage = $row['STAGE'];
+                $userScore = $row['score'];
+                $userStage = $row['total_cleared_stage'];
                 break;
             }
             $rank++;

@@ -4,7 +4,7 @@
     - 회원가입 용도
     - 회원가입 시 flameDB 조작 용도
 */
-class SignupTestDB {
+class signupFlameDB {
     private $conn;
     
     public function __construct() {
