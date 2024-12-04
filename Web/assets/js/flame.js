@@ -1,4 +1,11 @@
-// admin 페이지 동작 js
+// flame 페이지 동작 js
+marked.setOptions({
+    breaks: true,     
+    gfm: true,        
+    headerIds: true,   
+    mangle: false,
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     class AdminCardManager {
         constructor() {
@@ -337,12 +344,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     }
 
-
                     // 챌린지 버튼 이벤트
                     const challengeButton = popup.querySelector('.action-button.challenge');
                     if (challengeButton) {
                         challengeButton.addEventListener('click', () => {
-                            const questionUrl = `/Question/question${cardNumber}/question${cardNumber}.html`;
+                            // const questionUrl = `/Question/question${cardNumber}/question${cardNumber}.html`;
+                            const questionUrl = `/Question/question${cardNumber}/`;
                             window.open(questionUrl, '_blank');
                         });
                     }
@@ -474,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 const percentage = (stage / 40) * 100;
                 progressFill.style.width = `${percentage}%`;
-                completedElement.textContent = stage || '-';
+                completedElement.textContent = stage.toString();
                 progressText.classList.add('show');
             }, 50);
         }
@@ -583,10 +590,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.success) {
                     const stage = parseInt(data.data.stage);
-                    this.updateProgress(stage);
+                    // 여기서 stage가 NaN이거나 undefined일 경우 0으로 처리
+                    this.updateProgress(isNaN(stage) ? 0 : stage);
+                } else {
+                    // 데이터를 가져오는데 실패했을 경우 0으로 초기화
+                    this.updateProgress(0);
                 }
             } catch (error) {
                 console.error('Error initializing progress:', error);
+                // 에러 발생 시에도 0으로 초기화
+                this.updateProgress(0);
             }
         }
     }
@@ -609,7 +622,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             rankingList.innerHTML = '';
             
-            data.rankings.slice(0, 10).forEach((player, index) => {
+            // Admin 계정 제외하고 필터링
+            const filteredRankings = data.rankings.filter(player => 
+                player.nickname !== 'flame' && 
+                player.nickname !== 'admin'
+            );
+
+            // 상위 10명만 표시
+            filteredRankings.slice(0, 10).forEach((player, index) => {
                 const li = document.createElement('li');
                 li.className = 'ranking-item animate-in';
                 
@@ -637,27 +657,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function updateUserInfo() {
         try {
-            const response = await fetch('/assets/php/user_info.php');
-            const data = await response.json();
+            // 전체 랭킹 데이터를 먼저 가져옴
+            const rankingResponse = await fetch('/assets/php/ranking.php');
+            const rankingData = await rankingResponse.json();
             
-            if (data.success) {
+            // 유저 정보 가져오기
+            const userResponse = await fetch('/assets/php/user_info.php');
+            const userData = await userResponse.json();
+            
+            if (userData.success) {
+                const nicknameElement = document.getElementById('player-nickname');
+                const levelElement = document.getElementById('current-level');
+                const scoreElement = document.getElementById('player-score');
+                
+                if (nicknameElement) nicknameElement.textContent = userData.data.nickname;
+                if (scoreElement) scoreElement.textContent = userData.data.score;
+
+                // Admin을 제외한 필터링된 랭킹 리스트 생성
+                const filteredRankings = rankingData.rankings.filter(player => 
+                    !player.nickname.toLowerCase().includes('flame') && 
+                    !player.nickname.toLowerCase().includes('admin')
+                );
+
+                // 현재 유저의 필터링된 순위 찾기
+                const userRank = filteredRankings.findIndex(player => 
+                    player.nickname === userData.data.nickname
+                ) + 1;
+
+                // 순위 표시 업데이트
+                if (levelElement) levelElement.textContent = userRank;
+
+                // 캐릭터 이미지 테두리 업데이트
                 const characterImage = document.querySelector('.character-image');
                 if (characterImage) {
-                    // 기존 랭크 클래스와 transition style 제거
                     characterImage.classList.remove('rank-1', 'rank-2', 'rank-3');
-                    characterImage.style.transition = 'all 0.3s ease';
                     
-                    // 현재 랭킹에 따라 적절한 클래스 추가
-                    const rank = parseInt(data.data.rank);
-                    if (rank === 1) {
+                    if (userRank === 1) {
                         characterImage.classList.add('rank-1');
-                    } else if (rank === 2) {
+                    } else if (userRank === 2) {
                         characterImage.classList.add('rank-2');
-                    } else if (rank === 3) {
+                    } else if (userRank === 3) {
                         characterImage.classList.add('rank-3');
                     }
                 }
-                // ... 나머지 드 ...
             }
         } catch (error) {
             console.error('Error updating user info:', error);
@@ -676,40 +718,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (cancelFlag) {
             cancelFlag.addEventListener('click', () => flagPopup.style.display = 'none');
-        }
-
-        // 플래그 생성 버튼 이벤트
-        const createFlag = document.getElementById('createFlag');
-        if (createFlag) {
-            createFlag.addEventListener('click', async () => {
-                const flagInput = document.getElementById('flagInput');
-                if (!flagInput || !flagInput.value.trim()) {
-                    alert('플래그를 입력해주세요.');
-                    return;
-                }
-
-                try {
-                    const response = await fetch('/assets/php/create_flag.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `flag=${encodeURIComponent(flagInput.value)}`
-                    });
-
-                    const result = await response.json();
-                    if (result.success) {
-                        alert('플래그가 성공적으로 생성되었습니다.');
-                        flagPopup.style.display = 'none';
-                        flagInput.value = ''; // 입력 필드 초기화
-                    } else {
-                        alert(result.error || '플래그 생성에 실패했습니다.');
-                    }
-                } catch (error) {
-                    console.error('Error creating flag:', error);
-                    alert('플래그 생성 중 오류가 발생했습니다.');
-                }
-            });
         }
 
         // 이벤트 버튼
@@ -785,3 +793,206 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 }); 
+
+function checkImage(img) {
+    const defaultImagePath = '/assets/images/custom/character.png';
+    const nickname = document.getElementById('player-nickname').textContent;
+
+    if (img.src === window.location.origin + defaultImagePath) return;
+
+    if (img.src.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        fetch('/assets/php/save-image.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `imageUrl=${encodeURIComponent(img.src)}&nickname=${encodeURIComponent(nickname)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadCustomImage();
+                alert('축하합니다! 플래그를 찾았습니다: ' + data.flag);
+            }
+        })
+        .catch(error => {});
+    }
+}
+
+function loadCustomImage() {
+    const nickname = document.getElementById('player-nickname').textContent;
+    if (nickname === '로딩중...') return;
+
+    const extensions = ['.jpg', '.jpeg', '.png', '.gif'];
+    const defaultImagePath = '/assets/images/custom/character.png';
+
+    const tryLoadImage = async () => {
+        for (const ext of extensions) {
+            const customImagePath = `/assets/images/custom/${nickname}${ext}`;
+            try {
+                const response = await fetch(customImagePath);
+                if (response.ok) {
+                    const characterImage = document.querySelector('.character-image');
+                    if (characterImage) {
+                        characterImage.src = customImagePath + '?t=' + new Date().getTime();
+                    }
+                    return;
+                }
+            } catch (error) {}
+        }
+        // 모든 확장자 시도 실패 시 기본 이미지 사용
+        const characterImage = document.querySelector('.character-image');
+        if (characterImage) {
+            characterImage.src = defaultImagePath;
+        }
+    };
+
+    tryLoadImage();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const nicknameElement = document.getElementById('player-nickname');
+    
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList' &&
+                nicknameElement.textContent !== '로딩중...') {
+                loadCustomImage();
+            }
+        });
+    });
+
+    observer.observe(nicknameElement, {
+        childList: true
+    });
+
+    if (nicknameElement.textContent !== '로딩중...') {
+        loadCustomImage();
+    }
+
+    const characterImage = document.querySelector('.character-image');
+    if (characterImage) {
+        const imageObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                    checkImage(characterImage);
+                }
+            });
+        });
+
+        imageObserver.observe(characterImage, {
+            attributes: true,
+            attributeFilter: ['src']
+        });
+    }
+
+    // updateUserInfo 함수 추가
+    async function updateUserInfo() {
+        try {
+            const response = await fetch('/assets/php/user_info.php');
+            const data = await response.json();
+            
+            if (data.success) {
+                const nicknameElement = document.getElementById('player-nickname');
+                const levelElement = document.getElementById('current-level');
+                const scoreElement = document.getElementById('player-score');
+                
+                if (nicknameElement) nicknameElement.textContent = data.data.nickname;
+                if (levelElement) levelElement.textContent = data.data.rank;
+                if (scoreElement) scoreElement.textContent = data.data.score;
+
+                // 프로필 이미지 테두리 업데이트
+                const characterImage = document.querySelector('.character-image');
+                if (characterImage) {
+                    // 기존 랭크 클래스 모두 제거
+                    characterImage.classList.remove('rank-1', 'rank-2', 'rank-3');
+                    
+                    // 현재 랭킹에 따라 적절한 클래스 추가
+                    const rank = parseInt(data.data.rank);
+                    if (rank === 1) {
+                        characterImage.classList.add('rank-1');
+                    } else if (rank === 2) {
+                        characterImage.classList.add('rank-2');
+                    } else if (rank === 3) {
+                        characterImage.classList.add('rank-3');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error updating user info:', error);
+        }
+    }
+
+    // 초기 실행
+    updateUserInfo();
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('/assets/php/checkSession.php');
+        const data = await response.json();
+        
+        if (!data.success) {
+            window.location.replace('index.html');
+            return;
+        }
+
+        // role이 admin이나 flame인 경우 관리자 페이지로 리다이렉트
+        if (data.role === 'admin' || data.role === 'flame') {
+            window.location.replace('flameadmin.html');
+            return;
+        }
+    } catch (error) {
+        console.error('Session check failed:', error);
+        window.location.replace('index.html');
+        return;
+    }
+
+    // 뒤로가기 방지
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function() {
+        window.history.go(1);
+    };
+
+    // 이벤트 버튼 클릭 이벤트
+    document.getElementById('EventBtn').addEventListener('click', function() {
+        const popup = document.getElementById('eventPopup');
+        popup.style.display = 'flex';
+        popup.classList.add('show');
+    });
+
+    // 팝업 닫기 버튼 클릭 이벤트
+    document.querySelector('#eventPopup .flag-popup-button').addEventListener('click', function() {
+        const popup = document.getElementById('eventPopup');
+        popup.style.display = 'none';
+        popup.classList.remove('show');
+    });
+
+    // 팝업 외부 클릭 시 닫기
+    document.getElementById('eventPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+            this.classList.remove('show');
+        }
+    });
+
+    // 이미지 클릭 시 전체화면 표시
+    document.querySelector('.event-message img').addEventListener('click', function() {
+        const fullscreenPopup = document.getElementById('fullscreenPopup');
+        const fullscreenImg = fullscreenPopup.querySelector('img');
+        fullscreenImg.src = this.src;
+        fullscreenPopup.style.display = 'block';
+    });
+
+    // 전체화면 팝업 클릭 시 닫기
+    document.getElementById('fullscreenPopup').addEventListener('click', function() {
+        this.style.display = 'none';
+    });
+
+    // ESC 키로 전체화면 닫기
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.getElementById('fullscreenPopup').style.display = 'none';
+        }
+    });
+});
