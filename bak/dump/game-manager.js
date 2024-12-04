@@ -157,7 +157,7 @@ class GameManager {
     // 세션에서 닉네임 가져오는 메서드 수정
     async getNicknameFromSession() {
         try {
-            const response = await fetch('./assets/php/user_info.php');
+            const response = await fetch('./assets/php/userInfo.php');
             if (!response.ok) {
                 throw new Error('Failed to fetch user info');
             }

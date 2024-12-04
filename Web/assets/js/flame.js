@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (isAllCleared) {
                 // DB에서 실제 클리어한 스테이지 수 확인
-                fetch('/assets/php/get_cleared_stages.php')
+                fetch('/assets/php/getClearedStages.php')
                     .then(response => response.json())
                     .then(result => {
                         if (result.success && result.data.length < 40) {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         async loadClearedStages() {
             try {
-                const response = await fetch('/assets/php/get_cleared_stages.php');
+                const response = await fetch('/assets/php/getClearedStages.php');
                 const result = await response.json();
                 if (!result.success) {
                     throw new Error(result.error);
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                                         const saveResult = await saveResponse.json();
                                         if (saveResult.success) {
-                                            const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                            const clearedResponse = await fetch('/assets/php/getClearedStages.php');
                                             const clearedResult = await clearedResponse.json();
                                             
                                             if (clearedResult.success) {
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                                         const saveResult = await saveResponse.json();
                                         if (saveResult.success) {
-                                            const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                            const clearedResponse = await fetch('/assets/php/getClearedStages.php');
                                             const clearedResult = await clearedResponse.json();
                                             
                                             if (clearedResult.success) {
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         const result = await response.json();
                                         if (result.success) {
                                             // DB에서 실제 클리어한 스테이지 목록을 가져와서 localStorage 초기화
-                                            const clearedResponse = await fetch('/assets/php/get_cleared_stages.php');
+                                            const clearedResponse = await fetch('/assets/php/getClearedStages.php');
                                             const clearedResult = await clearedResponse.json();
                                             
                                             if (clearedResult.success) {
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 새로운 메소드: 진행 상태 초기화
         async initializeProgress() {
             try {
-                const response = await fetch('/assets/php/user_info.php');
+                const response = await fetch('/assets/php/userInfo.php');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -662,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const rankingData = await rankingResponse.json();
             
             // 유저 정보 가져오기
-            const userResponse = await fetch('/assets/php/user_info.php');
+            const userResponse = await fetch('/assets/php/userInfo.php');
             const userData = await userResponse.json();
             
             if (userData.success) {
@@ -801,7 +801,7 @@ function checkImage(img) {
     if (img.src === window.location.origin + defaultImagePath) return;
 
     if (img.src.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        fetch('/assets/php/save-image.php', {
+        fetch('/assets/php/saveImage.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -889,7 +889,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // updateUserInfo 함수 추가
     async function updateUserInfo() {
         try {
-            const response = await fetch('/assets/php/user_info.php');
+            const response = await fetch('/assets/php/userInfo.php');
             const data = await response.json();
             
             if (data.success) {
@@ -939,7 +939,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // role이 admin이나 flame인 경우 관리자 페이지로 리다이렉트
         if (data.role === 'admin' || data.role === 'flame') {
-            window.location.replace('flameadmin.html');
+            window.location.replace('flameAdmin.html');
             return;
         }
     } catch (error) {

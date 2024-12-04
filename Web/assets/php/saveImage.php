@@ -1,6 +1,6 @@
 <?php
 /*
-    save-image.php
+    saveImage.php
     - Challenge 8 문제 체크 용도
     - 이미지 저장 용도
 */

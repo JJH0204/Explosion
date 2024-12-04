@@ -1,6 +1,6 @@
 <?php
 /*
-    get_cleared_stages.php
+    getClearedStages.php
     - 클리어한 스테이지 조회
     - 클리어한 스테이지 몬스터 카드 출력 용도
 */

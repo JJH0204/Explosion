@@ -46,7 +46,8 @@
             <form id="signup-form">
                 <input type="text" id="signup-ID" class="input-field" placeholder="ID" required>
                 <input type="password" id="signup-PW" class="input-field" placeholder="Password" required>
-                <input type="password" id="signup-PW-confirm" class="input-field" placeholder="Confirm Password" required>
+                <input type="password" id="signup-PW-confirm" class="input-field" placeholder="Confirm Password"
+                    required>
                 <input type="text" id="signup-Nickname" class="input-field" placeholder="Nickname" required>
                 <div class="button-container">
                     <button type="submit" class="signup-button">Sign Up</button>
@@ -59,14 +60,14 @@
 
     <script>
         // 로그인 페이지 진입 시 캐시 방지 및 이전 세션 정리
-        window.onload = function() {
+        window.onload = function () {
             // 세션스토리지 클리어
             sessionStorage.clear();
             localStorage.clear();
-            
+
             // 뒤로가기 방지
             window.history.pushState(null, null, window.location.href);
-            window.onpopstate = function() {
+            window.onpopstate = function () {
                 window.history.pushState(null, null, window.location.href);
             };
         }
@@ -91,36 +92,36 @@
                 },
                 body: formData.toString()
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Login response:', data);
-                
-                if (data.success) {
-                    sessionStorage.setItem('loggedIn', 'true');
-                    sessionStorage.setItem('userRole', data.role);
-                    
-                    if (data.role === 'admin' || data.role === 'flame') {
-                        console.log('Redirecting to admin page...');
-                        window.location.href = 'flameadmin.html';
-                    } else {
-                        console.log('Redirecting to user page...');
-                        window.location.href = 'flame.html';
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                } else {
-                    document.getElementById('error-message').textContent = data.error || 'ID 또는 PW가 잘못되었습니다.';
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Login response:', data);
+
+                    if (data.success) {
+                        sessionStorage.setItem('loggedIn', 'true');
+                        sessionStorage.setItem('userRole', data.role);
+
+                        if (data.role === 'admin' || data.role === 'flame') {
+                            console.log('Redirecting to admin page...');
+                            window.location.href = 'flameAdmin.html';
+                        } else {
+                            console.log('Redirecting to user page...');
+                            window.location.href = 'flame.html';
+                        }
+                    } else {
+                        document.getElementById('error-message').textContent = data.error || 'ID 또는 PW가 잘못되었습니다.';
+                        document.getElementById('error-message').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Login request failed:', error);
+                    document.getElementById('error-message').textContent = '로그인 처리 중 오류가 발생했습니다.';
                     document.getElementById('error-message').style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error('Login request failed:', error);
-                document.getElementById('error-message').textContent = '로그인 처리 중 오류가 발생했습니다.';
-                document.getElementById('error-message').style.display = 'block';
-            });
+                });
         });
 
         // Sign up 버튼 클릭 시 모달 팝업 열기
