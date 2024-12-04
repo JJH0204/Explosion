@@ -12,9 +12,9 @@
 - ⏳ WAF 구현 및 디렉터리 보호
   - [ ] assets 폴더 보호
   - [ ] data 폴더 보호 (팝업창 문제 호환성 검토 필요)
-  - [ ] Question 폴더 보호 (html 제외)
+  - [ ] Question 폴더 보호 (php 제외)
 - 🔄 계정 보안
-  - [ ] flame, flame_admin 패스워드 변경
+  - [ ] flame, admin 패스워드 변경
   - [ ] 관련 PHP 코드 수정
 
 ### 2. 시스템 최적화 ⚡
@@ -62,13 +62,15 @@
 
 #### assets/php
 ```php
-checkAdmin.php       # 관리자 인증
-checkSession.php     # 세션 관리
+checkAdmin.php      # 관리자 인증
+checkSession.php    # 세션 관리
 login.php           # 로그인 처리
 logout.php          # 로그아웃 처리
 ranking.php         # 랭킹 시스템
 saveImage.php       # 이미지 업로드
 signup.php          # 회원가입
+signupFlameDB.php   # 회원가입(DB_flame)
+signupSqlDB.php     # 회원가입(DB_sql)
 userInfo.php        # 사용자 정보
 ```
 
@@ -89,7 +91,7 @@ userInfo.php        # 사용자 정보
 ### 1. 파일 명명 규칙
 
 #### 웹 파일
-- **HTML 파일**: 소문자, 기능 중심 (예: `flame.html`, `login.html`)
+- **HTML 파일**: 소문자, 페이지 중심 (예: `flame.html`, `index.html`)
 - **CSS 파일**: 소문자, 연관된 HTML 파일명과 동일 (예: `flame.css`)
 - **JS 파일**: 소문자, 기능 중심 (예: `flame.js`)
 - **PHP 파일**: 소문자, camelCase (예: `lowerCamelCase.php`)
