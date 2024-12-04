@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db = 'flameDB';
+$db = 'DB_flame';
 $username = 'db_admin';
 $passwd = 'flamerootpassword';
 

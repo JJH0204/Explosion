@@ -28,8 +28,8 @@ GRANT GRANT OPTION ON *.* TO 'db_admin'@'localhost';
 
 -- Grant for Admin Users
 CREATE USER `flame`@`localhost` identified by 'firewalld';
-GRANT SELECT, UPDATE ON `userDB`.`flame` TO 'flame'@'localhost';
+GRANT SELECT, UPDATE ON `DB_sql`.`flame` TO 'flame'@'localhost';
 CREATE USER `admin`@`localhost` identified by 'firewalld';
-GRANT SELECT, UPDATE ON `userDB`.`admin` TO 'flame_admin'@'localhost';
+GRANT SELECT, UPDATE ON `DB_sql`.`admin` TO 'admin'@'localhost';
 
 FLUSH PRIVILEGES;

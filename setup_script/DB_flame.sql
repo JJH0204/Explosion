@@ -29,11 +29,11 @@ CREATE TABLE `CLEARED_STAGE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Admin Users ID info (flame, admin)
-INSERT INTO ID_info (id, pw, nickname) VALUES ('flame', '$2y$10$iAyr/B348/gdixD4sYSnc.6mkXwo/yQ4/Jf1yG6x2JGZ96w3JVUCi', 'flame');
-INSERT INTO USER_info (id, score, total_cleared_stage) VALUES ('flame', 9999, 40);
+INSERT INTO `ID_INFO` (id, pw, nickname) VALUES ('flame', '$2y$10$iAyr/B348/gdixD4sYSnc.6mkXwo/yQ4/Jf1yG6x2JGZ96w3JVUCi', 'flame');
+INSERT INTO `USER_INFO` (id, score, total_cleared_stage) VALUES ('flame', 9999, 40);
 
-INSERT INTO ID_info (id, pw, nickname) VALUES ('admin', '$2y$10$uitUiH8DZ3ekbt16pd5miOZIOWeUeg4vV5fMSsRkk/khsB82mV.J2', 'admin');
-INSERT INTO USER_info (id, score, total_cleared_stage) VALUES ('admin', 9999, 40);
+INSERT INTO `ID_INFO` (id, pw, nickname) VALUES ('admin', '$2y$10$uitUiH8DZ3ekbt16pd5miOZIOWeUeg4vV5fMSsRkk/khsB82mV.J2', 'admin');
+INSERT INTO `USER_INFO` (id, score, total_cleared_stage) VALUES ('admin', 9999, 40);
 
 -- Admin Users have already cleared all challenges
 INSERT INTO `CLEARED_STAGE` (id, challenge_id) VALUES 
