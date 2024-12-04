@@ -24,13 +24,14 @@ class ClearedStagesDB {
         }
     }
 
-    public function getClearedStages($nickname) {
-        $stmt = $this->conn->prepare("SELECT ANSWER FROM CLEARED_STAGE WHERE NICKNAME = ?");
+    public function getClearedStages($id) {
+        // CLEARED_STAGE 테이블에서 challenge_id 조회
+        $stmt = $this->conn->prepare("SELECT challenge_id FROM CLEARED_STAGE WHERE id = ?");
         if (!$stmt) {
             throw new Exception('Failed to prepare statement: ' . $this->conn->error);
         }
 
-        $stmt->bind_param("s", $nickname);
+        $stmt->bind_param("s", $id);
         if (!$stmt->execute()) {
             throw new Exception('Failed to execute query: ' . $stmt->error);
         }
@@ -39,7 +40,7 @@ class ClearedStagesDB {
         $clearedStages = [];
         
         while ($row = $result->fetch_assoc()) {
-            $clearedStages[] = (int)$row['ANSWER'];
+            $clearedStages[] = (int)$row['challenge_id'];
         }
 
         return $clearedStages;
@@ -52,14 +53,14 @@ class ClearedStagesDB {
 
 try {
     session_start();
-    if (!isset($_SESSION['nickname'])) {
+    if (!isset($_SESSION['id'])) {
         throw new Exception('User not logged in');
     }
 
-    $nickname = $_SESSION['nickname'];
+    $id = $_SESSION['id'];
     
     $db = new ClearedStagesDB();
-    $clearedStages = $db->getClearedStages($nickname);
+    $clearedStages = $db->getClearedStages($id);
     $db->close();
 
     echo json_encode([
