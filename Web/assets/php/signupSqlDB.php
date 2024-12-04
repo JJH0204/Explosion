@@ -8,7 +8,7 @@ class SignupUserDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'userDB');
+        $this->conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'DB_sql');
         if ($this->conn->connect_error) {
             throw new Exception('userDB connection failed: ' . $this->conn->connect_error);
         }
@@ -18,8 +18,8 @@ class SignupUserDB {
     private function createNicknameTable($Nickname) {
         $tableName = $this->conn->real_escape_string($Nickname);
         $sql = "CREATE TABLE IF NOT EXISTS `$tableName` (
-            NICKNAME VARCHAR(50) PRIMARY KEY,
-            FLAG VARCHAR(100) DEFAULT NULL
+            nickname VARCHAR(50) PRIMARY KEY,
+            flag VARCHAR(100) DEFAULT NULL
         )";
         
         if (!$this->conn->query($sql)) {
@@ -29,7 +29,7 @@ class SignupUserDB {
 
     private function insertInitialData($Nickname) {
         $tableName = $this->conn->real_escape_string($Nickname);
-        $stmt = $this->conn->prepare("INSERT INTO `$tableName` (NICKNAME) VALUES (?)");
+        $stmt = $this->conn->prepare("INSERT INTO `$tableName` (nickname) VALUES (?)");
         $stmt->bind_param("s", $Nickname);
         if (!$stmt->execute()) {
             throw new Exception('Failed to insert initial data: ' . $stmt->error);
@@ -48,7 +48,7 @@ class SignupUserDB {
         }
 
         // 권한 부여
-        $grantSql = "GRANT UPDATE, SELECT ON userDB.`$escapedNickname` TO '$escapedID'@'localhost'";
+        $grantSql = "GRANT UPDATE, SELECT ON DB_sql.`$escapedNickname` TO '$escapedID'@'localhost'";
         if (!$this->conn->query($grantSql)) {
             throw new Exception('Failed to grant permissions: ' . $this->conn->error);
         }

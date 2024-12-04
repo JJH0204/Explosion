@@ -8,7 +8,7 @@ class SignupTestDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'flameDB');
+        $this->conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'DB_flame');
         if ($this->conn->connect_error) {
             throw new Exception('flameDB connection failed: ' . $this->conn->connect_error);
         }
@@ -16,7 +16,7 @@ class SignupTestDB {
     }
 
     private function checkDuplicateID($ID) {
-        $stmt = $this->conn->prepare("SELECT ID FROM ID_info WHERE ID = ?");
+        $stmt = $this->conn->prepare("SELECT id FROM ID_INFO WHERE id = ?");
         $stmt->bind_param("s", $ID);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -24,7 +24,7 @@ class SignupTestDB {
     }
 
     private function checkDuplicateNickname($Nickname) {
-        $stmt = $this->conn->prepare("SELECT NICKNAME FROM USER_info WHERE NICKNAME = ?");
+        $stmt = $this->conn->prepare("SELECT nickname FROM ID_INFO WHERE nickname = ?");
         $stmt->bind_param("s", $Nickname);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -33,18 +33,18 @@ class SignupTestDB {
 
     private function insertIDInfo($ID, $PW, $Nickname) {
         $hashedPW = password_hash($PW, PASSWORD_DEFAULT);
-        $stmt = $this->conn->prepare("INSERT INTO ID_info (ID, PW, NICKNAME) VALUES (?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO ID_INFO (id, pw, nickname) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $ID, $hashedPW, $Nickname);
         if (!$stmt->execute()) {
-            throw new Exception('Failed to insert into ID_info: ' . $stmt->error);
+            throw new Exception('Failed to insert into ID_INFO: ' . $stmt->error);
         }
     }
 
-    private function insertUserInfo($ID, $Nickname) {
-        $stmt = $this->conn->prepare("INSERT INTO USER_info (ID, NICKNAME) VALUES (?, ?)");
-        $stmt->bind_param("ss", $ID, $Nickname);
+    private function insertUserInfo($ID) {
+        $stmt = $this->conn->prepare("INSERT INTO USER_INFO (id) VALUES (?)");
+        $stmt->bind_param("ss", $ID);
         if (!$stmt->execute()) {
-            throw new Exception('Failed to insert into USER_info: ' . $stmt->error);
+            throw new Exception('Failed to insert into USER_INFO: ' . $stmt->error);
         }
     }
 

@@ -8,7 +8,7 @@ ob_start();
 
 // 에러 리포팅 설정
 error_reporting(E_ALL);
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 
 // JSON 헤더 설정
 header('Content-Type: application/json');
@@ -43,13 +43,13 @@ try {
     }
 
     // testDB 처리
-    require_once 'signup_testDB.php';
-    $testDB = new SignupTestDB();
+    require_once 'signupFlameDB.php';
+    $testDB = new signupFlameDB();
     $testDB->process($ID, $PW, $Nickname);
 
     // userDB 처리
-    require_once 'signup_userDB.php';
-    $userDB = new SignupUserDB();
+    require_once 'signupSqlDB.php';
+    $userDB = new SignupSqlDB();
     $userDB->process($ID, $PW, $Nickname);
 
     // 성공 응답
