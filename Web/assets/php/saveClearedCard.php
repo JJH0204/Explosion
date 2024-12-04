@@ -22,10 +22,7 @@ $cardId = intval($_POST['cardId']);
 
 try {
     // 데이터베이스 연결
-    $conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'flameDB');
-    if ($conn->connect_error) {
-        throw new Exception('Database connection failed: ' . $conn->connect_error);
-    }
+    $conn = include 'config.php';
 
     $conn->begin_transaction();
 

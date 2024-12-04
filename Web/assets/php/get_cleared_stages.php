@@ -15,11 +15,13 @@ class ClearedStagesDB {
     private $conn;
     
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'flameDB');
-        if ($this->conn->connect_error) {
-            throw new Exception('flameDB connection failed: ' . $this->conn->connect_error);
+        // config.php 파일로 DB 연결 시도
+        $this->conn = include 'config.php';
+
+        // config.php 정상 실행 여부 확인
+        if (!$this->conn instanceof mysqli) {
+            throw new Exception("Database connection was not established correctly.");
         }
-        $this->conn->set_charset('utf8');
     }
 
     public function getClearedStages($nickname) {

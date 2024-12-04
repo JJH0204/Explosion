@@ -7,17 +7,14 @@
 session_start();
 header('Content-Type: application/json');
 
-$host = 'localhost';
-$db = 'flameDB';
-$username = 'db_admin';
-$passwd = 'flamerootpassword';
-
 try {
-    $conn = new mysqli($host, $username, $passwd, $db);
-    if ($conn->connect_error) {
-        throw new Exception("Connection failed: " . $conn->connect_error);
+    // config.php 파일로 DB 연결 시도
+    $conn = include 'config.php';
+
+    // config.php 정상 실행 여부 확인
+    if (!$conn instanceof mysqli) {
+        throw new Exception("Database connection was not established correctly.");
     }
-    $conn->set_charset('utf8mb4');
 
     if (isset($_SESSION['nickname'])) {
         $nickname = $_SESSION['nickname'];
