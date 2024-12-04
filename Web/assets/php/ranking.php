@@ -4,18 +4,9 @@
     - 랭킹 조회 용도
 */
 header('Content-Type: application/json');
-$host = 'localhost';
-$db = 'flameDB';
-$username = 'db_admin';
-$passwd = 'flamerootpassword';
-$charset = 'utf8mb4';
 
 // 데이터베이스 연결
-$conn = new mysqli($host, $username, $passwd, $db);
-if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'error' => 'Database connection failed']);
-    exit;
-}
+$conn = include 'config.php';
 
 // USER_info 테이블에서 상위 10명을 점수 기준으로 정렬하고, 같은 점수일 경우 날짜순으로 정렬
 $sql = "SELECT NICKNAME, SCORE, STAGE, RECOREDE_DATE 
