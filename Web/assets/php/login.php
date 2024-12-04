@@ -11,10 +11,13 @@ header('Content-Type: application/json');
 ob_start();
 
 try {
-    $serverIP = 'localhost';
-    $DB_rootID = "db_admin";
-    $DB_rootPW = "flamerootpassword";
-    $dbname = "flameDB";
+    // config.php에서 DB 연결을 가져옴
+    $conn = include 'config.php';
+
+    // config.php 정상 실행 여부 확인
+    if (!$conn instanceof mysqli) {
+        throw new Exception("Database connection was not established correctly.");
+    }
 
     $ID = isset($_POST['ID']) ? $_POST['ID'] : null;
     $PW = isset($_POST['PW']) ? $_POST['PW'] : null;
@@ -33,18 +36,11 @@ try {
         $PW = 'flamerootpassword';
     }
 
-    $conn = new mysqli($serverIP, $DB_rootID, $DB_rootPW, $dbname);
-    if ($conn->connect_error) {
-        throw new Exception('Database connection failed');
-    }
-
-    $sql = "SELECT i.ID, i.PW, u.NICKNAME FROM ID_info i 
-            JOIN USER_info u ON i.ID = u.ID 
-            WHERE i.ID = ?";
+    $sql = "SELECT id, pw FROM ID_INFO WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
-        throw new Exception('Statement preparation failed');
+        throw new Exception('Statement preparation failed: ' . $conn->error);
     }
 
     $stmt->bind_param("s", $ID);
@@ -53,9 +49,8 @@ try {
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        if (password_verify($PW, $user['PW'])) {
-            $_SESSION['user_id'] = $user['ID'];
-            $_SESSION['nickname'] = $user['NICKNAME'];
+        if (password_verify($PW, $user['pw'])) {
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['logged_in'] = true;
             $_SESSION['role'] = $ROLE;
 

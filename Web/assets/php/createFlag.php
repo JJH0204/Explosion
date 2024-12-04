@@ -9,7 +9,7 @@ if (!isset($_SESSION['nickname']) || !isset($_POST['flag'])) {
 
 try {
     // admin 권한으로 직접 userDB에 연결
-    $conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'userDB');
+    $conn = new mysqli('localhost', 'db_admin', 'flamerootpassword', 'DB_sql');
     if ($conn->connect_error) {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }
@@ -17,7 +17,7 @@ try {
     $nickname = $_SESSION['nickname'];
     $flag = $_POST['flag'];
 
-    $stmt = $conn->prepare("UPDATE `$nickname` SET FLAG = ? WHERE NICKNAME = ?");
+    $stmt = $conn->prepare("UPDATE `$nickname` SET flag = ? WHERE nickname = ?");
     $stmt->bind_param("ss", $flag, $nickname);
     
     if (!$stmt->execute()) {
