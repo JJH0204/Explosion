@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // 서버에서 플래그 가져오기
         async function getFlag() {
             try {
-                const response = await fetch(`./question17.php?score=${score}`);
+                const response = await fetch(`index.php?score=${score}`);
                 const data = await response.json();
                 const resultElement = document.getElementById('result');
 

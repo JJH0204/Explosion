@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const resultDiv = document.getElementById('result');
 
             try {
-                const response = await fetch('question14.php', {
+                const response = await fetch('index.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ guess: guessInput })

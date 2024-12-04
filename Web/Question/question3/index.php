@@ -12,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($userInput === CORRECT_ANSWER) {
             echo json_encode([
                 'success' => true,
-                'message' => '정답입니다! 플래그는: ' . FLAG
+                'message' => '축하합니다! 플래그를 찾았습니다',
+                'flag' => 'FLAG{base64_decode_success}'
             ]);
         } else {
             echo json_encode([
@@ -78,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: bold;
         }
         #result {
-            margin-top: 15px;
+            margin-top: 20px;
+            font-size: 1.2em;
         }
     </style>
 </head>
@@ -103,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const input = document.getElementById('auth-key').value;
             const resultElement = document.getElementById('result');
             
-            fetch('question3.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,6 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (data.success) {
                     resultElement.style.color = '#00ff00';
                     resultElement.textContent = data.message;
+                    if (data.flag) {
+                        resultElement.textContent += ': ' + data.flag;
+                    }
                 } else {
                     resultElement.style.color = '#ff0000';
                     resultElement.textContent = '틀렸습니다!';

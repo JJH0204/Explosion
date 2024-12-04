@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('question13.php', { // PHP로 요청
+                const response = await fetch('index.php', { // PHP로 요청
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ input })

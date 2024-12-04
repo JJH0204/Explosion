@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const result = document.getElementById("result");
 
             // AJAX를 사용하여 PHP로 데이터 전송
-            fetch('question1.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

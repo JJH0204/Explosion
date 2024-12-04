@@ -241,7 +241,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 return;
             }
 
-            const response = await fetch('question11.php', {
+            const response = await fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const result = document.getElementById('result');
 
             try {
-                const response = await fetch('question16.php', {
+                const response = await fetch('index.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query })

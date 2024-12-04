@@ -131,7 +131,7 @@ if (isset($data['ip'])) {
                 return;
             }
 
-            fetch('question10.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

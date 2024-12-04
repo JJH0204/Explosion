@@ -3,7 +3,7 @@ session_start();
 
 // CSRF 방지
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'question29.php') === false) {
+    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'index.php') === false) {
         http_response_code(403);
         die(json_encode(['error' => 'Access Denied']));
     }

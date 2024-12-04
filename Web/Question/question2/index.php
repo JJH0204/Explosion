@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const input = document.getElementById('flagInput').value;
             const messageDiv = document.getElementById('message');
             
-            fetch('question2.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

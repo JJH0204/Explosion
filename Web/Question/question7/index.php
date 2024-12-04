@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isGameActive = false;
 
             if (selectedChar === 'O') {
-                fetch('question7.php', {
+                fetch('index.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

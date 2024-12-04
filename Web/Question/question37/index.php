@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         async function checkACL() {
             const aclCode = document.getElementById('aclCode').value.trim();
-            const response = await fetch("question37.php", {
+            const response = await fetch("index.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ acl: aclCode })

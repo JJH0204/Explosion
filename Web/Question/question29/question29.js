@@ -156,7 +156,7 @@
             
             if (score >= 1000) {
                 try {
-                    const response = await fetch('question29.php', {
+                    const response = await fetch('index.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

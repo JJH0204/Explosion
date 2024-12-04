@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const resultElement = document.getElementById('result');
 
             try {
-                const response = await fetch('question21.php', {
+                const response = await fetch('index.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

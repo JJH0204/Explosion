@@ -78,7 +78,7 @@ function serveHtml() {
             const form = document.getElementById('flagForm');
             const formData = new FormData(form);
 
-            fetch('question24.php', {
+            fetch('index.php', {
                 method: 'POST',
                 body: formData,
                 headers: {

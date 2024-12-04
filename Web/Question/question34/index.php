@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 networkIndicator: document.getElementById('networkIndicator').value.trim()
             };
 
-            const response = await fetch("question34.php", {
+            const response = await fetch("index.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(answers)

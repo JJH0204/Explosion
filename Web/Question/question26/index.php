@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 resultElement.style.color = '#00ff7f';
                 resultElement.textContent = `승리! 걸린 시간: ${seconds}초`;
                 try {
-                    const response = await fetch('question26.php', {
+                    const response = await fetch('index.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

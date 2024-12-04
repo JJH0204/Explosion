@@ -3,7 +3,7 @@
 $correct_date = '2011/10/20';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'question32.php') === false) {
+    if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'index.php') === false) {
         http_response_code(403);
         die(json_encode(['error' => 'Access Denied']));
     }
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         async function checkDate() {
             const date = document.getElementById('compileDate').value.trim();
-            const response = await fetch("question32.php", {
+            const response = await fetch("index.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ date })

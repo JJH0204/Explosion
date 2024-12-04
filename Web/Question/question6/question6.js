@@ -104,7 +104,7 @@ class ReactionTest {
         this.updateStats();
         
         // 서버에 점수 전송
-        fetch('question6.php', {
+        fetch('index.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function checkNumber() {
             const userNumber = String(slider.value).padStart(11, '0');
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'question12.php', true);
+            xhr.open('POST', 'index.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             
             xhr.onload = function() {

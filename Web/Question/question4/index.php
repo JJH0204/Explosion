@@ -127,7 +127,7 @@ if ($data && isset($data['role'])) {
                 role: formData.get('role')
             };
 
-            fetch('question4.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

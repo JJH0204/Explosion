@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 question3: document.getElementById('question3').value.trim(),
             };
 
-            const response = await fetch("question35.php", {
+            const response = await fetch("index.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(answers),

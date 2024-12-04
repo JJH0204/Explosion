@@ -30,7 +30,7 @@ function checkFileContent(file) {
 }
 
 function fetchAdminFlag() {
-    fetch('question5.php', {
+    fetch('index.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
