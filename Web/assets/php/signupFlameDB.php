@@ -42,7 +42,8 @@ class SignupTestDB {
 
     private function insertUserInfo($ID) {
         $stmt = $this->conn->prepare("INSERT INTO USER_INFO (id) VALUES (?)");
-        $stmt->bind_param("ss", $ID);
+        // $stmt->bind_param("ss", $ID);
+        $stmt->bind_param("s", $ID);
         if (!$stmt->execute()) {
             throw new Exception('Failed to insert into USER_INFO: ' . $stmt->error);
         }
@@ -54,9 +55,12 @@ class SignupTestDB {
     }
 
     public function process($ID, $PW, $Nickname) {
-        $this->conn->begin_transaction();
-
+        
         try {
+            // 트랜잭션 시작
+            error_log("트랜잭션이 시작되었습니다.");
+            $this->conn->begin_transaction();
+
             if ($this->isRestrictedNickname($Nickname)) {
                 throw new Exception('사용할 수 없는 닉네임입니다.');
             }
@@ -70,7 +74,8 @@ class SignupTestDB {
             }
 
             $this->insertIDInfo($ID, $PW, $Nickname);
-            $this->insertUserInfo($ID, $Nickname);
+            // $this->insertUserInfo($ID, $Nickname);
+            $this->insertUserInfo($ID);
 
             $this->conn->commit();
         } catch (Exception $e) {
