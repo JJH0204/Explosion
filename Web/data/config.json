@@ -137,7 +137,7 @@
             "markdownFile": "mk_5.md",
             "description": "This is the fifth challenge.",
             "link": "./Question/question5/question5.html",
-            "answer": "Salted__~2024+secret+key+to+decrypt+flag",
+            "answer": "flag{SaltedX_2024+secret+key+to+decrypt+flag}",
             "category": "upload",
             "difficulty": "beginner"
         },

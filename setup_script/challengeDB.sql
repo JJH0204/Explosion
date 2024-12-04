@@ -18,7 +18,7 @@ INSERT INTO `CHALLENGE_info` (challenge_id, challenge_score, challenge_title, ch
 (2,50,"HTML source code analysis","cryptology,reversing","basic","FLAG{source_code_analysis}"), 
 (3,50,"404 Not Found","cryptology,reversing","basic","FLAG{base64_decode_success}"), 
 (4,50,"Admin Portal","CSRF","basic","FLAG{proxy_role_manipulation_success}"), 
-(5,100,"FileHub","CSRF","basic","FLAG{proxy_role_manipulation_success}"), 
+(5,100,"FileHub","CSRF","basic","flag{SaltedX_2024+secret+key+to+decrypt+flag}"), 
 (6,50,"Reaction Speed Test","CSRF,ETC","basic","FLAG{F4st_R3fl3x_M4st3r}"), 
 (7,50,"O Finder Game","reversing","basic","FLAG{find_the_O_success}"), 
 (8,50,"Image Change", "reversing", "basic", "FLag{image_change}"), 

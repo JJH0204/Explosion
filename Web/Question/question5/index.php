@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (isset($input['action']) && $input['action'] === 'getFlag') {
         // 플래그를 서버 측 상수로 정의
-        define('ENCRYPTED_FLAG', 'U2FsdGVkX19+MjAyNCtzZWNyZXQra2V5K3RvK2RlY3J5cHQrZmxhZw==');
+        define('ENCRYPTED_FLAG', 'flag{SaltedX_2024+secret+key+to+decrypt+flag}');
         
         echo json_encode([
             'success' => true,
