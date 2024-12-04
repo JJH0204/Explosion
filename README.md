@@ -85,17 +85,17 @@ $ docker run -d -p 80:80 [organization]/flame-wargame:latest
 ### 프로젝트 관리 
 
 - **개발팀**: Team Firewall
-- **작업 관리**: [ToDoList](./ToDoList) 를 통해 진행 상황 추적
+- **작업 관리**: [TASK](./TASK.md) 를 통해 진행 상황 추적
 - **이슈 관리**: 버그 리포트 및 기능 요청 관리
 
 ### 기여하기 
 
 1. **버그 리포트**
    - 보안 취약점이나 버그 발견 시 관리자에게 보고
-   - [ToDoList](./ToDoList) 에서 현재 알려진 이슈 확인 가능
+   - [TASK](./TASK.md)에서 현재 알려진 이슈 확인 가능
 
 2. **개발 참여**
-   - [ToDoList](./ToDoList) 에서 진행 중인 작업 확인
+   - [TASK](./TASK.md)에서 진행 중인 작업 확인
    - 새로운 기능 제안 및 개발 참여 가능
 
-> **참고**: 프로젝트의 진행 상황과 예정된 업데이트는 [ToDoList](./ToDoList) 에서 확인하실 수 있습니다.
+> **참고**: 프로젝트의 진행 상황과 예정된 업데이트는 [TASK](./TASK.md)에서 확인하실 수 있습니다.
