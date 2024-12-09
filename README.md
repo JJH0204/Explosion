@@ -80,6 +80,15 @@ $ docker run -d -p 80:80 [organization]/flame-wargame:latest
 > - 환경 설정과 의존성이 모두 포함된 이미지 제공
 > - 간단한 명령어로 즉시 서비스 구동 가능
 
+### 소스 빌드 방법
+
+```bash
+$ git clone https://github.com/JJH0204/Flame_WarGame.git
+$ cd ./Flame_WarGame
+$ docker build -t flame-wargame .
+$ docker run -d -p 80:80 -p 3307:3307 flame-wargame
+```
+
 ## 개발 및 유지보수
 
 ### 프로젝트 관리 
