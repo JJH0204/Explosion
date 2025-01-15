@@ -69,10 +69,10 @@ Flame_WarGame/
 
 ```bash
 # Docker Hub에서 이미지 다운로드
-$ docker pull krjaeh0/wargame:latest
+$ docker pull krjaeh0/flame:latest
 
 # 컨테이너 실행
-$ docker run -d -p 80:80 krjaeh0/wargame:latest
+$ docker run -d -p 80:80 krjaeh0/flame:latest
 ```
 
 > 💡 **참고사항**
